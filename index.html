@@ -28,7 +28,6 @@
         /* Dashboard Styles */
         .header { margin-bottom: 30px; position: relative; }
         .header h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; margin: 0; }
-
         .whatsapp-btn { position: absolute; top: 5px; right: 0; background: #25D366; color: white; border: none; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); }
 
         /* Elite Cards */
@@ -45,7 +44,7 @@
         .water-fill-bg { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--water-blue); opacity: 0.15; transition: height 0.6s ease; }
         .water-content { position: relative; z-index: 2; padding: 25px; display: flex; justify-content: space-between; align-items: flex-end; }
         .water-btn { background: var(--water-blue); color: white; border: none; width: 50px; height: 50px; border-radius: 16px; font-size: 24px; font-weight: bold; }
-        .reset-water { position: absolute; top: 15px; right: 15px; z-index: 10; background: rgba(0,0,0,0.05); border: none; width: 30px; height: 30px; border-radius: 50%; color: var(--text-sec); font-size: 16px; cursor: pointer; }
+        .reset-water { position: absolute; top: 15px; right: 15px; z-index: 10; background: rgba(0,0,0,0.1); border: none; width: 30px; height: 30px; border-radius: 50%; color: var(--text-sec); font-size: 16px; cursor: pointer; }
 
         /* Time Intelligence Card */
         .card-weekly { background: linear-gradient(135deg, #ffffff 0%, #f9fff0 100%); border: 1px solid rgba(120, 190, 32, 0.1); }
@@ -60,7 +59,7 @@
     
     <div id="setupScreen" class="screen">
         <h1>FitFlow</h1>
-        <p style="color:var(--text-sec); margin:0 0 25px 0;">Elite Health Tracking</p>
+        <p style="color:var(--text-sec); margin:0 0 25px 0;">Elite Health Intelligence</p>
         
         <div class="field-group"><label>Full Name</label><input type="text" id="inName" placeholder="Enter Name"></div>
         <div style="display:flex; gap:12px;">
@@ -74,8 +73,8 @@
 
         <label>Disclaimer & Terms</label>
         <div class="legal-box">
-            <strong>Disclaimer:</strong> This tool is for personal tracking. It does not replace medical advice. Consult a physician before any weight loss or Herbalife routine. <br><br>
-            <strong>Terms:</strong> Data is saved locally on your device for your privacy. By starting, you accept all responsibility.
+            <strong>Health Disclaimer:</strong> FitFlow is a personal tracking tool. It is not medical advice. Consult a healthcare professional before starting any Herbalife routine or weight management program. <br><br>
+            <strong>Terms:</strong> Your data is saved locally on this browser. By clicking "Start," you agree to take full responsibility for your results and health decisions.
         </div>
         
         <div class="check-row">
@@ -101,15 +100,6 @@
             <button class="btn-action" onclick="updateWeight()">Update Weight</button>
         </div>
 
-        <div class="card card-weekly">
-            <div class="label">Time Intelligence</div>
-            <div style="display:flex; align-items:center; margin:10px 0;">
-                <div id="weeksLeft" class="weeks-num">--</div>
-                <div style="font-weight:700; font-size:14px; line-height:1.2;">Weeks to reach<br>your goal</div>
-            </div>
-            <p id="weeklyTip" style="font-size:11px; color:var(--text-sec); margin:0;">Calculating projection...</p>
-        </div>
-
         <div class="card card-water">
             <div class="water-fill-bg" id="wFill"></div>
             <button class="reset-water" onclick="resetWater(event)">↺</button>
@@ -117,6 +107,15 @@
                 <div><div class="label">Daily Hydration</div><div style="font-size:32px; font-weight:800;"><span id="curH">0.0</span> <small style="font-size:14px; color:var(--text-sec);">/ <span id="goalH">0.0</span>L</small></div></div>
                 <button class="water-btn">+</button>
             </div>
+        </div>
+
+        <div class="card card-weekly">
+            <div class="label">Time Intelligence</div>
+            <div style="display:flex; align-items:center; margin:10px 0;">
+                <div id="weeksLeft" class="weeks-num">--</div>
+                <div style="font-weight:700; font-size:14px; line-height:1.2;">Weeks to reach<br>your goal</div>
+            </div>
+            <p id="weeklyTip" style="font-size:11px; color:var(--text-sec); margin:0;">Steady 0.7kg/week Herbalife pace.</p>
         </div>
 
         <button onclick="localStorage.clear(); location.reload();" style="background:none; border:none; color:var(--text-sec); width:100%; margin-top:20px; font-size:11px; text-decoration:underline; cursor:pointer;">Reset Profile & Data</button>
@@ -127,7 +126,7 @@
     let appData = { name: '', height: 0, weight: 0, startW: 0, goal: 0, water: 0, waterGoal: 0 };
 
     window.onload = function() {
-        const saved = localStorage.getItem('FitFlow_Pro_Data_Final_V2');
+        const saved = localStorage.getItem('FitFlow_Pro_Live_V1');
         if (saved) {
             appData = JSON.parse(saved);
             renderDashboard();
@@ -164,21 +163,21 @@
         document.getElementById('curH').innerText = appData.water.toFixed(1);
         document.getElementById('goalH').innerText = appData.waterGoal;
 
-        // Weight Progress Bar
+        // Weight Progress
         let diff = appData.startW - appData.goal;
         let progress = appData.startW - appData.weight;
         let wPct = diff > 0 ? (progress / diff) * 100 : 0;
         document.getElementById('wBar').style.width = Math.max(5, Math.min(100, wPct)) + "%";
 
-        // Water Fill Effect
+        // Water Fill
         let hPct = (appData.water / appData.waterGoal) * 100;
         document.getElementById('wFill').style.height = Math.min(100, hPct) + "%";
 
-        // Weekly Projection Logic
+        // Time Intelligence
         let remaining = appData.weight - appData.goal;
         let weeks = Math.ceil(remaining / 0.7);
         document.getElementById('weeksLeft').innerText = remaining > 0 ? weeks : "0";
-        document.getElementById('weeklyTip').innerText = remaining > 0 ? "Steady 0.7kg/week Herbalife pace." : "Goal achieved! Excellent work.";
+        document.getElementById('weeklyTip').innerText = remaining > 0 ? "Based on healthy 0.7kg/week loss." : "Congratulations! Goal reached.";
 
         document.getElementById('setupScreen').classList.remove('active');
         document.getElementById('dashScreen').classList.add('active');
@@ -207,7 +206,7 @@
     }
 
     function saveAndRender() {
-        localStorage.setItem('FitFlow_Pro_Data_Final_V2', JSON.stringify(appData));
+        localStorage.setItem('FitFlow_Pro_Live_V1', JSON.stringify(appData));
         renderDashboard();
     }
 
@@ -215,14 +214,14 @@
         const appLink = "https://krishnamu045-rgb.github.io/fitflow/"; 
         let totalLost = (appData.startW - appData.weight).toFixed(1);
         let weeks = Math.ceil((appData.weight - appData.goal) / 0.7);
-        let progressPct = Math.round(((appData.startW - appData.weight) / (appData.startW - appData.goal)) * 100);
+        let progressPct = Math.max(0, Math.round(((appData.startW - appData.weight) / (appData.startW - appData.goal)) * 100));
         
         let message = `*🌟 FITFLOW SUCCESS REPORT 🌟*%0A%0A` +
                       `🏃‍♂️ *Total Lost:* ${totalLost}kg%0A` +
-                      `📊 *Progress:* ${progressPct}%25 of Goal Reached!%0A` +
+                      `📊 *Goal Progress:* ${progressPct}%25%0A` +
                       `⚖️ *Current Weight:* ${appData.weight.toFixed(1)}kg%0A` +
-                      `🎯 *Target:* ${appData.goal}kg%0A` +
-                      `⏳ *Remaining:* ~${weeks} Weeks%0A%0A` +
+                      `🎯 *Target Weight:* ${appData.goal}kg%0A` +
+                      `⏳ *Timeline:* ~${weeks} Weeks to Goal%0A%0A` +
                       `*Start your own 3-2-1 journey here:*%0A` +
                       `${appLink}`;
         
