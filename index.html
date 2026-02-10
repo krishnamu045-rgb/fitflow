@@ -28,7 +28,7 @@
         .card { background: white; border-radius: 28px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
         .weight-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
         
-        /* BRIDGE DESIGN */
+        /* RESTORED BRIDGE DESIGN */
         .bridge-box { display: flex; align-items: center; justify-content: center; position: relative; margin: 30px 0; height: 40px; }
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -67,12 +67,12 @@
         <span class="f-label">Gender</span><select id="inG"><option value="male">Male</option><option value="female">Female</option></select>
         
         <div class="legal-box">
-            <strong>Disclaimer:</strong> This application is a personal tracking tool and does not provide medical advice. Consult a doctor before starting any weight loss program.
+            <strong>Disclaimer:</strong> This application is a personal tracking tool. Consult a doctor before starting any program.
         </div>
         
         <label style="display:flex; gap:12px; margin: 20px 0; cursor:pointer; align-items:flex-start;">
             <input type="checkbox" id="termsCheck" style="width:20px; height:20px;">
-            <span style="font-size:13px; font-weight:600; color:var(--text);">I accept the health disclaimer and 7-day weigh-in rule.</span>
+            <span style="font-size:13px; font-weight:600; color:var(--text);">I accept the health disclaimer and 7-day rule.</span>
         </label>
         
         <button class="btn-p" onclick="initApp()">Save & Start</button>
@@ -156,7 +156,7 @@
 
     function initApp() {
         const n = document.getElementById('inName').value, h = document.getElementById('inH').value, w = document.getElementById('inW').value, g = document.getElementById('inG').value, acc = document.getElementById('termsCheck').checked;
-        if(!n || !h || !w || !acc) return alert("Fill all fields and accept terms.");
+        if(!n || !h || !w || !acc) return alert("Accept terms and fill all fields.");
         const user = { name:n, h:Number(h), g:g, startW:Number(w), w:Number(w), water:0, startD:Date.now() };
         localStorage.setItem(VAULT_KEY, JSON.stringify(user));
         location.reload();
@@ -209,6 +209,21 @@
         if(id === 'dietTab') dietNav('morning');
     }
 
+    function shareWA() {
+        const data = JSON.parse(localStorage.getItem(VAULT_KEY));
+        const goal = getIdealGoal(data.h, data.g);
+        const diff = (Number(data.w) - goal).toFixed(1);
+        const message = 
+            `🚀 *FITFLOW ELITE PROGRESS REPORT* 🚀\n\n` +
+            `👤 *User:* ${data.name}\n` +
+            `⚖️ *Current Weight:* ${data.w} kg\n` +
+            `🎯 *Ideal Goal:* ${goal} kg\n` +
+            `📉 *Remaining:* ${diff} kg to go!\n\n` +
+            `📲 *DOWNLOAD APP HERE:* \n` +
+            `https://krishnamu045-rgb.github.io/fitflow/`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
+    }
+
     function updateWeight() {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         let v = prompt("New Weight (kg):", data.w);
@@ -225,22 +240,6 @@
         localStorage.setItem(VAULT_KEY, JSON.stringify(data));
         render();
     }
-
-    function shareWA() {
-        const data = JSON.parse(localStorage.getItem(VAULT_KEY));
-        const goal = getIdealGoal(data.h, data.g);
-        const diff = (Number(data.w) - goal).toFixed(1);
-        const message = 
-            `🚀 *FITFLOW ELITE PROGRESS REPORT* 🚀\n\n` +
-            `👤 *User:* ${data.name}\n` +
-            `⚖️ *Current Weight:* ${data.w} kg\n` +
-            `🎯 *Ideal Goal:* ${goal} kg\n` +
-            `📉 *Remaining:* ${diff} kg to go!\n\n` +
-            `📲 *DOWNLOAD APP HERE:* \n` +
-            `https://krishnamu045-rgb.github.io/fitflow/`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
-    }
-
     window.onload = render;
 </script>
 </body>
