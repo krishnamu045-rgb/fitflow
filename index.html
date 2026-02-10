@@ -7,7 +7,7 @@
     <script>
         const VAULT_KEY = 'FITFLOW_MASTER_V105';
         function masterReset() {
-            if(confirm("DANGER: This will delete ALL data and reset the app. Continue?")) {
+            if(confirm("DANGER: This deletes ALL data. Continue?")) {
                 localStorage.removeItem(VAULT_KEY);
                 location.reload(true);
             }
@@ -42,10 +42,14 @@
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* DIET & TABS */
+        /* DIET & RECIPES */
         .diet-toggle { display: flex; background: #EEE; padding: 4px; border-radius: 12px; margin-bottom: 15px; }
         .toggle-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; cursor: pointer; border-radius: 10px; color: var(--text-sec); }
         .active-toggle { background: white; color: var(--hb-green); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        .recipe-scroller { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
+        .recipe-scroller::-webkit-scrollbar { display: none; }
+        .recipe-mini { min-width: 140px; background: white; padding: 15px; border-radius: 20px; border: 1px solid #EEE; text-align: center; }
         
         .sub-tab-pill { display: flex; background: #E5E5EA; padding: 4px; border-radius: 14px; margin-bottom: 15px; }
         .sub-tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-sec); cursor: pointer; border-radius: 10px; }
@@ -81,7 +85,7 @@
             <div class="gender-option"><input type="radio" name="gender" value="male" id="male" checked><label for="male">Male</label></div>
             <div class="gender-option"><input type="radio" name="gender" value="female" id="female"><label for="female">Female</label></div>
         </div>
-        <div class="legal-box"><strong>Disclaimer:</strong> Consult a doctor before starting. App is for tracking only.</div>
+        <div class="legal-box"><strong>Disclaimer:</strong> App is for tracking only. Consult a doctor.</div>
         <label style="display:flex; gap:10px; margin-bottom:20px;"><input type="checkbox" id="termsCheck"><span>Accept terms & 7-day rule</span></label>
         <button class="btn-p" onclick="initApp()">Save & Start</button>
     </div>
@@ -129,6 +133,23 @@
             <div id="vegBtn" class="toggle-btn active-toggle" onclick="setDietType('veg')">VEGETARIAN</div>
             <div id="nonVegBtn" class="toggle-btn" onclick="setDietType('nonveg')">NON-VEG</div>
         </div>
+
+        <span class="f-label" style="margin-top:0;">Featured Recipes</span>
+        <div class="recipe-scroller">
+            <div class="recipe-mini" onclick="alert('Pesarattu Recipe:\n1. Soak Green Gram 4 hrs\n2. Grind with Ginger/Chilli\n3. Spread thin, use 1 tsp oil')">
+                <div style="font-size:20px; margin-bottom:5px;">🥞</div>
+                <div style="font-size:11px; font-weight:800;">Pesarattu</div>
+            </div>
+            <div class="recipe-mini" onclick="alert('Moong Dal Soup:\n1. Cook Moong dal with turmeric\n2. Add garlic and ginger\n3. Season with cumin & pepper')">
+                <div style="font-size:20px; margin-bottom:5px;">🥣</div>
+                <div style="font-size:11px; font-weight:800;">Dal Soup</div>
+            </div>
+            <div class="recipe-mini" onclick="alert('Oats Idli:\n1. Dry roast oats & grind\n2. Mix with curd & veggies\n3. Steam for 10 mins')">
+                <div style="font-size:20px; margin-bottom:5px;">⚪</div>
+                <div style="font-size:11px; font-weight:800;">Oats Idli</div>
+            </div>
+        </div>
+
         <div class="sub-tab-pill">
             <div id="btnMorning" class="sub-tab-btn active-sub" onclick="dietNav('morning')">Morning</div>
             <div id="btnAfternoon" class="sub-tab-btn" onclick="dietNav('afternoon')">Afternoon</div>
@@ -162,21 +183,19 @@
 
 <script>
     let dietPreference = 'veg';
-
     function setDietType(type) {
         dietPreference = type;
         document.getElementById('vegBtn').classList.toggle('active-toggle', type === 'veg');
         document.getElementById('nonVegBtn').classList.toggle('active-toggle', type === 'nonveg');
-        const content = type === 'veg' ? '1 Bowl Dal + 1 Bowl Sabzi + 100g Brown Rice + Salad' : '150g Boiled Chicken / 2 Eggs + 1 Bowl Sabzi + Salad (No Rice)';
-        document.getElementById('lunchContent').innerHTML = content;
+        document.getElementById('lunchContent').innerHTML = type === 'veg' ? 
+            '1 Bowl Dal + 1 Bowl Sabzi + 100g Brown Rice + Salad' : 
+            '150g Grilled Chicken/Fish + 1 Bowl Sabzi + Salad';
     }
-
     function getIdealGoal(h, g) {
         const height = Number(h);
         const over5 = (height / 2.54) - 60;
         return Math.round(g === 'male' ? 50 + (2.3 * over5) : 45.5 + (2.3 * over5));
     }
-
     function initApp() {
         const n = document.getElementById('inName').value, h = document.getElementById('inH').value, w = document.getElementById('inW').value, acc = document.getElementById('termsCheck').checked;
         const g = document.querySelector('input[name="gender"]:checked').value;
@@ -184,7 +203,6 @@
         localStorage.setItem(VAULT_KEY, JSON.stringify({ name:n, h:Number(h), g:g, startW:Number(w), w:Number(w), water:0, startD:Date.now() }));
         location.reload();
     }
-
     function render() {
         const saved = localStorage.getItem(VAULT_KEY);
         if(!saved) return;
@@ -203,34 +221,29 @@
         document.getElementById('weeksLeft').innerText = vel > 0 ? Math.ceil(diff / vel) : Math.ceil(diff);
         document.getElementById('velTxt').innerText = vel > 0 ? `Speed: ${vel.toFixed(2)}kg/week` : "Ready to Start?";
     }
-
     function dietNav(phase) {
         document.querySelectorAll('.diet-sub-screen').forEach(s => s.classList.remove('active-diet'));
         document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active-sub'));
         document.getElementById('diet' + phase.charAt(0).toUpperCase() + phase.slice(1)).classList.add('active-diet');
         document.getElementById('btn' + phase.charAt(0).toUpperCase() + phase.slice(1)).classList.add('active-sub');
     }
-
     function nav(id, el) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
         document.querySelectorAll('.tab-btn').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active-screen'); el.classList.add('active');
         if(id === 'dietTab') dietNav('morning');
     }
-
     function updateWeight() {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         let v = prompt("New Weight (kg):", data.w);
         if(v && !isNaN(v)) { data.w = Number(v); localStorage.setItem(VAULT_KEY, JSON.stringify(data)); render(); }
     }
-
     function addWater(v) {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         data.water = Math.max(0, (data.water || 0) + v);
         localStorage.setItem(VAULT_KEY, JSON.stringify(data));
         render();
     }
-
     function shareWA() {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         const goal = getIdealGoal(data.h, data.g);
