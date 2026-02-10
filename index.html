@@ -15,24 +15,24 @@
         body { background: #D1D1D6; margin: 0; display: flex; justify-content: center; font-family: -apple-system, sans-serif; color: var(--text); overflow-x: hidden; }
         .app-shell { width: 100%; max-width: 430px; background: var(--bg); min-height: 100vh; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.2); padding-bottom: 110px; }
         
-        /* SETUP */
+        /* SETUP / FARM */
         #setupScreen { position: fixed; top: 0; width: 100%; max-width: 430px; height: 100%; background: var(--bg); z-index: 10000; padding: 30px; box-sizing: border-box; overflow-y: auto; display: block; }
         .vault-unlocked #setupScreen { display: none !important; }
         .f-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); margin: 20px 0 8px; }
         input, select { width: 100%; border: 1px solid #E5E5EA; background: white; padding: 18px; border-radius: 16px; font-size: 16px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
-        
-        /* TOP BAR */
+        .legal-box { background: #EEE; border-radius: 14px; padding: 15px; font-size: 12px; line-height: 1.5; margin: 15px 0; border: 1px solid #DDD; }
+
+        /* DASHBOARD UI */
         .top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #EEE; }
         .whatsapp-btn { background: #25D366; border: none; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
-        /* CARDS & BRIDGE LOGIC */
         .card { background: white; border-radius: 28px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
         .weight-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
+        
+        /* BRIDGE DESIGN */
         .bridge-box { display: flex; align-items: center; justify-content: center; position: relative; margin: 30px 0; height: 40px; }
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* UI ELEMENTS */
         .screen { padding: 20px; box-sizing: border-box; display: none; }
         .active-screen { display: block !important; }
         .btn-p { background: var(--hb-green); color: white; border: none; width: 100%; padding: 20px; border-radius: 20px; font-size: 17px; font-weight: 700; cursor: pointer; }
@@ -57,13 +57,25 @@
 <div class="app-shell">
     <div id="setupScreen">
         <h1 style="font-size:38px; font-weight:900; letter-spacing:-2px; margin:0;">FitFlow Elite</h1>
-        <span class="f-label">Name</span><input type="text" id="inName">
+        <p style="color:var(--text-sec); font-weight:700; margin-bottom:10px;">Setup Portal</p>
+        
+        <span class="f-label">Name</span><input type="text" id="inName" placeholder="Full Name">
         <div style="display:flex; gap:10px;">
-            <div style="flex:1"><span class="f-label">Height (cm)</span><input type="number" id="inH"></div>
-            <div style="flex:1"><span class="f-label">Weight (kg)</span><input type="number" id="inW"></div>
+            <div style="flex:1"><span class="f-label">Height (cm)</span><input type="number" id="inH" placeholder="165"></div>
+            <div style="flex:1"><span class="f-label">Weight (kg)</span><input type="number" id="inW" placeholder="80"></div>
         </div>
         <span class="f-label">Gender</span><select id="inG"><option value="male">Male</option><option value="female">Female</option></select>
-        <button class="btn-p" style="margin-top:20px;" onclick="initApp()">Save & Start</button>
+        
+        <div class="legal-box">
+            <strong>Disclaimer:</strong> This application is a personal tracking tool and does not provide medical advice. Consult a doctor before starting any weight loss program.
+        </div>
+        
+        <label style="display:flex; gap:12px; margin: 20px 0; cursor:pointer; align-items:flex-start;">
+            <input type="checkbox" id="termsCheck" style="width:20px; height:20px;">
+            <span style="font-size:13px; font-weight:600; color:var(--text);">I accept the health disclaimer and 7-day weigh-in rule.</span>
+        </label>
+        
+        <button class="btn-p" onclick="initApp()">Save & Start</button>
     </div>
 
     <div class="top-bar">
@@ -91,7 +103,7 @@
             <div style="flex:1">
                 <span class="f-label">Hydration</span>
                 <div style="font-size:32px; font-weight:900; color:var(--water-blue);" id="curH">0 ml</div>
-                <div style="font-size: 13px; font-weight: 700; color: var(--text-sec); margin-top:5px;">Target: <span id="goalH">0</span> ml</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-sec); margin-top:5px;">Daily Target: <span id="goalH">0</span> ml</div>
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <button class="btn-p" style="padding:10px; background:#E1F5FE; color:var(--water-blue);" onclick="addWater(-250)">-</button>
                     <button class="btn-p" style="padding:10px; background:var(--water-blue);" onclick="addWater(250)">+ 250ML</button>
@@ -143,8 +155,8 @@
     }
 
     function initApp() {
-        const n = document.getElementById('inName').value, h = document.getElementById('inH').value, w = document.getElementById('inW').value, g = document.getElementById('inG').value;
-        if(!n || !h || !w) return alert("Fill all fields.");
+        const n = document.getElementById('inName').value, h = document.getElementById('inH').value, w = document.getElementById('inW').value, g = document.getElementById('inG').value, acc = document.getElementById('termsCheck').checked;
+        if(!n || !h || !w || !acc) return alert("Fill all fields and accept terms.");
         const user = { name:n, h:Number(h), g:g, startW:Number(w), w:Number(w), water:0, startD:Date.now() };
         localStorage.setItem(VAULT_KEY, JSON.stringify(user));
         location.reload();
@@ -155,7 +167,6 @@
         if(!saved) return;
         const data = JSON.parse(saved);
         const curW = Number(data.w), goal = getIdealGoal(data.h, data.g), startW = Number(data.startW);
-        
         document.getElementById('outName').innerText = "Hi, " + data.name.split(' ')[0];
         document.getElementById('curW').innerText = curW.toFixed(1);
         document.getElementById('goalW').innerText = goal;
@@ -194,8 +205,7 @@
     function nav(id, el) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
         document.querySelectorAll('.tab-btn').forEach(n => n.classList.remove('active'));
-        document.getElementById(id).classList.add('active-screen'); 
-        el.classList.add('active');
+        document.getElementById(id).classList.add('active-screen'); el.classList.add('active');
         if(id === 'dietTab') dietNav('morning');
     }
 
@@ -207,6 +217,13 @@
             localStorage.setItem(VAULT_KEY, JSON.stringify(data)); 
             render(); 
         }
+    }
+
+    function addWater(v) {
+        const data = JSON.parse(localStorage.getItem(VAULT_KEY));
+        data.water = Math.max(0, (data.water || 0) + v);
+        localStorage.setItem(VAULT_KEY, JSON.stringify(data));
+        render();
     }
 
     function shareWA() {
@@ -224,12 +241,6 @@
         window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
     }
 
-    function addWater(v) {
-        const data = JSON.parse(localStorage.getItem(VAULT_KEY));
-        data.water = Math.max(0, (data.water || 0) + v);
-        localStorage.setItem(VAULT_KEY, JSON.stringify(data));
-        render();
-    }
     window.onload = render;
 </script>
 </body>
