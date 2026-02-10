@@ -42,19 +42,18 @@
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* DIET & DYNAMIC RECIPES */
+        /* DIET TAB & RECIPE GRID */
         .diet-toggle { display: flex; background: #EEE; padding: 4px; border-radius: 12px; margin-bottom: 15px; }
         .toggle-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; cursor: pointer; border-radius: 10px; color: var(--text-sec); }
         .active-toggle { background: white; color: var(--hb-green); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        .recipe-scroller { display: flex; gap: 12px; overflow-x: auto; padding: 5px 20px 15px; margin: 0 -20px 10px; scrollbar-width: none; }
-        .recipe-scroller::-webkit-scrollbar { display: none; }
-        .recipe-mini { min-width: 120px; background: white; padding: 15px; border-radius: 22px; border: 1px solid #EEE; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
         .sub-tab-pill { display: flex; background: #E5E5EA; padding: 4px; border-radius: 14px; margin-bottom: 15px; }
         .sub-tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-sec); cursor: pointer; border-radius: 10px; }
         .active-sub { background: white !important; color: var(--hb-green) !important; }
         
+        .recipe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .recipe-mini { background: white; padding: 15px; border-radius: 22px; border: 1px solid #EEE; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; }
+
         .screen { padding: 20px; box-sizing: border-box; display: none; }
         .active-screen { display: block !important; }
         .diet-sub-screen { display: none; }
@@ -134,10 +133,6 @@
             <div id="nonVegBtn" class="toggle-btn" onclick="setDietType('nonveg')">NON-VEG</div>
         </div>
 
-        <span class="f-label" style="margin-top:0;">Healthy Recipes</span>
-        <div class="recipe-scroller" id="recipeScroller">
-            </div>
-
         <div class="sub-tab-pill">
             <div id="btnMorning" class="sub-tab-btn active-sub" onclick="dietNav('morning')">Morning</div>
             <div id="btnAfternoon" class="sub-tab-btn" onclick="dietNav('afternoon')">Afternoon</div>
@@ -161,6 +156,10 @@
             <div class="card"><span class="f-label">05:30 PM</span><div style="font-weight:700;">Afresh (Warm) + 1 Small Bowl Roasted Chana</div></div>
             <div class="card" style="background:#F0F9E8;"><span class="f-label" style="color:var(--hb-green)">08:00 PM</span><div style="font-weight:700;">Herbalife Shake (3 Scoops) in 300ml Water</div></div>
         </div>
+
+        <span class="f-label" style="margin-top:20px;">Healthy Recipes Grid</span>
+        <div class="recipe-grid" id="recipeGrid">
+            </div>
     </div>
 
     <div class="tab-bar"><div class="tab-pill">
@@ -172,30 +171,30 @@
 <script>
     const vegRecipes = [
         { name: 'Pesarattu', icon: '🥬', info: 'Green Gram Dosa: Soak 1 cup green gram (4h). Grind with ginger & chillies. Spread thin, use 1 tsp oil.' },
-        { name: 'Dal Soup', icon: '🥣', info: 'Moong Dal Soup: Cook dal with turmeric. Add ginger/garlic. Season with pepper. High protein liquid.' },
-        { name: 'Paneer Tikka', icon: '🧀', info: '100g Paneer cubes. Marinate in curd + spices. Grill with 1 tsp oil. Great protein snack.' },
-        { name: 'Oats Idli', icon: '⚪', info: 'Roast oats & powder. Mix with curd & veggies. Steam for 10 mins. Low calorie breakfast.' }
+        { name: 'Dal Soup', icon: '🥣', info: 'Moong Dal Soup: Cook dal with turmeric. Add ginger/garlic. Season with pepper.' },
+        { name: 'Paneer Tikka', icon: '🧀', info: '100g Paneer cubes. Marinate in curd + spices. Grill with 1 tsp oil. High protein.' },
+        { name: 'Oats Idli', icon: '⚪', info: 'Roast oats & powder. Mix with curd & veggies. Steam for 10 mins.' }
     ];
 
     const nonVegRecipes = [
-        { name: 'Egg Snack', icon: '🥚', info: '2 Hard boiled eggs. Sprinkle pepper & cumin. Serve with sliced cucumber. Best afternoon fuel.' },
-        { name: 'Lemon Chicken', icon: '🍗', info: '150g Chicken breast strips. Sauté with lemon juice & garlic. No carbs, high protein lunch.' },
-        { name: 'Grilled Fish', icon: '🐟', info: '150g White fish fillet. Rub with ginger-garlic paste. Grill or air-fry till golden.' },
-        { name: 'Chicken Soup', icon: '🍲', info: 'Clear chicken broth with shredded breast and veggies. Zero carb filler for evening hunger.' }
+        { name: 'Egg Snack', icon: '🥚', info: '2 Hard boiled eggs. Sprinkle pepper & cumin. Serve with sliced cucumber.' },
+        { name: 'Lemon Chicken', icon: '🍗', info: '150g Chicken breast strips. Sauté with lemon juice & garlic. High protein lunch.' },
+        { name: 'Grilled Fish', icon: '🐟', info: '150g White fish fillet. Rub with ginger-garlic paste. Grill or air-fry.' },
+        { name: 'Chicken Soup', icon: '🍲', info: 'Clear chicken broth with shredded breast and veggies. Zero carb filler.' }
     ];
 
     function setDietType(type) {
         document.getElementById('vegBtn').classList.toggle('active-toggle', type === 'veg');
         document.getElementById('nonVegBtn').classList.toggle('active-toggle', type === 'nonveg');
         
-        const scroller = document.getElementById('recipeScroller');
+        const grid = document.getElementById('recipeGrid');
         const recipes = type === 'veg' ? vegRecipes : nonVegRecipes;
         
-        scroller.innerHTML = '';
+        grid.innerHTML = '';
         recipes.forEach(r => {
-            scroller.innerHTML += `<div class="recipe-mini" onclick="alert('${r.info}')">
-                <div style="font-size:24px; margin-bottom:5px;">${r.icon}</div>
-                <div style="font-size:11px; font-weight:800;">${r.name}</div>
+            grid.innerHTML += `<div class="recipe-mini" onclick="alert('${r.info}')">
+                <div style="font-size:28px; margin-bottom:5px;">${r.icon}</div>
+                <div style="font-size:12px; font-weight:800;">${r.name}</div>
             </div>`;
         });
 
@@ -235,7 +234,7 @@
         let vel = (startW - curW) / weeks;
         document.getElementById('weeksLeft').innerText = vel > 0 ? Math.ceil(diff / vel) : Math.ceil(diff);
         document.getElementById('velTxt').innerText = vel > 0 ? `Speed: ${vel.toFixed(2)}kg/week` : "Ready to Start?";
-        setDietType('veg'); // Initial Load
+        setDietType('veg'); 
     }
 
     function dietNav(phase) {
