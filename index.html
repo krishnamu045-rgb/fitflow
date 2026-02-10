@@ -8,9 +8,9 @@
         const VAULT_KEY = 'FITFLOW_MASTER_V105';
         
         function masterReset() {
-            if(confirm("DANGER: This deletes ALL data and resets the app. Continue?")) {
+            if(confirm("DANGER: This will delete ALL data and reset the app. Continue?")) {
                 localStorage.removeItem(VAULT_KEY);
-                location.reload();
+                location.reload(true);
             }
         }
 
@@ -23,31 +23,32 @@
         body { background: #D1D1D6; margin: 0; display: flex; justify-content: center; font-family: -apple-system, sans-serif; color: var(--text); overflow-x: hidden; }
         .app-shell { width: 100%; max-width: 430px; background: var(--bg); min-height: 100vh; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.2); padding-bottom: 110px; }
         
-        /* THE FARM */
+        /* SETUP FARM (RESTORED) */
         #setupScreen { position: fixed; top: 0; width: 100%; max-width: 430px; height: 100%; background: var(--bg); z-index: 10000; padding: 30px; box-sizing: border-box; overflow-y: auto; display: block; }
         .vault-unlocked #setupScreen { display: none !important; }
         .f-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); margin: 20px 0 8px; }
         input, select { width: 100%; border: 1px solid #E5E5EA; background: white; padding: 18px; border-radius: 16px; font-size: 16px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
         .legal-box { background: #EEE; border-radius: 14px; padding: 15px; font-size: 12px; line-height: 1.5; margin: 15px 0; border: 1px solid #DDD; }
 
-        /* HEADER & CARDS */
+        /* HEADER */
         .top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #EEE; }
         .whatsapp-btn { background: #25D366; border: none; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        /* WEIGHT CARD (BRIDGE RESTORED) */
         .card { background: white; border-radius: 28px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
         .weight-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
-        
-        /* WEIGHT CARD BRIDGE UI */
         .bridge-box { display: flex; align-items: center; justify-content: center; position: relative; margin: 30px 0; height: 40px; }
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
+        /* UI SCREENS */
         .screen { padding: 20px; box-sizing: border-box; display: none; }
         .active-screen { display: block !important; }
         .btn-p { background: var(--hb-green); color: white; border: none; width: 100%; padding: 20px; border-radius: 20px; font-size: 17px; font-weight: 700; cursor: pointer; }
         .capsule { width: 70px; height: 160px; background: #F2F2F7; border-radius: 35px; position: relative; overflow: hidden; border: 4px solid #FFF; }
         #wFill { position: absolute; bottom: 0; width: 100%; background: var(--water-blue); transition: height 1s; }
         
-        /* DIET TABS */
+        /* DIET */
         .sub-tab-pill { display: flex; background: #E5E5EA; padding: 4px; border-radius: 14px; margin-bottom: 20px; }
         .sub-tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-sec); cursor: pointer; border-radius: 10px; }
         .active-sub { background: white !important; color: var(--hb-green) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
@@ -65,13 +66,19 @@
 <div class="app-shell">
     <div id="setupScreen">
         <h1 style="font-size:38px; font-weight:900; letter-spacing:-2px; margin:0;">FitFlow Elite</h1>
+        <p style="color:var(--text-sec); font-weight:700; margin-bottom:10px;">Setup Portal</p>
+        
         <span class="f-label">Name</span><input type="text" id="inName">
         <div style="display:flex; gap:10px;">
             <div style="flex:1"><span class="f-label">Height (cm)</span><input type="number" id="inH"></div>
             <div style="flex:1"><span class="f-label">Weight (kg)</span><input type="number" id="inW"></div>
         </div>
         <span class="f-label">Gender</span><select id="inG"><option value="male">Male</option><option value="female">Female</option></select>
-        <div class="legal-box"><strong>Health Disclaimer:</strong> This app is a tracking tool and not medical advice.</div>
+        
+        <div class="legal-box">
+            <strong>Disclaimer:</strong> This application is a tracking tool and does not provide medical advice. Consult a doctor before starting.
+        </div>
+        
         <label style="display:flex; gap:12px; margin: 20px 0; cursor:pointer;"><input type="checkbox" id="termsCheck"><span>Accept terms and 7-day rule.</span></label>
         <button class="btn-p" onclick="initApp()">Save & Start</button>
     </div>
@@ -231,7 +238,14 @@
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         const goal = getIdealGoal(data.h, data.g);
         const diff = (Number(data.w) - goal).toFixed(1);
-        const message = `🚀 *FITFLOW ELITE PROGRESS REPORT* 🚀\n\n👤 *User:* ${data.name}\n⚖️ *Weight:* ${data.w} kg\n🎯 *Ideal Goal:* ${goal} kg\n📉 *To Go:* ${diff} kg\n\n📲 *Download:* https://krishnamu045-rgb.github.io/fitflow/`;
+        const message = 
+            `🚀 *FITFLOW ELITE PROGRESS REPORT* 🚀\n\n` +
+            `👤 *User:* ${data.name}\n` +
+            `⚖️ *Current Weight:* ${data.w} kg\n` +
+            `🎯 *Ideal Goal:* ${goal} kg\n` +
+            `📉 *Remaining:* ${diff} kg to go!\n\n` +
+            `📲 *DOWNLOAD APP HERE:* \n` +
+            `https://krishnamu045-rgb.github.io/fitflow/`;
         window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
     }
 
