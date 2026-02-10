@@ -33,38 +33,35 @@
         .gender-option input:checked + label { border-color: var(--hb-green); background: #F0F9E8; color: var(--hb-green); }
         .legal-box { background: #F2F2F7; border-radius: 16px; padding: 18px; font-size: 12px; line-height: 1.5; margin: 15px 0; border: 1px solid #E5E5EA; }
 
-        /* HEADER & TOP BAR */
-        .top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #EEE; }
-        .whatsapp-btn { background: #25D366; border: none; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-
         /* HOME CARDS */
+        .top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #EEE; }
         .card { background: white; border-radius: 28px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
         .weight-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
         .bridge-box { display: flex; align-items: center; justify-content: center; position: relative; margin: 30px 0; height: 40px; }
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* WATER CARD UI */
-        .capsule { width: 70px; height: 160px; background: #F2F2F7; border-radius: 35px; position: relative; overflow: hidden; border: 4px solid #FFF; }
-        #wFill { position: absolute; bottom: 0; width: 100%; background: var(--water-blue); transition: height 1s; }
-
-        /* DIET TABS & GRID */
-        .diet-toggle { display: flex; background: #EEE; padding: 4px; border-radius: 12px; margin-bottom: 15px; }
-        .toggle-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; cursor: pointer; border-radius: 10px; color: var(--text-sec); }
-        .active-toggle { background: white; color: var(--hb-green); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* DIET MASTER TOGGLE */
+        .diet-toggle { display: flex; background: #EEE; padding: 5px; border-radius: 15px; margin-bottom: 20px; }
+        .toggle-btn { flex: 1; padding: 12px; text-align: center; font-size: 13px; font-weight: 900; cursor: pointer; border-radius: 12px; color: var(--text-sec); transition: 0.3s; }
+        .active-toggle { background: white; color: var(--hb-green); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
         .sub-tab-pill { display: flex; background: #E5E5EA; padding: 4px; border-radius: 14px; margin-bottom: 15px; }
         .sub-tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-sec); cursor: pointer; border-radius: 10px; }
         .active-sub { background: white !important; color: var(--hb-green) !important; }
-        .recipe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        
+        /* RECIPE GRID */
+        .recipe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; border-top: 2px solid #F2F2F7; padding-top: 20px; }
         .recipe-item { background: white; padding: 12px 5px; border-radius: 18px; border: 1px solid #EEE; text-align: center; cursor: pointer; }
 
         .screen { padding: 20px; box-sizing: border-box; display: none; }
         .active-screen { display: block !important; }
         .diet-sub-screen { display: none; }
         .active-diet { display: block !important; }
-        .btn-p { background: var(--hb-green); color: white; border: none; width: 100%; padding: 20px; border-radius: 20px; font-size: 17px; font-weight: 700; cursor: pointer; width: 100%; }
-        
+        .btn-p { background: var(--hb-green); color: white; border: none; width: 100%; padding: 20px; border-radius: 20px; font-size: 17px; font-weight: 700; cursor: pointer; }
+        .capsule { width: 70px; height: 160px; background: #F2F2F7; border-radius: 35px; position: relative; overflow: hidden; border: 4px solid #FFF; }
+        #wFill { position: absolute; bottom: 0; width: 100%; background: var(--water-blue); transition: height 1s; }
+
         .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 430px; background: white; height: 85px; display: flex; justify-content: center; align-items: center; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
         .tab-pill { display: flex; background: #F2F2F7; padding: 6px; border-radius: 25px; width: 90%; }
         .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); border-radius: 20px; cursor: pointer; }
@@ -87,16 +84,12 @@
             <div class="gender-option"><input type="radio" name="gender" value="female" id="female"><label for="female">Female</label></div>
         </div>
         <div class="legal-box"><strong>Disclaimer:</strong> Tracking tool only. Consult a doctor.</div>
-        <label style="display:flex; gap:12px; margin: 15px 0; cursor:pointer;"><input type="checkbox" id="termsCheck" style="width:20px; height:20px;"><span style="font-size:13px; font-weight:600;">Accept terms & 7-day rule.</span></label>
+        <label style="display:flex; gap:12px; margin: 15px 0; cursor:pointer;"><input type="checkbox" id="termsCheck"><span>Accept terms & 7-day rule.</span></label>
         <button class="btn-p" onclick="initApp()">Save & Start</button>
     </div>
 
-    <div class="top-bar">
-        <h2 id="outName" style="margin:0; font-weight: 800;">Hi!</h2>
-        <button class="whatsapp-btn" onclick="shareWA()"><svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.408 0 12.044c0 2.123.555 4.197 1.608 6.04L0 24l6.105-1.602a11.832 11.832 0 005.937 1.606h.005c6.637 0 12.046-5.409 12.05-12.046a11.808 11.808 0 00-3.542-8.514z"/></svg></button>
-    </div>
-
     <div id="homeTab" class="screen active-screen">
+        <div class="top-bar"><h2 id="outName" style="margin:0; font-weight: 800;">Hi!</h2></div>
         <div class="card">
             <div style="display:flex; justify-content:space-between;">
                 <div><span class="f-label">Current</span><span class="weight-num" id="curW">0.0</span></div>
@@ -111,26 +104,17 @@
                 <span class="f-label">Hydration</span>
                 <div style="font-size:32px; font-weight:900; color:var(--water-blue);" id="curH">0 ml</div>
                 <div style="font-size:12px; font-weight:700;">Target: <span id="goalH">0</span> ml</div>
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button class="btn-p" style="padding:10px; background:#E1F5FE; color:var(--water-blue);" onclick="addWater(-250)">-</button>
-                    <button class="btn-p" style="padding:10px; background:var(--water-blue);" onclick="addWater(250)">+ 250ML</button>
-                </div>
+                <div style="display:flex; gap:10px; margin-top:10px;"><button class="btn-p" style="padding:10px; background:var(--water-blue);" onclick="addWater(250)">+ 250ML</button></div>
             </div>
         </div>
-        <div class="card" style="border: 2px solid #F0F9E8; display: flex; align-items: center; gap: 20px;">
-            <div style="background:var(--hb-green); color:white; width:55px; height:55px; display:flex; align-items:center; justify-content:center; border-radius:18px; font-size:24px;">🚀</div>
-            <div>
-                <h3 style="font-size:26px; font-weight:900; margin:0;"><span id="weeksLeft">--</span> Weeks</h3>
-                <p id="velTxt" style="font-size:11px; color:var(--hb-green); margin:0; font-weight:700; text-transform:uppercase;">PREDICTION</p>
-            </div>
-        </div>
+        <div class="card"><span class="f-label">Prediction</span><h3 style="font-size:26px; font-weight:900; margin:0;"><span id="weeksLeft">--</span> Weeks</h3></div>
         <p style="text-align:center;"><a href="#" onclick="masterReset()" style="color:var(--text-sec); font-size:11px; text-decoration:none;">MASTER DATA RESET</a></p>
     </div>
 
     <div id="dietTab" class="screen">
         <div class="diet-toggle">
-            <div id="mPlanVeg" class="toggle-btn active-toggle" onclick="setDietType('veg')">VEGETARIAN</div>
-            <div id="mPlanNon" class="toggle-btn" onclick="setDietType('nonveg')">NON-VEG</div>
+            <div id="masterVeg" class="toggle-btn active-toggle" onclick="unifyDiet('veg')">VEGETARIAN</div>
+            <div id="masterNon" class="toggle-btn" onclick="unifyDiet('nonveg')">NON-VEG</div>
         </div>
 
         <div class="sub-tab-pill">
@@ -144,18 +128,14 @@
             <div class="card"><span class="f-label">08:30 AM</span><div style="font-weight:700;">Herbalife Shake (3 Scoops)</div></div>
         </div>
         <div id="dietAfternoon" class="diet-sub-screen">
-            <div class="card"><span class="f-label">11:00 AM</span><div style="font-weight:700;">1 Small Bowl Papaya (150g)</div></div>
-            <div class="card"><span class="f-label">01:30 PM - Lunch</span><div id="lunchText" style="font-weight:700;">Dal + Sabzi + 100g Brown Rice</div></div>
+            <div class="card"><span class="f-label">01:30 PM - Lunch</span><div id="lunchBox" style="font-weight:700;">Dal + Sabzi + 100g Rice</div></div>
         </div>
         <div id="dietEvening" class="diet-sub-screen">
             <div class="card"><span class="f-label">05:30 PM</span><div style="font-weight:700;">Afresh + Roasted Chana</div></div>
             <div class="card" style="background:#F0F9E8;"><span class="f-label" style="color:var(--hb-green)">08:00 PM</span><div style="font-weight:700;">Herbalife Shake (3 Scoops)</div></div>
         </div>
 
-        <div class="sub-tab-pill" style="margin-top:20px;">
-            <div id="rVegBtn" class="sub-tab-btn active-sub" onclick="switchRecipes('veg')">Veg Recipes</div>
-            <div id="rNonBtn" class="sub-tab-btn" onclick="switchRecipes('nonveg')">Non-Veg Recipes</div>
-        </div>
+        <span class="f-label" style="margin-top:20px;">Healthy Recipes</span>
         <div class="recipe-grid" id="recipeGrid"></div>
     </div>
 
@@ -166,22 +146,36 @@
 </div>
 
 <script>
-    const vegRec = [{n:'Pesarattu',i:'🥬'},{n:'Paneer',i:'🧀'},{n:'Dal Soup',i:'🥣'},{n:'Oats Idli',i:'⚪'},{n:'Sprouts',i:'🌱'},{n:'Salad',i:'🥗'},{n:'Soya',i:'🍢'},{n:'Buttermilk',i:'🥛'},{n:'Papaya',i:'🥭'}];
-    const nonRec = [{n:'Boiled Egg',i:'🥚'},{n:'Chicken',i:'🍗'},{n:'Fish Fry',i:'🐟'},{n:'Bhurji',i:'🍳'},{n:'Soup',i:'🍲'},{n:'Omelette',i:'🥘'},{n:'Steamed',i:'🐠'},{n:'Salad',i:'🥗'},{n:'Egg White',i:'⚪'}];
+    const vRec = [{n:'Pesarattu',i:'🥬'},{n:'Paneer',i:'🧀'},{n:'Dal Soup',i:'🥣'},{n:'Oats Idli',i:'⚪'},{n:'Sprouts',i:'🌱'},{n:'Salad',i:'🥗'},{n:'Soya',i:'🍢'},{n:'Buttermilk',i:'🥛'},{n:'Papaya',i:'🥭'}];
+    const nRec = [{n:'Boiled Egg',i:'🥚'},{n:'Chicken',i:'🍗'},{n:'Fish Fry',i:'🐟'},{n:'Bhurji',i:'🍳'},{n:'Soup',i:'🍲'},{n:'Omelette',i:'🥘'},{n:'Steamed',i:'🐠'},{n:'Salad',i:'🥗'},{n:'Egg White',i:'⚪'}];
 
-    function setDietType(t) {
-        document.getElementById('mPlanVeg').classList.toggle('active-toggle', t==='veg');
-        document.getElementById('mPlanNon').classList.toggle('active-toggle', t==='nonveg');
-        document.getElementById('lunchText').innerText = t==='veg' ? 'Dal + Sabzi + 100g Brown Rice' : '150g Chicken/Fish + Sabzi + Salad';
+    function unifyDiet(t) {
+        // Toggle UI
+        document.getElementById('masterVeg').classList.toggle('active-toggle', t==='veg');
+        document.getElementById('masterNon').classList.toggle('active-toggle', t==='nonveg');
+        
+        // Update Meal Planner Lunch
+        document.getElementById('lunchBox').innerText = t==='veg' ? 'Dal + Sabzi + 100g Brown Rice' : '150g Chicken/Fish + Sabzi + Salad (No Rice)';
+        
+        // Update Recipe Grid
+        const grid = document.getElementById('recipeGrid'); grid.innerHTML = '';
+        (t==='veg'?vRec:nRec).forEach(r => {
+            grid.innerHTML += `<div class="recipe-item" onclick="alert('${r.n} Preparation Ready!')"><div style="font-size:24px;">${r.i}</div><div style="font-size:10px;font-weight:800;">${r.n}</div></div>`;
+        });
     }
 
-    function switchRecipes(t) {
-        document.getElementById('rVegBtn').classList.toggle('active-sub', t==='veg');
-        document.getElementById('rNonBtn').classList.toggle('active-sub', t==='nonveg');
-        const g = document.getElementById('recipeGrid'); g.innerHTML = '';
-        (t==='veg'?vegRec:nonRec).forEach(r => {
-            g.innerHTML += `<div class="recipe-item"><div style="font-size:24px;">${r.i}</div><div style="font-size:10px;font-weight:800;">${r.n}</div></div>`;
-        });
+    function dietNav(p) {
+        document.querySelectorAll('.diet-sub-screen').forEach(s => s.classList.remove('active-diet'));
+        document.querySelectorAll('#dietTab .sub-tab-btn').forEach(b => b.classList.remove('active-sub'));
+        document.getElementById('diet' + p.charAt(0).toUpperCase() + p.slice(1)).classList.add('active-diet');
+        document.getElementById('btn' + p.charAt(0).toUpperCase() + p.slice(1)).classList.add('active-sub');
+    }
+
+    function nav(id, el) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+        document.querySelectorAll('.tab-btn').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active-screen'); el.classList.add('active');
+        if(id === 'dietTab') { dietNav('morning'); unifyDiet('veg'); }
     }
 
     function initApp() {
@@ -209,21 +203,6 @@
         const weeks = Math.max(0.1, (Date.now() - Number(d.startD)) / (7 * 24 * 60 * 60 * 1000));
         let vel = (Number(d.startW) - curW) / weeks;
         document.getElementById('weeksLeft').innerText = vel > 0 ? Math.ceil(diff / vel) : Math.ceil(diff);
-        switchRecipes('veg'); setDietType('veg');
-    }
-
-    function dietNav(p) {
-        document.querySelectorAll('.diet-sub-screen').forEach(s => s.classList.remove('active-diet'));
-        document.querySelectorAll('#dietTab .sub-tab-btn').forEach(b => { if(b.id.includes('btn')) b.classList.remove('active-sub') });
-        document.getElementById('diet' + p.charAt(0).toUpperCase() + p.slice(1)).classList.add('active-diet');
-        document.getElementById('btn' + p.charAt(0).toUpperCase() + p.slice(1)).classList.add('active-sub');
-    }
-
-    function nav(id, el) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-        document.querySelectorAll('.tab-btn').forEach(n => n.classList.remove('active'));
-        document.getElementById(id).classList.add('active-screen'); el.classList.add('active');
-        if(id === 'dietTab') dietNav('morning');
     }
 
     function updateWeight() {
@@ -231,7 +210,6 @@
         let v = prompt("New Weight (kg):", d.w);
         if(v && !isNaN(v)) { d.w = Number(v); localStorage.setItem(VAULT_KEY, JSON.stringify(d)); render(); }
     }
-
     function addWater(v) {
         const d = JSON.parse(localStorage.getItem(VAULT_KEY));
         d.water = Math.max(0, (d.water || 0) + v);
