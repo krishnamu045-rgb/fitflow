@@ -41,18 +41,17 @@
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* DIET TAB & RECIPE SECTION */
+        /* DIET TAB & 9x9 GRID */
         .sub-tab-pill { display: flex; background: #E5E5EA; padding: 4px; border-radius: 14px; margin-bottom: 15px; }
         .sub-tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-sec); cursor: pointer; border-radius: 10px; }
         .active-sub { background: white !important; color: var(--hb-green) !important; }
         
-        .recipe-tabs { display: flex; gap: 10px; margin-top: 25px; border-top: 1px solid #EEE; padding-top: 20px; }
-        .recipe-tab-btn { flex: 1; padding: 10px; text-align: center; font-size: 12px; font-weight: 800; background: #EEE; border-radius: 10px; cursor: pointer; color: var(--text-sec); }
+        .recipe-tabs { display: flex; gap: 8px; margin-top: 25px; border-top: 2px solid #F2F2F7; padding-top: 20px; }
+        .recipe-tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 11px; font-weight: 900; background: #E5E5EA; border-radius: 12px; cursor: pointer; color: var(--text-sec); letter-spacing: 0.5px; }
         .active-recipe-tab { background: var(--hb-green); color: white; }
 
-        .recipe-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 15px 0; scrollbar-width: none; }
-        .recipe-scroll::-webkit-scrollbar { display: none; }
-        .recipe-item { min-width: 140px; background: white; padding: 15px; border-radius: 22px; border: 1px solid #EEE; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; }
+        .recipe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .recipe-item { background: white; padding: 12px 5px; border-radius: 18px; border: 1px solid #EEE; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); cursor: pointer; }
 
         .screen { padding: 20px; box-sizing: border-box; display: none; }
         .active-screen { display: block !important; }
@@ -119,12 +118,11 @@
             <div class="card"><span class="f-label">08:00 PM</span><div style="font-weight:700;">Herbalife Shake (3 Scoops)</div></div>
         </div>
 
-        <span class="f-label">Healthy Recipes</span>
         <div class="recipe-tabs">
-            <div id="rVegBtn" class="recipe-tab-btn active-recipe-tab" onclick="switchRecipes('veg')">VEGETARIAN</div>
-            <div id="rNonBtn" class="recipe-tab-btn" onclick="switchRecipes('nonveg')">NON-VEG</div>
+            <div id="rVegBtn" class="recipe-tab-btn active-recipe-tab" onclick="switchRecipes('veg')">VEG (9)</div>
+            <div id="rNonBtn" class="recipe-tab-btn" onclick="switchRecipes('nonveg')">NON-VEG (9)</div>
         </div>
-        <div class="recipe-scroll" id="recipeScroll">
+        <div class="recipe-grid" id="recipeGrid">
             </div>
     </div>
 
@@ -136,23 +134,26 @@
 
 <script>
     const vegList = [
-        { n:'Pesarattu', i:'🥬', d:'Moong Gram Dosa' },
-        { n:'Paneer Tikka', i:'🧀', d:'100g Grilled Paneer' },
-        { n:'Dal Soup', i:'🥣', d:'Moong Dal Liquid' }
+        { n:'Pesarattu', i:'🥬' }, { n:'Paneer Tikka', i:'🧀' }, { n:'Dal Soup', i:'🥣' },
+        { n:'Oats Idli', i:'⚪' }, { n:'Sprouts', i:'🌱' }, { n:'Veg Salad', i:'🥗' },
+        { n:'Soya Chunks', i:'🍢' }, { n:'Buttermilk', i:'🥛' }, { n:'Papaya', i:'🥭' }
     ];
     const nonVegList = [
-        { n:'Egg Snack', i:'🥚', d:'2 Boiled Eggs' },
-        { n:'Lemon Chicken', i:'🍗', d:'150g Breast Strips' },
-        { n:'Grilled Fish', i:'🐟', d:'150g White Fish' }
+        { n:'Boiled Egg', i:'🥚' }, { n:'Grilled Chkn', i:'🍗' }, { n:'Fish Fry', i:'🐟' },
+        { n:'Egg Bhurji', i:'🍳' }, { n:'Chkn Soup', i:'🍲' }, { n:'Omelette', i:'🥘' },
+        { n:'Steamed Fish', i:'🐠' }, { n:'Chkn Salad', i:'🥗' }, { n:'Boiled EggW', i:'⚪' }
     ];
 
     function switchRecipes(type) {
         document.getElementById('rVegBtn').classList.toggle('active-recipe-tab', type === 'veg');
         document.getElementById('rNonBtn').classList.toggle('active-recipe-tab', type === 'nonveg');
-        const scroll = document.getElementById('recipeScroll');
-        scroll.innerHTML = '';
+        const grid = document.getElementById('recipeGrid');
+        grid.innerHTML = '';
         (type === 'veg' ? vegList : nonVegList).forEach(r => {
-            scroll.innerHTML += `<div class="recipe-item" onclick="alert('${r.d}')"><div style="font-size:24px;">${r.i}</div><div style="font-size:11px;font-weight:800;">${r.n}</div></div>`;
+            grid.innerHTML += `<div class="recipe-item">
+                <div style="font-size:26px; margin-bottom:5px;">${r.i}</div>
+                <div style="font-size:10px; font-weight:800; line-height:1.2;">${r.n}</div>
+            </div>`;
         });
     }
 
@@ -199,7 +200,6 @@
         let v = prompt("New Weight (kg):", data.w);
         if(v && !isNaN(v)) { data.w = Number(v); localStorage.setItem(VAULT_KEY, JSON.stringify(data)); render(); }
     }
-
     window.onload = render;
 </script>
 </body>
