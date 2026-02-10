@@ -8,8 +8,6 @@
         :root { --hb-green: #78BE20; --water-blue: #00A3E0; --bg: #F8F9FB; --card-bg: #FFFFFF; --text: #1C1C1E; --text-sec: #8E8E93; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; color: var(--text); -webkit-font-smoothing: antialiased; }
         .app-shell { max-width: 430px; margin: auto; min-height: 100vh; position: relative; }
-        
-        /* This prevents the "Flicker" of the form on refresh */
         .screen { display: none; padding: 30px 20px; box-sizing: border-box; min-height: 100vh; }
         .active { display: block !important; }
 
@@ -25,25 +23,33 @@
         .header h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; margin: 0; }
         .whatsapp-btn { position: absolute; top: 5px; right: 0; background: #25D366; color: white; border: none; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); }
 
-        .card { background: white; border-radius: 32px; padding: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); margin-bottom: 18px; position: relative; overflow: hidden; }
+        .card { background: white; border-radius: 32px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); margin-bottom: 18px; position: relative; overflow: hidden; }
         
         /* Weight Section */
-        .weight-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
+        .weight-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; }
         .weight-num { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
-        .weight-unit { font-size: 16px; font-weight: 700; color: var(--text-sec); margin-left: 2px; }
+        .weight-unit { font-size: 16px; font-weight: 700; color: var(--text-sec); }
         .bar-container { height: 10px; background: #F2F2F7; border-radius: 5px; margin: 10px 0; overflow: hidden; }
         .bar-fill { height: 100%; background: var(--hb-green); width: 0%; transition: width 1.2s ease; }
 
+        /* Intelligent Meal Tracker */
+        .guide-status { font-size: 12px; font-weight: 700; color: var(--hb-green); margin-bottom: 10px; background: #F0F9E8; display: inline-block; padding: 4px 12px; border-radius: 20px; }
+        .meal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 5px; }
+        .meal-item { background: #F2F2F7; border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
+        .meal-item.done { background: #F0F9E8; border-color: var(--hb-green); }
+        .meal-item.suggested { border-color: rgba(120, 190, 32, 0.3); background: #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .meal-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+        .meal-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); }
+        .meal-item.done .meal-label { color: var(--hb-green); }
+
         /* Water Card */
-        .card-water { height: 150px; display: flex; flex-direction: column; justify-content: flex-end; }
+        .card-water { height: 140px; display: flex; flex-direction: column; justify-content: flex-end; }
         .water-fill-bg { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--water-blue); opacity: 0.15; transition: height 0.8s ease; }
         .water-content { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: flex-end; width: 100%; }
-        .water-controls { display: flex; gap: 8px; }
-        .btn-plus { background: var(--water-blue); color: white; border: none; padding: 0 15px; height: 44px; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; }
+        .btn-plus { background: var(--water-blue); color: white; border: none; padding: 12px 18px; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; }
         .btn-minus { background: #E1F5FE; color: var(--water-blue); border: none; width: 44px; height: 44px; border-radius: 14px; font-size: 20px; font-weight: 800; cursor: pointer; }
 
-        .card-weekly { background: linear-gradient(135deg, #ffffff 0%, #fafff2 100%); border: 1px solid rgba(120, 190, 32, 0.12); }
-        .weeks-num { font-size: 36px; font-weight: 900; color: var(--hb-green); background: #f0f9e8; padding: 8px 18px; border-radius: 14px; margin-right: 15px; }
+        .weeks-num { font-size: 32px; font-weight: 900; color: var(--hb-green); background: #f0f9e8; padding: 5px 15px; border-radius: 12px; margin-right: 12px; }
         .btn-action { background: #F2F2F7; border: none; padding: 14px 20px; border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
@@ -75,88 +81,82 @@
 
         <div class="card">
             <div class="weight-row">
-                <div><div class="label">Current Weight</div><div><span class="weight-num" id="curW">0.0</span><span class="weight-unit">kg</span></div></div>
-                <div style="text-align:right;"><div class="label" style="color:var(--hb-green)">Goal Weight</div><div><span class="weight-num" id="goalW" style="color:var(--hb-green)">0</span><span class="weight-unit">kg</span></div></div>
+                <div><div class="label">Current</div><div><span class="weight-num" id="curW">0.0</span><span class="weight-unit">kg</span></div></div>
+                <div style="text-align:right;"><div class="label" style="color:var(--hb-green)">Goal</div><div><span class="weight-num" id="goalW" style="color:var(--hb-green)">0</span><span class="weight-unit">kg</span></div></div>
             </div>
             <div class="bar-container"><div class="bar-fill" id="wBar"></div></div>
             <button class="btn-action" onclick="updateWeight()">Update Weight</button>
         </div>
 
+        <div class="card">
+            <div class="label">Daily 3-2-1 Guide</div>
+            <div id="mealStatus" class="guide-status">Analyzing target...</div>
+            <div class="meal-grid">
+                <div class="meal-item" id="m-s1" onclick="toggleMeal('s1')"><span class="meal-icon">🥤</span><span class="meal-label">Shake 1</span></div>
+                <div class="meal-item" id="m-s2" onclick="toggleMeal('s2')"><span class="meal-icon">🥤</span><span class="meal-label">Shake 2</span></div>
+                <div class="meal-item" id="m-s3" onclick="toggleMeal('s3')"><span class="meal-icon">🥤</span><span class="meal-label">Shake 3</span></div>
+                <div class="meal-item" id="m-af1" onclick="toggleMeal('af1')"><span class="meal-icon">🍵</span><span class="meal-label">Afresh 1</span></div>
+                <div class="meal-item" id="m-af2" onclick="toggleMeal('af2')"><span class="meal-icon">🍵</span><span class="meal-label">Afresh 2</span></div>
+                <div class="meal-item" id="m-meal" onclick="toggleMeal('meal')"><span class="meal-icon">🥗</span><span class="meal-label">Healthy Meal</span></div>
+            </div>
+        </div>
+
         <div class="card card-water">
             <div class="water-fill-bg" id="wFill"></div>
             <div class="water-content">
-                <div><div class="label">Day Water Intake</div><div style="font-size:32px; font-weight:800;"><span id="curH">0</span> <small style="font-size:14px; color:var(--text-sec);">/ <span id="goalH">0</span> ml</small></div></div>
-                <div class="water-controls">
+                <div><div class="label">Day Water Intake</div><div style="font-size:28px; font-weight:800;"><span id="curH">0</span> <small style="font-size:12px; color:var(--text-sec);">/ <span id="goalH">0</span> ml</small></div></div>
+                <div style="display:flex; gap:8px;">
                     <button class="btn-minus" onclick="reduceWater()">−</button>
                     <button class="btn-plus" onclick="addWater()">+ 250ml</button>
                 </div>
             </div>
         </div>
 
-        <div class="card card-weekly">
+        <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fafff2 100%);">
             <div class="label">Time Intelligence</div>
-            <div style="display:flex; align-items:center; margin:15px 0;">
+            <div style="display:flex; align-items:center; margin-top:10px;">
                 <div id="weeksLeft" class="weeks-num">--</div>
-                <div style="font-weight:700; font-size:15px; line-height:1.2;">Weeks to reach goal</div>
+                <div style="font-weight:700; font-size:15px;">Weeks to reach goal</div>
             </div>
         </div>
 
-        <button onclick="localStorage.clear(); location.reload();" style="background:none; border:none; color:var(--text-sec); width:100%; margin: 25px 0; font-size:12px; text-decoration:underline; cursor:pointer;">Reset Profile</button>
+        <button onclick="localStorage.clear(); location.reload();" style="background:none; border:none; color:var(--text-sec); width:100%; margin: 20px 0; font-size:12px; text-decoration:underline;">Reset Profile</button>
     </div>
 </div>
 
 <script>
-    // DATA MODEL
-    let appData = { name: '', height: 0, weight: 0, startW: 0, goal: 0, water: 0, waterGoal: 0, lastDate: '' };
+    let appData = { name: '', height: 0, weight: 0, startW: 0, goal: 0, water: 0, waterGoal: 0, lastDate: '', meals: {} };
 
-    // --- CRITICAL AUTO-LOAD ---
     function checkMemory() {
-        const saved = localStorage.getItem('FitFlow_Pro_V10');
+        const saved = localStorage.getItem('FitFlow_Pro_V12');
         if (saved) {
             appData = JSON.parse(saved);
-            
-            // Check if it's a new day
             const today = new Date().toDateString();
             if (appData.lastDate !== today) {
                 appData.water = 0;
+                appData.meals = { s1:false, s2:false, s3:false, af1:false, af2:false, meal:false };
                 appData.lastDate = today;
-                localStorage.setItem('FitFlow_Pro_V10', JSON.stringify(appData));
+                saveData();
             }
-
-            // Immediately show dashboard
+            renderDashboard();
             document.getElementById('setupScreen').classList.remove('active');
             document.getElementById('dashScreen').classList.add('active');
-            renderDashboard();
         } else {
-            // No data, show setup
             document.getElementById('setupScreen').classList.add('active');
         }
     }
 
-    // Run immediately when script loads
     checkMemory();
 
     function initApp() {
         const n = document.getElementById('inName').value;
         const h = parseFloat(document.getElementById('inH').value);
         const w = parseFloat(document.getElementById('inW').value);
-        const g = document.getElementById('inG').value;
-        
         if(!n || !h || !w) return alert("Fill all fields.");
-
-        appData.name = n;
-        appData.height = h;
-        appData.weight = w;
-        appData.startW = w;
-        appData.lastDate = new Date().toDateString();
-        
-        let inches = (h - 152.4) / 2.54;
-        appData.goal = Math.round((g === 'male') ? 50 + (2.3 * inches) : 45.5 + (2.3 * inches));
-        appData.waterGoal = Math.round(w * 35);
-        
-        saveData();
-        renderDashboard();
-        
+        appData = { name:n, height:h, weight:w, startW:w, lastDate:new Date().toDateString(), 
+                    meals: { s1:false, s2:false, s3:false, af1:false, af2:false, meal:false },
+                    goal: Math.round(50 + (2.3 * ((h - 152.4) / 2.54))), waterGoal: Math.round(w * 35), water:0 };
+        saveData(); renderDashboard();
         document.getElementById('setupScreen').classList.remove('active');
         document.getElementById('dashScreen').classList.add('active');
     }
@@ -167,37 +167,48 @@
         document.getElementById('goalW').innerText = appData.goal;
         document.getElementById('curH').innerText = appData.water;
         document.getElementById('goalH').innerText = appData.waterGoal;
+        let diff = appData.weight - appData.goal;
         
-        let progress = appData.startW - appData.weight;
-        let wPct = Math.max(5, Math.min(100, (progress / (appData.startW - appData.goal)) * 100));
-        document.getElementById('wBar').style.width = wPct + "%";
+        document.getElementById('wBar').style.width = Math.max(5, Math.min(100, ((appData.startW - appData.weight) / (appData.startW - appData.goal)) * 100)) + "%";
         document.getElementById('wFill').style.height = Math.min(100, (appData.water / appData.waterGoal) * 100) + "%";
+        document.getElementById('weeksLeft').innerText = Math.max(0, Math.ceil(diff / 0.7));
         
-        let remaining = appData.weight - appData.goal;
-        document.getElementById('weeksLeft').innerText = remaining > 0 ? Math.ceil(remaining / 0.7) : "0";
-    }
+        // Intelligent Guidance Logic
+        const statusEl = document.getElementById('mealStatus');
+        const s3El = document.getElementById('m-s3');
+        
+        if (diff > 2) {
+            statusEl.innerText = "MODE: WEIGHT LOSS (2 Shakes, 1 Meal)";
+            statusEl.style.color = "var(--hb-green)";
+            s3El.style.display = "none"; // Hide 3rd shake in weight loss mode
+        } else if (diff <= 2 && diff > 0) {
+            statusEl.innerText = "MODE: FINAL STRETCH (Focus on Hydration)";
+            statusEl.style.color = "#E67E22";
+            s3El.style.display = "block";
+        } else {
+            statusEl.innerText = "MODE: MAINTENANCE (1 Shake, 2 Meals)";
+            statusEl.style.color = "var(--water-blue)";
+            s3El.style.display = "block";
+        }
 
-    function updateWeight() {
-        let val = prompt("New Weight (kg):", appData.weight);
-        if(val) {
-            appData.weight = parseFloat(val);
-            appData.waterGoal = Math.round(appData.weight * 35);
-            saveData();
-            renderDashboard();
+        // Render Meals
+        for (let key in appData.meals) {
+            const el = document.getElementById('m-' + key);
+            if(el) appData.meals[key] ? el.classList.add('done') : el.classList.remove('done');
         }
     }
 
+    function toggleMeal(key) { appData.meals[key] = !appData.meals[key]; saveData(); renderDashboard(); }
+    function updateWeight() { 
+        let val = prompt("New Weight (kg):", appData.weight);
+        if(val) { appData.weight = parseFloat(val); appData.waterGoal = Math.round(appData.weight * 35); saveData(); renderDashboard(); }
+    }
     function addWater() { appData.water += 250; saveData(); renderDashboard(); }
     function reduceWater() { if(appData.water >= 250) { appData.water -= 250; saveData(); renderDashboard(); } }
-
-    function saveData() {
-        localStorage.setItem('FitFlow_Pro_V10', JSON.stringify(appData));
-    }
-
+    function saveData() { localStorage.setItem('FitFlow_Pro_V12', JSON.stringify(appData)); }
     function shareWeightProgress() {
         const appLink = "https://krishnamu045-rgb.github.io/fitflow/";
-        let totalLost = (appData.startW - appData.weight).toFixed(1);
-        let message = `*🌟 FITFLOW SUCCESS REPORT 🌟*%0A%0A🏃‍♂️ *Total Lost:* ${totalLost}kg%0A⚖️ *Current:* ${appData.weight.toFixed(1)}kg%0A🎯 *Target:* ${appData.goal}kg%0A%0A📥 *INSTALL APP:*%0A${appLink}`;
+        let message = `*🌟 FITFLOW SUCCESS REPORT 🌟*%0A%0A🏃‍♂️ *Lost:* ${(appData.startW - appData.weight).toFixed(1)}kg%0A⚖️ *Current:* ${appData.weight.toFixed(1)}kg%0A🎯 *Goal:* ${appData.goal}kg%0A%0A📥 *INSTALL APP:*%0A${appLink}`;
         window.open(`https://wa.me/?text=${message}`, '_blank');
     }
 </script>
