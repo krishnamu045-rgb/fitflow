@@ -42,14 +42,14 @@
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* DIET & RECIPES */
+        /* DIET & EXTENDED RECIPES */
         .diet-toggle { display: flex; background: #EEE; padding: 4px; border-radius: 12px; margin-bottom: 15px; }
         .toggle-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; cursor: pointer; border-radius: 10px; color: var(--text-sec); }
         .active-toggle { background: white; color: var(--hb-green); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
-        .recipe-scroller { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
+        .recipe-scroller { display: flex; gap: 12px; overflow-x: auto; padding: 5px 20px 15px; margin: 0 -20px 10px; scrollbar-width: none; }
         .recipe-scroller::-webkit-scrollbar { display: none; }
-        .recipe-mini { min-width: 140px; background: white; padding: 15px; border-radius: 20px; border: 1px solid #EEE; text-align: center; }
+        .recipe-mini { min-width: 120px; background: white; padding: 15px; border-radius: 22px; border: 1px solid #EEE; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
         .sub-tab-pill { display: flex; background: #E5E5EA; padding: 4px; border-radius: 14px; margin-bottom: 15px; }
         .sub-tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-sec); cursor: pointer; border-radius: 10px; }
@@ -134,19 +134,27 @@
             <div id="nonVegBtn" class="toggle-btn" onclick="setDietType('nonveg')">NON-VEG</div>
         </div>
 
-        <span class="f-label" style="margin-top:0;">Featured Recipes</span>
+        <span class="f-label" style="margin-top:0;">Healthy Recipes</span>
         <div class="recipe-scroller">
-            <div class="recipe-mini" onclick="alert('Pesarattu Recipe:\n1. Soak Green Gram 4 hrs\n2. Grind with Ginger/Chilli\n3. Spread thin, use 1 tsp oil')">
-                <div style="font-size:20px; margin-bottom:5px;">🥞</div>
+            <div class="recipe-mini" onclick="alert('Pesarattu (Green Moong Dosa):\n- Soak 1 cup green gram (4h)\n- Grind with 1 inch ginger & 2 chillies\n- Spread thin on tawa, 1 tsp cold-pressed oil\n- Serve with ginger chutney.')">
+                <div style="font-size:24px; margin-bottom:5px;">🥬</div>
                 <div style="font-size:11px; font-weight:800;">Pesarattu</div>
             </div>
-            <div class="recipe-mini" onclick="alert('Moong Dal Soup:\n1. Cook Moong dal with turmeric\n2. Add garlic and ginger\n3. Season with cumin & pepper')">
-                <div style="font-size:20px; margin-bottom:5px;">🥣</div>
-                <div style="font-size:11px; font-weight:800;">Dal Soup</div>
+            <div class="recipe-mini" onclick="alert('Paneer Tikka (Healthy):\n- 100g Paneer cubes\n- Marinate in curd + Turmeric + Chilli\n- Air fry or grill with 1 tsp oil\n- High protein snack.')">
+                <div style="font-size:24px; margin-bottom:5px;">🧀</div>
+                <div style="font-size:11px; font-weight:800;">Paneer Tikka</div>
             </div>
-            <div class="recipe-mini" onclick="alert('Oats Idli:\n1. Dry roast oats & grind\n2. Mix with curd & veggies\n3. Steam for 10 mins')">
-                <div style="font-size:20px; margin-bottom:5px;">⚪</div>
-                <div style="font-size:11px; font-weight:800;">Oats Idli</div>
+            <div class="recipe-mini" onclick="alert('Spiced Boiled Eggs:\n- 2 Hard boiled eggs\n- Sprinkle with Black Pepper & Cumin\n- Side of fresh cucumber salad\n- Perfect midday protein.')">
+                <div style="font-size:24px; margin-bottom:5px;">🥚</div>
+                <div style="font-size:11px; font-weight:800;">Egg Snack</div>
+            </div>
+            <div class="recipe-mini" onclick="alert('Lemon Pepper Chicken:\n- 150g Chicken Breast strips\n- Marinate: Lemon juice, Garlic, Pepper\n- Sauté in minimal oil till tender\n- Zero-carb lunch option.')">
+                <div style="font-size:24px; margin-bottom:5px;">🍗</div>
+                <div style="font-size:11px; font-weight:800;">Lemon Chicken</div>
+            </div>
+            <div class="recipe-mini" onclick="alert('Fish Fry (Air Fried):\n- 150g White Fish fillet\n- Rub: Ginger-Garlic paste + Chilli\n- Air fry at 180°C for 15 mins\n- Rich in Omega-3.')">
+                <div style="font-size:24px; margin-bottom:5px;">🐟</div>
+                <div style="font-size:11px; font-weight:800;">Grilled Fish</div>
             </div>
         </div>
 
@@ -189,7 +197,7 @@
         document.getElementById('nonVegBtn').classList.toggle('active-toggle', type === 'nonveg');
         document.getElementById('lunchContent').innerHTML = type === 'veg' ? 
             '1 Bowl Dal + 1 Bowl Sabzi + 100g Brown Rice + Salad' : 
-            '150g Grilled Chicken/Fish + 1 Bowl Sabzi + Salad';
+            '150g Grilled Chicken/Fish + 1 Bowl Sabzi + Salad (No Rice)';
     }
     function getIdealGoal(h, g) {
         const height = Number(h);
