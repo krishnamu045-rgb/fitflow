@@ -3,53 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Family Pro</title>
+    <title>FitFlow Elite Pro</title>
+    <script>
+        const VAULT_KEY = 'FITFLOW_MASTER_V105';
+        if (localStorage.getItem(VAULT_KEY)) {
+            document.documentElement.classList.add('vault-unlocked');
+        }
+    </script>
     <style>
         :root { --hb-green: #78BE20; --water-blue: #00A3E0; --bg: #F8F9FB; --text: #1C1C1E; --text-sec: #8E8E93; }
-        
-        body { background: #D1D1D6; margin: 0; display: flex; justify-content: center; font-family: -apple-system, system-ui, sans-serif; }
-        .app-shell { width: 100%; max-width: 430px; background: var(--bg); min-height: 100vh; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.2); padding-bottom: 110px; overflow-x: hidden; }
-
-        /* --- SECTION 0: LOCKED SETUP FORM --- */
-        #setupScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; padding: 40px 30px; box-sizing: border-box; display: none; overflow-y: auto; }
-        #setupScreen.active { display: block !important; }
-        h1 { font-size: 38px; font-weight: 900; letter-spacing: -2px; margin: 0 0 10px 0; }
-        .field-group { margin-bottom: 18px; }
-        label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); margin-bottom: 8px; }
-        input, select { width: 100%; border: 1px solid #E5E5EA; background: white; padding: 18px; border-radius: 16px; font-size: 16px; box-sizing: border-box; margin-bottom: 18px; }
-        .legal-box { background: #E5E5EA; border-radius: 14px; padding: 15px; font-size: 12px; color: #3A3A3C; line-height: 1.5; margin-bottom: 15px; border: 1px solid #D1D1D6; }
-        .terms-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 25px; }
-        .terms-row input { width: 22px; height: 22px; margin: 0; cursor: pointer; }
-
-        /* --- DASHBOARD HEADER --- */
+        body { background: #D1D1D6; margin: 0; display: flex; justify-content: center; font-family: -apple-system, sans-serif; color: var(--text); }
+        .app-shell { width: 100%; max-width: 430px; background: var(--bg); min-height: 100vh; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.2); padding-bottom: 110px; overflow: hidden; }
+        #setupScreen { position: fixed; top: 0; width: 100%; max-width: 430px; height: 100%; background: var(--bg); z-index: 10000; padding: 30px; box-sizing: border-box; overflow-y: auto; display: block; }
+        .vault-unlocked #setupScreen { display: none !important; }
+        h1 { font-size: 38px; font-weight: 900; letter-spacing: -2px; margin: 0; }
+        .f-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); margin: 20px 0 8px; }
+        input, select { width: 100%; border: 1px solid #E5E5EA; background: white; padding: 18px; border-radius: 16px; font-size: 16px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
+        .legal-box { background: #EEE; border-radius: 14px; padding: 15px; font-size: 12px; line-height: 1.5; margin: 15px 0; border: 1px solid #DDD; }
         .top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #EEE; }
         .whatsapp-btn { background: #25D366; border: none; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
-        .screen { display: none; padding: 20px; box-sizing: border-box; }
+        .screen { padding: 20px; box-sizing: border-box; display: none; }
         .active-screen { display: block !important; }
-
-        /* --- SECTION 1: LOCKED WEIGHT CARD --- */
         .card { background: white; border-radius: 28px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
-        .weight-main-row { display: flex; justify-content: space-between; align-items: center; }
         .weight-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
-        .unit { font-size: 12px; color: var(--text-sec); font-weight: 700; margin-left: 2px; }
-        
-        .to-go-container { display: flex; align-items: center; justify-content: center; margin: 20px 0; position: relative; }
-        .to-go-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
-        .to-go-badge { background: #F0F9E8; color: var(--hb-green); padding: 8px 20px; border-radius: 20px; font-size: 18px; font-weight: 900; position: relative; z-index: 2; border: 2px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-
-        /* --- SECTION 2: LOCKED WATER CARD --- */
-        .water-card-elite { display: flex; align-items: center; gap: 20px; padding: 25px; background: white; border-radius: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .glass-capsule { width: 70px; height: 160px; background: #F2F2F7; border-radius: 35px; position: relative; overflow: hidden; border: 4px solid #FFF; }
-        .liquid-fill { position: absolute; bottom: 0; width: 100%; background: var(--water-blue); transition: height 1s ease-in-out; }
-        .ml-main { font-size: 34px; font-weight: 900; color: var(--water-blue); margin: 0; }
-
-        /* --- SECTION 3: LOCKED TAB NAVIGATION --- */
-        .tab-bar-container { position: fixed; bottom: 0; width: 100%; max-width: 430px; background: white; height: 85px; display: flex; justify-content: center; align-items: center; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); z-index: 1000; }
-        .tab-nav { display: flex; background: #F2F2F7; padding: 6px; border-radius: 25px; width: 90%; justify-content: space-between; }
-        .tab-item { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); cursor: pointer; border-radius: 20px; transition: 0.2s ease; }
-        .tab-item.active { background: white; color: var(--hb-green); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-
+        .bridge-box { display: flex; align-items: center; justify-content: center; position: relative; margin: 30px 0; height: 40px; }
+        .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
+        .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .capsule { width: 70px; height: 160px; background: #F2F2F7; border-radius: 35px; position: relative; overflow: hidden; border: 4px solid #FFF; }
+        #wFill { position: absolute; bottom: 0; width: 100%; background: var(--water-blue); transition: height 1s; }
+        .sub-tab-pill { display: flex; background: #E5E5EA; padding: 4px; border-radius: 14px; margin-bottom: 20px; }
+        .sub-tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 800; color: var(--text-sec); cursor: pointer; border-radius: 10px; }
+        .active-sub { background: white; color: var(--hb-green); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .diet-sub-screen { display: none; }
+        .active-diet { display: block !important; }
+        .tab-bar { position: fixed; bottom: 0; width: 100%; max-width: 430px; background: white; height: 85px; display: flex; justify-content: center; align-items: center; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); z-index: 1000; }
+        .tab-pill { display: flex; background: #F2F2F7; padding: 6px; border-radius: 25px; width: 90%; }
+        .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); cursor: pointer; border-radius: 20px; }
+        .tab-btn.active { background: white; color: var(--hb-green); }
         .btn-p { background: var(--hb-green); color: white; border: none; width: 100%; padding: 20px; border-radius: 20px; font-size: 17px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
@@ -57,121 +47,158 @@
 
 <div class="app-shell">
     <div id="setupScreen">
-        <h1>FitFlow</h1>
-        <p style="color:var(--text-sec); margin-bottom: 25px;">Elite Health Intelligence</p>
-        <div class="field-group"><label>Full Name</label><input type="text" id="inName" placeholder="Enter Name"></div>
-        <div style="display:flex; gap:12px;">
-            <div style="flex:1" class="field-group"><label>Height (cm)</label><input type="number" id="inH" placeholder="165"></div>
-            <div style="flex:1" class="field-group"><label>Weight (kg)</label><input type="number" id="inW" placeholder="80"></div>
+        <h1>FitFlow Elite</h1>
+        <p style="color:var(--text-sec); font-weight:600;">Transformation Portal</p>
+        <span class="f-label">Full Name</span><input type="text" id="inName">
+        <div style="display:flex; gap:10px;">
+            <div style="flex:1"><span class="f-label">Height (cm)</span><input type="number" id="inH"></div>
+            <div style="flex:1"><span class="f-label">Weight (kg)</span><input type="number" id="inW"></div>
         </div>
-        <div class="field-group"><label>Gender</label><select id="inG"><option value="male">Male</option><option value="female">Female</option></select></div>
-        <div class="legal-box"><strong>Disclaimer:</strong> This application is a personal tracking tool and does not provide medical advice. Consult your physician before starting any diet or supplement routine.</div>
-        <div class="terms-row">
-            <input type="checkbox" id="termsCheck">
-            <label style="font-size:13px; font-weight:600; cursor:pointer;" for="termsCheck">I accept the health disclaimer and terms of use.</label>
-        </div>
-        <button class="btn-p" id="saveBtn">Save & Start</button>
+        <span class="f-label">Gender</span><select id="inG"><option value="male">Male</option><option value="female">Female</option></select>
+        <div class="legal-box"><strong>Disclaimer:</strong> Not medical advice.</div>
+        <label style="display:flex; gap:10px; margin: 20px 0; cursor:pointer;"><input type="checkbox" id="termsCheck"><span>Accept 7-day rule.</span></label>
+        <button class="btn-p" onclick="initApp()">Save & Start</button>
     </div>
 
     <div class="top-bar">
         <h2 id="outName" style="margin:0; font-weight: 800;">Hi!</h2>
-        <button class="whatsapp-btn" id="waBtn">
+        <button class="whatsapp-btn" onclick="shareWA()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.408 0 12.044c0 2.123.555 4.197 1.608 6.04L0 24l6.105-1.602a11.832 11.832 0 005.937 1.606h.005c6.637 0 12.046-5.409 12.05-12.046a11.808 11.808 0 00-3.542-8.514z"/></svg>
         </button>
     </div>
 
     <div id="homeTab" class="screen active-screen">
         <div class="card">
-            <div class="weight-main-row">
-                <div class="weight-col"><span class="label">Current</span><div><span class="weight-num" id="curW">0.0</span><span class="unit">kg</span></div></div>
-                <div class="weight-col" style="text-align:right;"><span class="label" style="color:var(--hb-green)">Target</span><div><span class="weight-num" id="goalW" style="color:var(--hb-green)">0</span><span class="unit">kg</span></div></div>
+            <div style="display:flex; justify-content:space-between;">
+                <div><span class="f-label">Current</span><span class="weight-num" id="curW">0.0</span></div>
+                <div style="text-align:right;"><span class="f-label" style="color:var(--hb-green)">Target</span><span class="weight-num" id="goalW">0</span></div>
             </div>
-            <div class="to-go-container"><div class="to-go-line"></div><div class="to-go-badge" id="remainTxt">-- kg to go</div></div>
-            <button onclick="updateWeight()" style="width:100%; border:none; background:#F2F2F7; padding:12px; border-radius:12px; font-weight:700; cursor:pointer;">UPDATE WEIGHT</button>
+            <div class="to-go-container" style="display:flex; align-items:center; justify-content:center; position:relative; margin:30px 0; height:40px;">
+                <div class="bridge-line"></div>
+                <div class="bridge-badge" id="remainTxt">-- kg to go</div>
+            </div>
+            <button onclick="updateWeight()" style="width:100%; border:none; background:#F2F2F7; padding:15px; border-radius:15px; font-weight:800; cursor:pointer;">UPDATE WEIGHT</button>
         </div>
-
-        <div class="water-card-elite">
-            <div class="glass-capsule"><div id="wFill" class="liquid-fill" style="height: 0%;"></div></div>
+        <div class="card" style="display: flex; align-items: center; gap: 20px; padding: 25px;">
+            <div class="capsule"><div id="wFill"></div></div>
             <div style="flex:1">
-                <span class="label">Hydration</span>
-                <p class="ml-main" id="curH">0 ml</p>
-                <div style="font-size: 13px; font-weight: 700; color: var(--text-sec); margin-top:5px;">Target: <span id="goalH">0</span> ml</div>
-                <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button style="width:50px; background:#E1F5FE; color:var(--water-blue); border:none; border-radius:15px; font-size:22px; font-weight:bold; cursor:pointer;" onclick="addWater(-250)">−</button>
-                    <button style="flex:1; background:var(--water-blue); color:white; border:none; padding:15px; border-radius:15px; font-weight:800; cursor:pointer;" onclick="addWater(250)">+ 250ML</button>
+                <span class="f-label">Hydration</span>
+                <div style="font-size:32px; font-weight:900; color:var(--water-blue);" id="curH">0 ml</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-sec); margin-top:5px;">Daily Target: <span id="goalH">0</span> ml</div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button class="btn-p" style="padding:12px; background:#E1F5FE; color:var(--water-blue);" onclick="addWater(-250)">-</button>
+                    <button class="btn-p" style="padding:12px; background:var(--water-blue);" onclick="addWater(250)">+ 250ML</button>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="tab-bar-container">
-        <div class="tab-nav">
-            <div class="tab-item active" onclick="nav('homeTab', this)">Home</div>
-            <div class="tab-item" onclick="nav('dietTab', this)">Diet</div>
-            <div class="tab-item" onclick="nav('workoutTab', this)">Plan</div>
+        <div class="card" style="border: 2px solid #F0F9E8; display: flex; align-items: center; gap: 20px;">
+            <div style="background:var(--hb-green); color:white; width:55px; height:55px; display:flex; align-items:center; justify-content:center; border-radius:18px; font-size:24px;">🚀</div>
+            <div>
+                <h3 style="font-size:26px; font-weight:900; margin:0;"><span id="weeksLeft">--</span> Weeks</h3>
+                <p id="velTxt" style="font-size:11px; color:var(--hb-green); margin:0; font-weight:700; text-transform:uppercase;"></p>
+            </div>
         </div>
     </div>
+
+    <div id="dietTab" class="screen">
+        <div class="sub-tab-pill">
+            <div id="btnMorning" class="sub-tab-btn active-sub" onclick="dietNav('morning')">Morning</div>
+            <div id="btnAfternoon" class="sub-tab-btn" onclick="dietNav('afternoon')">Afternoon</div>
+            <div id="btnEvening" class="sub-tab-btn" onclick="dietNav('evening')">Evening</div>
+        </div>
+        <div id="dietMorning" class="diet-sub-screen active-diet">
+            <div class="card"><span class="f-label">06:30 AM</span><div style="font-weight:700;">Afresh (Warm) + 5 Soaked Almonds</div></div>
+            <div class="card"><span class="f-label">08:30 AM</span><div style="font-weight:700;">Formula 1 Shake (3 Scoops) + Protein (1 Scoop)</div></div>
+        </div>
+        <div id="dietAfternoon" class="diet-sub-screen">
+            <div class="card"><span class="f-label">11:00 AM</span><div style="font-weight:700;">1 Small Bowl Papaya (150g)</div></div>
+            <div class="card"><span class="f-label">01:30 PM - Lunch</span><div style="font-weight:700;">1 Bowl Dal + 1 Bowl Sabzi<br>1 Small Cup Brown Rice (100g) + Fresh Salad</div></div>
+        </div>
+        <div id="dietEvening" class="diet-sub-screen">
+            <div class="card"><span class="f-label">05:30 PM</span><div style="font-weight:700;">Afresh (Warm) + 1 Small Bowl Roasted Chana</div></div>
+            <div class="card" style="background:#F0F9E8;"><span class="f-label" style="color:var(--hb-green);">08:00 PM</span><div style="font-weight:700;">Herbalife Shake (3 Scoops) in 300ml Water</div></div>
+        </div>
+    </div>
+
+    <div class="tab-bar"><div class="tab-pill">
+        <div class="tab-btn active" onclick="nav('homeTab', this)">Home</div>
+        <div class="tab-btn" onclick="nav('dietTab', this)">Diet</div>
+    </div></div>
 </div>
 
 <script>
-    const STORAGE_KEY = 'FITFLOW_ELITE_IRON_LOCKED_V1';
-    let user = { name:'', weight:0, startW:0, goal:0, water:0, waterGoal:0, lastDate:'' };
+    function initApp() {
+        const n = document.getElementById('inName').value, h = parseFloat(document.getElementById('inH').value), w = parseFloat(document.getElementById('inW').value), acc = document.getElementById('termsCheck').checked;
+        if(!n || !h || !w || !acc) return alert("Fill all fields.");
+        const user = { name:n, startW:w, weight:w, goal:70, water:0, lastUpd:Date.now(), startD:Date.now() };
+        localStorage.setItem(VAULT_KEY, JSON.stringify(user));
+        location.reload();
+    }
 
     function render() {
+        const data = localStorage.getItem(VAULT_KEY);
+        if(!data) return;
+        const user = JSON.parse(data);
         document.getElementById('outName').innerText = "Hi, " + user.name.split(' ')[0];
         document.getElementById('curW').innerText = user.weight.toFixed(1);
         document.getElementById('goalW').innerText = user.goal;
         document.getElementById('curH').innerText = user.water + " ml";
-        document.getElementById('goalH').innerText = user.waterGoal;
-        const diff = (user.weight - user.goal).toFixed(1);
-        document.getElementById('remainTxt').innerText = diff > 0 ? diff + " kg to go" : "Goal Reached! 🌟";
-        document.getElementById('wFill').style.height = Math.min(100, (user.water / user.waterGoal) * 100) + "%";
+        document.getElementById('goalH').innerText = Math.round(user.weight * 35);
+        document.getElementById('wFill').style.height = Math.min(100, (user.water / (user.weight * 35)) * 100) + "%";
+        const diff = user.weight - user.goal;
+        document.getElementById('remainTxt').innerText = diff > 0 ? diff.toFixed(1) + " kg to go" : "Goal Reached!";
+        const weeksPassed = Math.max(0.1, (Date.now() - user.startD) / (7 * 24 * 60 * 60 * 1000));
+        let velocity = (user.startW - user.weight) / weeksPassed;
+        if (velocity <= 0) {
+            document.getElementById('weeksLeft').innerText = Math.ceil(diff);
+            document.getElementById('velTxt').innerText = "Ready to start your journey?";
+        } else {
+            document.getElementById('weeksLeft').innerText = Math.ceil(diff / velocity);
+            document.getElementById('velTxt').innerText = `You are killing it at ${velocity.toFixed(2)}kg/week!`;
+        }
     }
 
-    document.getElementById('saveBtn').addEventListener('click', function() {
-        const n = document.getElementById('inName').value;
-        const h = parseFloat(document.getElementById('inH').value);
-        const w = parseFloat(document.getElementById('inW').value);
-        const g = document.getElementById('inG').value;
-        const accepted = document.getElementById('termsCheck').checked;
+    function shareWA() { 
+        const data = localStorage.getItem(VAULT_KEY);
+        if(!data) return;
+        const user = JSON.parse(data);
+        const diff = (user.weight - user.goal).toFixed(1);
+        const message = 
+            `🚀 *FITFLOW ELITE PROGRESS* 🚀\n\n` +
+            `👤 *Name:* ${user.name}\n` +
+            `⚖️ *Weight:* ${user.weight} kg\n` +
+            `📉 *To Goal:* ${diff} kg to go!\n\n` +
+            `--------------------------\n` +
+            `📲 *DOWNLOAD APP HERE:* \n` +
+            `https://krishnamu045-rgb.github.io/fitflow/\n` +
+            `--------------------------`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`); 
+    }
 
-        if(!n || !h || !w) { alert("Fill all fields."); return; }
-        if(!accepted) { alert("Please accept the health disclaimer."); return; }
-
-        user = { name:n, weight:w, startW:w, lastDate:new Date().toDateString(),
-                 goal: Math.round((g === 'male' ? 50 : 45.5) + (2.3 * ((h - 152.4) / 2.54))), 
-                 waterGoal: Math.round(w * 35), water:0 };
-        
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-        document.getElementById('setupScreen').style.display = 'none';
-        render();
-    });
-
-    function addWater(v) { user.water = Math.max(0, user.water + v); localStorage.setItem(STORAGE_KEY, JSON.stringify(user)); render(); }
-    function updateWeight() { let v = prompt("New Weight (kg):", user.weight); if(v) { user.weight=parseFloat(v); user.waterGoal=Math.round(user.weight*35); localStorage.setItem(STORAGE_KEY, JSON.stringify(user)); render(); }}
-    document.getElementById('waBtn').onclick = function() {
-        const msg = `FitFlow Progress: ${user.weight}kg. Target: ${user.goal}kg.`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-    };
-
+    function updateWeight() { 
+        const user = JSON.parse(localStorage.getItem(VAULT_KEY));
+        let v = prompt("New Weight (kg):", user.weight); 
+        if(v) { user.weight = parseFloat(v); user.lastUpd = Date.now(); localStorage.setItem(VAULT_KEY, JSON.stringify(user)); render(); } 
+    }
+    function addWater(v) { 
+        const user = JSON.parse(localStorage.getItem(VAULT_KEY));
+        user.water = Math.max(0, user.water + v); 
+        localStorage.setItem(VAULT_KEY, JSON.stringify(user)); 
+        render(); 
+    }
     function nav(id, el) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-        document.querySelectorAll('.tab-item').forEach(n => n.classList.remove('active'));
-        if(document.getElementById(id)) document.getElementById(id).classList.add('active-screen');
-        el.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active-screen'); el.classList.add('active');
     }
-
-    (function load() {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            user = JSON.parse(saved);
-            render();
-            document.getElementById('setupScreen').style.display = 'none';
-        } else {
-            document.getElementById('setupScreen').style.display = 'block';
-            document.getElementById('setupScreen').classList.add('active');
-        }
-    })();
+    function dietNav(phase) {
+        document.querySelectorAll('.diet-sub-screen').forEach(s => s.classList.remove('active-diet'));
+        document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active-sub'));
+        if(phase === 'morning') { document.getElementById('dietMorning').classList.add('active-diet'); document.getElementById('btnMorning').classList.add('active-sub'); }
+        else if(phase === 'afternoon') { document.getElementById('dietAfternoon').classList.add('active-diet'); document.getElementById('btnAfternoon').classList.add('active-sub'); }
+        else if(phase === 'evening') { document.getElementById('dietEvening').classList.add('active-diet'); document.getElementById('btnEvening').classList.add('active-sub'); }
+    }
+    window.onload = render;
 </script>
 </body>
 </html>
