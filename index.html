@@ -42,7 +42,7 @@
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* DIET & EXTENDED RECIPES */
+        /* DIET & DYNAMIC RECIPES */
         .diet-toggle { display: flex; background: #EEE; padding: 4px; border-radius: 12px; margin-bottom: 15px; }
         .toggle-btn { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 800; cursor: pointer; border-radius: 10px; color: var(--text-sec); }
         .active-toggle { background: white; color: var(--hb-green); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -135,28 +135,8 @@
         </div>
 
         <span class="f-label" style="margin-top:0;">Healthy Recipes</span>
-        <div class="recipe-scroller">
-            <div class="recipe-mini" onclick="alert('Pesarattu (Green Moong Dosa):\n- Soak 1 cup green gram (4h)\n- Grind with 1 inch ginger & 2 chillies\n- Spread thin on tawa, 1 tsp cold-pressed oil\n- Serve with ginger chutney.')">
-                <div style="font-size:24px; margin-bottom:5px;">🥬</div>
-                <div style="font-size:11px; font-weight:800;">Pesarattu</div>
+        <div class="recipe-scroller" id="recipeScroller">
             </div>
-            <div class="recipe-mini" onclick="alert('Paneer Tikka (Healthy):\n- 100g Paneer cubes\n- Marinate in curd + Turmeric + Chilli\n- Air fry or grill with 1 tsp oil\n- High protein snack.')">
-                <div style="font-size:24px; margin-bottom:5px;">🧀</div>
-                <div style="font-size:11px; font-weight:800;">Paneer Tikka</div>
-            </div>
-            <div class="recipe-mini" onclick="alert('Spiced Boiled Eggs:\n- 2 Hard boiled eggs\n- Sprinkle with Black Pepper & Cumin\n- Side of fresh cucumber salad\n- Perfect midday protein.')">
-                <div style="font-size:24px; margin-bottom:5px;">🥚</div>
-                <div style="font-size:11px; font-weight:800;">Egg Snack</div>
-            </div>
-            <div class="recipe-mini" onclick="alert('Lemon Pepper Chicken:\n- 150g Chicken Breast strips\n- Marinate: Lemon juice, Garlic, Pepper\n- Sauté in minimal oil till tender\n- Zero-carb lunch option.')">
-                <div style="font-size:24px; margin-bottom:5px;">🍗</div>
-                <div style="font-size:11px; font-weight:800;">Lemon Chicken</div>
-            </div>
-            <div class="recipe-mini" onclick="alert('Fish Fry (Air Fried):\n- 150g White Fish fillet\n- Rub: Ginger-Garlic paste + Chilli\n- Air fry at 180°C for 15 mins\n- Rich in Omega-3.')">
-                <div style="font-size:24px; margin-bottom:5px;">🐟</div>
-                <div style="font-size:11px; font-weight:800;">Grilled Fish</div>
-            </div>
-        </div>
 
         <div class="sub-tab-pill">
             <div id="btnMorning" class="sub-tab-btn active-sub" onclick="dietNav('morning')">Morning</div>
@@ -190,20 +170,46 @@
 </div>
 
 <script>
-    let dietPreference = 'veg';
+    const vegRecipes = [
+        { name: 'Pesarattu', icon: '🥬', info: 'Green Gram Dosa: Soak 1 cup green gram (4h). Grind with ginger & chillies. Spread thin, use 1 tsp oil.' },
+        { name: 'Dal Soup', icon: '🥣', info: 'Moong Dal Soup: Cook dal with turmeric. Add ginger/garlic. Season with pepper. High protein liquid.' },
+        { name: 'Paneer Tikka', icon: '🧀', info: '100g Paneer cubes. Marinate in curd + spices. Grill with 1 tsp oil. Great protein snack.' },
+        { name: 'Oats Idli', icon: '⚪', info: 'Roast oats & powder. Mix with curd & veggies. Steam for 10 mins. Low calorie breakfast.' }
+    ];
+
+    const nonVegRecipes = [
+        { name: 'Egg Snack', icon: '🥚', info: '2 Hard boiled eggs. Sprinkle pepper & cumin. Serve with sliced cucumber. Best afternoon fuel.' },
+        { name: 'Lemon Chicken', icon: '🍗', info: '150g Chicken breast strips. Sauté with lemon juice & garlic. No carbs, high protein lunch.' },
+        { name: 'Grilled Fish', icon: '🐟', info: '150g White fish fillet. Rub with ginger-garlic paste. Grill or air-fry till golden.' },
+        { name: 'Chicken Soup', icon: '🍲', info: 'Clear chicken broth with shredded breast and veggies. Zero carb filler for evening hunger.' }
+    ];
+
     function setDietType(type) {
-        dietPreference = type;
         document.getElementById('vegBtn').classList.toggle('active-toggle', type === 'veg');
         document.getElementById('nonVegBtn').classList.toggle('active-toggle', type === 'nonveg');
+        
+        const scroller = document.getElementById('recipeScroller');
+        const recipes = type === 'veg' ? vegRecipes : nonVegRecipes;
+        
+        scroller.innerHTML = '';
+        recipes.forEach(r => {
+            scroller.innerHTML += `<div class="recipe-mini" onclick="alert('${r.info}')">
+                <div style="font-size:24px; margin-bottom:5px;">${r.icon}</div>
+                <div style="font-size:11px; font-weight:800;">${r.name}</div>
+            </div>`;
+        });
+
         document.getElementById('lunchContent').innerHTML = type === 'veg' ? 
             '1 Bowl Dal + 1 Bowl Sabzi + 100g Brown Rice + Salad' : 
             '150g Grilled Chicken/Fish + 1 Bowl Sabzi + Salad (No Rice)';
     }
+
     function getIdealGoal(h, g) {
         const height = Number(h);
         const over5 = (height / 2.54) - 60;
         return Math.round(g === 'male' ? 50 + (2.3 * over5) : 45.5 + (2.3 * over5));
     }
+    
     function initApp() {
         const n = document.getElementById('inName').value, h = document.getElementById('inH').value, w = document.getElementById('inW').value, acc = document.getElementById('termsCheck').checked;
         const g = document.querySelector('input[name="gender"]:checked').value;
@@ -211,6 +217,7 @@
         localStorage.setItem(VAULT_KEY, JSON.stringify({ name:n, h:Number(h), g:g, startW:Number(w), w:Number(w), water:0, startD:Date.now() }));
         location.reload();
     }
+
     function render() {
         const saved = localStorage.getItem(VAULT_KEY);
         if(!saved) return;
@@ -228,30 +235,36 @@
         let vel = (startW - curW) / weeks;
         document.getElementById('weeksLeft').innerText = vel > 0 ? Math.ceil(diff / vel) : Math.ceil(diff);
         document.getElementById('velTxt').innerText = vel > 0 ? `Speed: ${vel.toFixed(2)}kg/week` : "Ready to Start?";
+        setDietType('veg'); // Initial Load
     }
+
     function dietNav(phase) {
         document.querySelectorAll('.diet-sub-screen').forEach(s => s.classList.remove('active-diet'));
         document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active-sub'));
         document.getElementById('diet' + phase.charAt(0).toUpperCase() + phase.slice(1)).classList.add('active-diet');
         document.getElementById('btn' + phase.charAt(0).toUpperCase() + phase.slice(1)).classList.add('active-sub');
     }
+
     function nav(id, el) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
         document.querySelectorAll('.tab-btn').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active-screen'); el.classList.add('active');
         if(id === 'dietTab') dietNav('morning');
     }
+
     function updateWeight() {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         let v = prompt("New Weight (kg):", data.w);
         if(v && !isNaN(v)) { data.w = Number(v); localStorage.setItem(VAULT_KEY, JSON.stringify(data)); render(); }
     }
+
     function addWater(v) {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         data.water = Math.max(0, (data.water || 0) + v);
         localStorage.setItem(VAULT_KEY, JSON.stringify(data));
         render();
     }
+    
     function shareWA() {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
         const goal = getIdealGoal(data.h, data.g);
