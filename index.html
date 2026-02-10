@@ -94,7 +94,7 @@
 
     <div id="dietTab" class="screen">
         <div class="sub-tab-pill">
-            <div id="btnMorning" class="sub-tab-btn active-sub" onclick="dietNav('morning')">Morning</div>
+            <div id="btnMorning" class="sub-tab-btn" onclick="dietNav('morning')">Morning</div>
             <div id="btnAfternoon" class="sub-tab-btn" onclick="dietNav('afternoon')">Afternoon</div>
             <div id="btnEvening" class="sub-tab-btn" onclick="dietNav('evening')">Evening</div>
         </div>
@@ -119,46 +119,52 @@
 </div>
 
 <script>
-    function calculateIdealGoal(h, g) {
-        const inchesOver5ft = (h / 2.54) - 60;
+    function getGoal(h, g) {
+        if(!h || isNaN(h)) return 70; // Safety Fallback
+        const inchesOver5ft = (Number(h) / 2.54) - 60;
         let goal = g === 'male' ? 50 + (2.3 * inchesOver5ft) : 45.5 + (2.3 * inchesOver5ft);
         return Math.round(goal);
     }
 
     function initApp() {
-        const n = document.getElementById('inName').value, h = parseFloat(document.getElementById('inH').value), w = parseFloat(document.getElementById('inW').value), g = document.getElementById('inG').value, acc = document.getElementById('termsCheck').checked;
+        const n = document.getElementById('inName').value, h = document.getElementById('inH').value, w = document.getElementById('inW').value, g = document.getElementById('inG').value, acc = document.getElementById('termsCheck').checked;
         if(!n || !h || !w || !acc) return alert("Fill all fields.");
-        const goal = calculateIdealGoal(h, g);
-        const user = { name:n, height:h, gender:g, startW:w, weight:w, goal:goal, water:0, lastUpd:Date.now(), startD:Date.now() };
+        const user = { name:n, height:h, gender:g, startW:w, weight:w, water:0, lastUpd:Date.now(), startD:Date.now() };
         localStorage.setItem(VAULT_KEY, JSON.stringify(user));
         location.reload();
     }
 
     function render() {
-        const data = JSON.parse(localStorage.getItem(VAULT_KEY));
-        if(!data) return;
+        const dataStr = localStorage.getItem(VAULT_KEY);
+        if(!dataStr) return;
+        const data = JSON.parse(dataStr);
         
-        // RE-VERIFY GOAL EVERY TIME
-        const currentGoal = calculateIdealGoal(data.height, data.gender);
+        const currentWeight = Number(data.weight) || 0;
+        const targetGoal = getGoal(data.height, data.gender);
         
         document.getElementById('outName').innerText = "Hi, " + data.name.split(' ')[0];
-        document.getElementById('curW').innerText = parseFloat(data.weight).toFixed(1);
-        document.getElementById('goalW').innerText = currentGoal;
-        document.getElementById('curH').innerText = data.water + " ml";
-        document.getElementById('goalH').innerText = Math.round(data.weight * 35);
-        document.getElementById('wFill').style.height = Math.min(100, (data.water / (data.weight * 35)) * 100) + "%";
+        document.getElementById('curW').innerText = currentWeight.toFixed(1);
+        document.getElementById('goalW').innerText = targetGoal;
+        document.getElementById('curH').innerText = (data.water || 0) + " ml";
+        document.getElementById('goalH').innerText = Math.round(currentWeight * 35);
+        document.getElementById('wFill').style.height = Math.min(100, ((data.water || 0) / (currentWeight * 35)) * 100) + "%";
         
-        const diff = parseFloat(data.weight) - currentGoal;
-        document.getElementById('remainTxt').innerText = diff > 0 ? diff.toFixed(1) + " kg to go" : "Goal Reached!";
-        
-        const weeksPassed = Math.max(0.1, (Date.now() - data.startD) / (7 * 24 * 60 * 60 * 1000));
-        let velocity = (parseFloat(data.startW) - parseFloat(data.weight)) / weeksPassed;
-        if (velocity <= 0) {
-            document.getElementById('weeksLeft').innerText = Math.ceil(diff);
-            document.getElementById('velTxt').innerText = "Ready to start?";
+        const diff = currentWeight - targetGoal;
+        if (diff <= 0) {
+            document.getElementById('remainTxt').innerText = "Goal Reached! 🌟";
+            document.getElementById('weeksLeft').innerText = "0";
+            document.getElementById('velTxt').innerText = "Maintain your success!";
         } else {
-            document.getElementById('weeksLeft').innerText = Math.max(1, Math.ceil(diff / velocity));
-            document.getElementById('velTxt').innerText = `Killing it at ${velocity.toFixed(2)}kg/week!`;
+            document.getElementById('remainTxt').innerText = diff.toFixed(1) + " kg to go";
+            const weeksPassed = Math.max(0.1, (Date.now() - (data.startD || Date.now())) / (7 * 24 * 60 * 60 * 1000));
+            let velocity = (Number(data.startW) - currentWeight) / weeksPassed;
+            if (velocity <= 0) {
+                document.getElementById('weeksLeft').innerText = Math.ceil(diff);
+                document.getElementById('velTxt').innerText = "Ready to start?";
+            } else {
+                document.getElementById('weeksLeft').innerText = Math.max(1, Math.ceil(diff / velocity));
+                document.getElementById('velTxt').innerText = `Killing it at ${velocity.toFixed(2)}kg/week!`;
+            }
         }
     }
 
@@ -167,8 +173,10 @@
         document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active-sub'));
         const target = 'diet' + phase.charAt(0).toUpperCase() + phase.slice(1);
         const btn = 'btn' + phase.charAt(0).toUpperCase() + phase.slice(1);
-        document.getElementById(target).style.display = 'block';
-        document.getElementById(btn).classList.add('active-sub');
+        const el = document.getElementById(target);
+        const bEl = document.getElementById(btn);
+        if(el) el.style.display = 'block';
+        if(bEl) bEl.classList.add('active-sub');
     }
 
     function nav(id, el) {
@@ -181,8 +189,8 @@
 
     function shareWA() {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
-        const goal = calculateIdealGoal(data.height, data.gender);
-        const diff = (parseFloat(data.weight) - goal).toFixed(1);
+        const goal = getGoal(data.height, data.gender);
+        const diff = (Number(data.weight) - goal).toFixed(1);
         const message = `🚀 *FITFLOW ELITE PROGRESS REPORT*\n\n👤 *User:* ${data.name}\n⚖️ *Weight:* ${data.weight} kg\n🎯 *Ideal Goal:* ${goal} kg\n📉 *To Go:* ${diff} kg\n\n📲 *Download:* https://krishnamu045-rgb.github.io/fitflow/`;
         window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
     }
@@ -199,7 +207,7 @@
 
     function addWater(v) {
         const data = JSON.parse(localStorage.getItem(VAULT_KEY));
-        data.water = Math.max(0, data.water + v);
+        data.water = Math.max(0, (data.water || 0) + v);
         localStorage.setItem(VAULT_KEY, JSON.stringify(data));
         render();
     }
