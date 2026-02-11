@@ -4,47 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FitFlow Elite Pro</title>
-    <script>
-        const VAULT_KEY = 'FITFLOW_MASTER_V105';
-        function masterReset() {
-            if(confirm("DANGER: This deletes ALL data. Continue?")) {
-                localStorage.removeItem(VAULT_KEY);
-                location.reload(true);
-            }
-        }
-        if (localStorage.getItem(VAULT_KEY)) {
-            document.documentElement.classList.add('vault-unlocked');
-        }
-    </script>
     <style>
         :root { --hb-green: #78BE20; --water-blue: #00A3E0; --bg: #F8F9FB; --text: #1C1C1E; --text-sec: #8E8E93; }
         body { background: #D1D1D6; margin: 0; display: flex; justify-content: center; font-family: -apple-system, sans-serif; color: var(--text); overflow-x: hidden; }
         .app-shell { width: 100%; max-width: 430px; background: var(--bg); min-height: 100vh; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.2); padding-bottom: 110px; }
         
-        /* FARM & SETUP */
+        /* SETUP FARM */
         #setupScreen { position: fixed; top: 0; width: 100%; max-width: 430px; height: 100%; background: var(--bg); z-index: 10000; padding: 30px; box-sizing: border-box; display: block; }
         .vault-unlocked #setupScreen { display: none !important; }
         .f-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-sec); margin: 20px 0 8px; }
         input { width: 100%; border: 1px solid #E5E5EA; background: white; padding: 18px; border-radius: 16px; font-size: 16px; box-sizing: border-box; margin-bottom: 10px; }
         .legal-box { background: #F2F2F7; border-radius: 16px; padding: 15px; font-size: 12px; line-height: 1.5; margin: 15px 0; border: 1px solid #E5E5EA; }
 
-        /* HOME PAGE CARDS */
-        .top-bar { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: white; border-bottom: 1px solid #EEE; }
+        /* CARDS */
         .card { background: white; border-radius: 28px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.03); }
         .weight-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; }
         .bridge-box { display: flex; align-items: center; justify-content: center; position: relative; margin: 25px 0; height: 40px; }
         .bridge-line { position: absolute; width: 100%; height: 2px; background: #F2F2F7; z-index: 1; }
         .bridge-badge { position: relative; z-index: 5; background: white !important; color: var(--hb-green); padding: 8px 25px; border-radius: 20px; font-size: 18px; font-weight: 900; border: 2px solid #F0F9E8; }
 
-        /* WATER */
+        /* WATER UI */
         .capsule { width: 60px; height: 140px; background: #F2F2F7; border-radius: 30px; position: relative; overflow: hidden; border: 4px solid #FFF; }
         #wFill { position: absolute; bottom: 0; width: 100%; background: var(--water-blue); transition: height 1s; }
 
         /* WORKOUT LIST */
-        .day-row { border-bottom: 1px solid #EEE; padding: 20px 0; }
-        .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .day-name { font-size: 18px; font-weight: 900; color: var(--text); }
-        .vid-wrapper { width: 100%; border-radius: 20px; overflow: hidden; background: #000; aspect-ratio: 16/9; margin-bottom: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .vid-wrapper { width: 100%; border-radius: 20px; overflow: hidden; background: #000; aspect-ratio: 16/9; margin: 10px 0 20px; }
         iframe { width: 100%; height: 100%; border: none; }
 
         .screen { padding: 20px; box-sizing: border-box; display: none; }
@@ -64,13 +48,12 @@
         <h1 style="font-size:36px; font-weight:900;">FitFlow Elite</h1>
         <span class="f-label">Name</span><input type="text" id="inName">
         <div style="display:flex; gap:10px;"><input type="number" id="inH" placeholder="Height cm"><input type="number" id="inW" placeholder="Weight kg"></div>
-        <div class="legal-box"><strong>Disclaimer:</strong> Tracking tool only. Consult a doctor.</div>
-        <label style="display:flex; gap:10px; margin:15px 0;"><input type="checkbox" id="termsCheck"><span>Accept 7-day rule</span></label>
+        <div class="legal-box"><strong>Health Disclaimer:</strong> Tracking only. Consult a doctor.</div>
+        <label style="display:flex; gap:10px; margin:15px 0;"><input type="checkbox" id="termsCheck"><span>Accept terms & 7-day rule</span></label>
         <button onclick="initApp()" class="btn-p">Save & Start</button>
     </div>
 
     <div id="homeTab" class="screen active-screen">
-        <div class="top-bar"><h2 id="outName" style="font-weight: 800;">Hi!</h2></div>
         <div class="card">
             <div style="display:flex; justify-content:space-between;"><div><span class="f-label">Current</span><span class="weight-num" id="curW">0.0</span></div><div style="text-align:right;"><span class="f-label" style="color:var(--hb-green)">Goal</span><span class="weight-num" id="goalW">--</span></div></div>
             <div class="bridge-box"><div class="bridge-line"></div><div class="bridge-badge" id="remainTxt">-- kg to go</div></div>
@@ -84,50 +67,18 @@
             <div style="font-size:35px;">🚀</div>
             <div><p id="velTxt" style="font-size:11px; font-weight:800; color:var(--hb-green); margin:0;">CALCULATING...</p><h3 style="font-size:26px; font-weight:900; margin:0;"><span id="weeksLeft">--</span> Weeks</h3></div>
         </div>
-        <p style="text-align:center;"><a href="#" onclick="masterReset()" style="color:var(--text-sec); font-size:11px; text-decoration:none;">MASTER DATA RESET</a></p>
+        <p style="text-align:center;"><a href="javascript:void(0)" onclick="masterReset()" style="color:var(--text-sec); font-size:11px; text-decoration:none; font-weight:800;">MASTER DATA RESET</a></p>
     </div>
 
     <div id="workoutTab" class="screen">
-        <h2 style="font-weight:900; margin-bottom:20px;">7-Day Routine</h2>
-        
-        <div class="day-row">
-            <div class="day-header"><span class="day-name">Monday</span><span class="f-label" style="margin:0">HIIT Cardio</span></div>
-            <div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/ml6cT4AZdqI" allowfullscreen></iframe></div>
-        </div>
-
-        <div class="day-row">
-            <div class="day-header"><span class="day-name">Tuesday</span><span class="f-label" style="margin:0">Yoga Flow</span></div>
-            <div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/v7AYKMP6rOE" allowfullscreen></iframe></div>
-        </div>
-
-        <div class="day-row">
-            <div class="day-header"><span class="day-name">Wednesday</span><span class="f-label" style="margin:0">Strength</span></div>
-            <div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/95846CBv_S0" allowfullscreen></iframe></div>
-        </div>
-
-        <div class="day-row">
-            <div class="day-header"><span class="day-name">Thursday</span><span class="f-label" style="margin:0">Full Body</span></div>
-            <div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/XW9Q-W6IdV0" allowfullscreen></iframe></div>
-        </div>
-
-        <div class="day-row">
-            <div class="day-header"><span class="day-name">Friday</span><span class="f-label" style="margin:0">Belly Fat</span></div>
-            <div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/2MoGxae-zyo" allowfullscreen></iframe></div>
-        </div>
-
-        <div class="day-row">
-            <div class="day-header"><span class="day-name">Saturday</span><span class="f-label" style="margin:0">Stretch</span></div>
-            <div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/g_tea8ZNk5A" allowfullscreen></iframe></div>
-        </div>
-
-        <div class="day-row" style="border:none;">
-            <div class="day-header"><span class="day-name" style="color:var(--hb-green)">Sunday</span><span class="f-label" style="margin:0">Recovery</span></div>
-            <div class="card" style="text-align:center; padding:40px; background:#F0F9E8; border:none;">
-                <div style="font-size:40px;">🛌</div>
-                <h3 style="margin:10px 0 5px;">Rest & Relax</h3>
-                <p style="font-size:13px; color:var(--text-sec); margin:0;">Focus on deep hydration and muscle recovery today.</p>
-            </div>
-        </div>
+        <h2 style="font-weight:900;">7-Day Routine</h2>
+        <div class="day-row"><h3>Monday - HIIT</h3><div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/ml6cT4AZdqI" allowfullscreen></iframe></div></div>
+        <div class="day-row"><h3>Tuesday - Yoga</h3><div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/v7AYKMP6rOE" allowfullscreen></iframe></div></div>
+        <div class="day-row"><h3>Wednesday - Strength</h3><div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/95846CBv_S0" allowfullscreen></iframe></div></div>
+        <div class="day-row"><h3>Thursday - Full Body</h3><div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/XW9Q-W6IdV0" allowfullscreen></iframe></div></div>
+        <div class="day-row"><h3>Friday - Belly Fat</h3><div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/2MoGxae-zyo" allowfullscreen></iframe></div></div>
+        <div class="day-row"><h3>Saturday - Stretching</h3><div class="vid-wrapper"><iframe src="https://www.youtube.com/embed/g_tea8ZNk5A" allowfullscreen></iframe></div></div>
+        <div class="day-row"><h3>Sunday - Rest</h3><div class="card" style="text-align:center; background:#F0F9E8; padding:30px;">🛌<br><strong>Rest & Relax</strong></div></div>
     </div>
 
     <div class="tab-bar"><div class="tab-pill">
@@ -137,38 +88,54 @@
 </div>
 
 <script>
-    function getIdealGoal(h) {
-        const over5 = (Number(h)/2.54)-60;
-        return Math.round(50+(2.3*over5));
-    }
-
-    function render() {
-        const saved = localStorage.getItem(VAULT_KEY); if(!saved) return;
-        const d = JSON.parse(saved);
-        const curW = Number(d.w), goal = getIdealGoal(d.h);
-        document.getElementById('outName').innerText = "Hi, " + d.name.split(' ')[0];
-        document.getElementById('curW').innerText = curW.toFixed(1);
-        document.getElementById('goalW').innerText = goal;
-        const diff = curW - goal;
-        document.getElementById('remainTxt').innerText = diff > 0 ? diff.toFixed(1) + " kg to go" : "Goal Reached!";
-        const weeks = Math.max(0.1, (Date.now() - Number(d.startD)) / (7 * 24 * 60 * 60 * 1000));
-        let vel = (Number(d.startW) - curW) / weeks;
-        document.getElementById('weeksLeft').innerText = vel > 0 ? Math.ceil(diff / vel) : "--";
-        document.getElementById('velTxt').innerText = vel > 0 ? `SPEED: ${vel.toFixed(2)}kg/week` : "CALCULATING...";
-        document.getElementById('curH').innerText = (d.water || 0) + " ml";
-        document.getElementById('wFill').style.height = Math.min(100, ((d.water || 0) / (curW * 35)) * 100) + "%";
+    const VAULT_KEY = 'FITFLOW_MASTER_V105';
+    
+    function masterReset() {
+        if(confirm("DANGER: This will delete everything. Proceed?")) {
+            localStorage.clear();
+            location.reload();
+        }
     }
 
     function initApp() {
         const n = document.getElementById('inName').value, h = document.getElementById('inH').value, w = document.getElementById('inW').value, acc = document.getElementById('termsCheck').checked;
         if(!n || !h || !w || !acc) return alert("Fill all fields.");
-        localStorage.setItem(VAULT_KEY, JSON.stringify({ name:n, h:Number(h), startW:Number(w), w:Number(w), water:0, startD:Date.now() }));
+        const user = { name:n, h:Number(h), startW:Number(w), w:Number(w), water:0, startD:Date.now() };
+        localStorage.setItem(VAULT_KEY, JSON.stringify(user));
         location.reload();
+    }
+
+    function render() {
+        const saved = localStorage.getItem(VAULT_KEY);
+        if(!saved) return;
+        document.documentElement.classList.add('vault-unlocked');
+        const d = JSON.parse(saved);
+        const curW = Number(d.w), h = Number(d.h), startW = Number(d.startW);
+        const goal = Math.round(50 + (2.3 * ((h/2.54)-60)));
+        
+        document.getElementById('curW').innerText = curW.toFixed(1);
+        document.getElementById('goalW').innerText = goal;
+        const diff = curW - goal;
+        document.getElementById('remainTxt').innerText = diff > 0 ? diff.toFixed(1) + " kg to go" : "Goal Reached!";
+        
+        const weeksPassed = Math.max(0.1, (Date.now() - Number(d.startD)) / (7 * 24 * 60 * 60 * 1000));
+        const speed = (startW - curW) / weeksPassed;
+        
+        if(speed > 0) {
+            document.getElementById('weeksLeft').innerText = Math.ceil(diff / speed);
+            document.getElementById('velTxt').innerText = `SPEED: ${speed.toFixed(2)}kg/week`;
+        } else {
+            document.getElementById('weeksLeft').innerText = "--";
+            document.getElementById('velTxt').innerText = "CALCULATING...";
+        }
+
+        document.getElementById('curH').innerText = (d.water || 0) + " ml";
+        document.getElementById('wFill').style.height = Math.min(100, ((d.water || 0) / (curW * 35)) * 100) + "%";
     }
 
     function updateWeight() {
         const d = JSON.parse(localStorage.getItem(VAULT_KEY));
-        let v = prompt("New Weight (kg):", d.w);
+        let v = prompt("Enter Weight (kg):", d.w);
         if(v && !isNaN(v)) { d.w = Number(v); localStorage.setItem(VAULT_KEY, JSON.stringify(d)); render(); }
     }
 
@@ -184,6 +151,7 @@
         document.querySelectorAll('.tab-btn').forEach(n => n.classList.remove('active'));
         document.getElementById(id).classList.add('active-screen'); el.classList.add('active');
     }
+
     window.onload = render;
 </script>
 </body>
