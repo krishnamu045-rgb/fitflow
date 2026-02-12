@@ -26,6 +26,8 @@
         .gender-active { background-color: #FF4D00 !important; color: white !important; border-color: #FF4D00 !important; }
         .check-active { background-color: #FF4D00 !important; color: white !important; border-color: #FF4D00 !important; }
         .thumbnail-gradient { background: linear-gradient(to top, rgba(10, 38, 71, 0.9) 0%, transparent 70%); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="font-sans text-marine">
@@ -38,21 +40,55 @@
             </div>
             
             <div class="space-y-3">
-                <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none focus:ring-2 focus:ring-punch font-bold text-center border border-slate-100">
-                
+                <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none focus:ring-2 focus:ring-punch font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3">
                     <button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button>
                     <button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button>
                 </div>
                 <input type="hidden" id="setupGender" value="">
-
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="setupH" placeholder="Height (cm)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100">
-                    <input type="number" id="setupW" placeholder="Weight (kg)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100">
+                    <input type="number" id="setupH" placeholder="Height (cm)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
+                    <input type="number" id="setupW" placeholder="Weight (kg)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 </div>
-
-                <button onclick="finishSetup()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4">Calculate Plan</button>
+                <button onclick="finishSetup()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4 text-lg">Calculate Plan</button>
             </div>
+        </div>
+    </div>
+
+    <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center">
+                <i class="fas fa-shield-heart text-5xl text-punch mb-4"></i>
+                <h2 class="text-2xl font-black uppercase tracking-tight text-marine">Health Disclaimer</h2>
+            </div>
+            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]">
+                <p>FitFlow Pro is a wellness tracking tool, not a medical service.</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Consult your physician before starting any diet or exercise program.</li>
+                    <li>If you experience dizziness, pain, or shortness of breath, stop immediately.</li>
+                    <li>The Herbalife meal plan is a recommendation; verify with your coach for suitability.</li>
+                </ul>
+            </div>
+            <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept & Continue</button>
+        </div>
+    </div>
+
+    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6">
+            <div class="text-center">
+                <i class="fas fa-heart-pulse text-5xl text-water mb-4"></i>
+                <h2 class="text-2xl font-black uppercase tracking-tight text-marine">Workout Safety</h2>
+            </div>
+            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]">
+                <p class="font-bold text-marine">Before you begin:</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Clear a 6ft x 6ft space around you.</li>
+                    <li>Wear appropriate footwear to prevent injury.</li>
+                    <li>Keep a water bottle nearby and hydrate.</li>
+                    <li>Focus on form over speed.</li>
+                </ul>
+            </div>
+            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I Am Ready</button>
         </div>
     </div>
 
@@ -78,8 +114,8 @@
                         <div class="text-right"><p class="text-[9px] font-bold text-punch uppercase">Ideal Goal</p><p class="text-xl font-bold text-marine"><span id="goalW">--</span>kg</p></div>
                     </div>
                     <div class="w-full bg-mist h-2 rounded-full overflow-hidden p-0.5"><div id="wBar" class="h-full bg-punch rounded-full transition-all duration-1000"></div></div>
+                    <p id="nextUpdateMsg" class="text-[9px] font-bold text-slate-400 text-center uppercase tracking-widest hide">Next update in: <span id="daysLeft">--</span> days</p>
                 </div>
-
                 <div class="space-y-3">
                     <div class="flex justify-between items-end">
                         <div><p class="text-[9px] font-bold text-slate-300 uppercase text-water">Intake (ml)</p><h2 class="text-4xl font-extrabold tracking-tighter text-water"><span id="watV">0</span><small class="text-xs opacity-20 ml-1 font-medium">ml</small></h2></div>
@@ -97,8 +133,6 @@
                 <h3 class="font-extrabold text-xl uppercase tracking-tight px-1 italic">South Indian Menu</h3>
                 <div id="mealContainer" class="space-y-3"></div>
             </div>
-
-            <button onclick="masterReset()" class="w-full py-6 text-[10px] font-black text-slate-200 uppercase tracking-[0.4em] hover:text-red-400 transition-all">Master Reset (PIN: 2710)</button>
         </div>
 
         <div id="workout-section" class="max-w-md mx-auto p-5 space-y-8 hide text-center">
@@ -116,24 +150,31 @@
             <div class="space-y-4 text-left">
                 <h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Daily Checklist</h3>
                 <div id="tracker-list" class="grid grid-cols-2 gap-3">
-                    <button onclick="toggleCheck(this)" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click">
+                    <button id="task-mShake" onclick="toggleTask('mShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all">
                         <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div>
                         <span class="text-[10px] font-extrabold uppercase">Morning Shake</span>
                     </button>
-                    <button onclick="toggleCheck(this)" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click">
+                    <button id="task-nShake" onclick="toggleTask('nShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all">
                         <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div>
                         <span class="text-[10px] font-extrabold uppercase">Night Shake</span>
                     </button>
-                    <button onclick="toggleCheck(this)" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click">
+                    <button id="task-water" onclick="toggleTask('water')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all">
                         <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div>
                         <span class="text-[10px] font-extrabold uppercase text-water">Water Goal</span>
                     </button>
-                    <button onclick="toggleCheck(this)" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click">
+                    <button id="task-workout" onclick="toggleTask('workout')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all">
                         <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div>
                         <span class="text-[10px] font-extrabold uppercase">Workout Done</span>
                     </button>
                 </div>
             </div>
+
+            <div class="space-y-3 text-left">
+                <h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Weekly History Log</h3>
+                <div id="historyContainer" class="flex justify-between bg-mist p-4 rounded-[2rem] border border-slate-100 overflow-x-auto no-scrollbar"></div>
+            </div>
+
+            <button onclick="masterReset()" class="w-full py-6 text-[10px] font-black text-slate-200 uppercase tracking-[0.4em] hover:text-red-400 transition-all mt-6">Master Reset (PIN: 2710)</button>
         </div>
 
         <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-100 pb-10 pt-4 px-12 z-50">
@@ -147,12 +188,12 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FF_PRO_LINKED_V1";
+        const KEY = "FF_PRO_FINAL_V3";
         let state = JSON.parse(localStorage.getItem(KEY));
         
         const MEALS = {
             "Monday": { veg: "Brown Rice (1 cup) + Sambhar", non: "Brown Rice + Kerala Fish Curry", vid: "b9ztxh-cTHI", t: "Body Basics" },
-            "Tuesday": { veg: "Ragi Mudde (1 med) + Veg Saaru", non: "Ragi Mudde (1 med) + Chicken Saaru", vid: "ELpVLwrDR_g", t: "Core Strength" },
+            "Tuesday": { veg: "Ragi Mudde (1 med) + Saaru", non: "Ragi Mudde + Chicken Saaru", vid: "ELpVLwrDR_g", t: "Core Strength" },
             "Wednesday": { veg: "Millet Rice (1 cup) + Rasam", non: "Millet Rice + Egg Roast", vid: "VsAXZ34AJ-k", t: "Metabolism" },
             "Thursday": { veg: "2 Jowar Rotis + Veg Fry", non: "2 Jowar Rotis + Grilled Chicken", vid: "rmmWuI5Jinc", t: "Lower Body" },
             "Friday": { veg: "Brown Rice (1 cup) + Dal", non: "Brown Rice + Fish Tawa Fry", vid: "8r4Z-ghDI4k", t: "Cardio Kick" },
@@ -161,11 +202,7 @@
         };
 
         window.onload = () => {
-            if (state && (!state.weight || state.weight === 0 || !state.goal)) {
-                localStorage.removeItem(KEY);
-                state = null;
-            }
-
+            if (state && (!state.weight || state.weight === 0)) { localStorage.removeItem(KEY); state = null; }
             if (!state) {
                 document.getElementById('setup-screen').classList.remove('hide');
                 document.getElementById('main-app').classList.add('hide');
@@ -185,26 +222,144 @@
             const h = parseFloat(document.getElementById('setupH').value);
             const w = parseFloat(document.getElementById('setupW').value);
             const g = document.getElementById('setupGender').value;
-            
             if(!n || !h || !w || !g) return alert("Please fill all details!");
-
+            
             let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2);
             if (idealW < 40) idealW = 45;
 
             state = { 
                 name: n, gender: g, weight: w, height: h, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0,
-                startDate: Date.now()
+                startDate: Date.now(),
+                lastWeightUpdate: 0,
+                lastDisclaimerDate: 0,
+                lastWorkoutSafetyDate: 0,
+                history: {}, 
+                todayTasks: { mShake: false, nShake: false, water: false, workout: false }
             };
-            
-            localStorage.setItem(KEY, JSON.stringify(state));
-            location.reload();
+            save(); location.reload();
         }
 
         function init() {
             document.getElementById('setup-screen').classList.add('hide');
             document.getElementById('main-app').classList.remove('hide');
             document.getElementById('userDisp').innerText = state.name;
-            updateUI(); renderMeals();
+            checkNewDay();
+            checkHomeDisclaimer(); // Check Disclaimer on Init
+            updateUI(); renderMeals(); renderTasks(); renderHistory();
+        }
+
+        function checkNewDay() {
+            const today = new Date().toISOString().split('T')[0];
+            if (!state.lastLogin || state.lastLogin !== today) {
+                state.lastLogin = today;
+                state.todayTasks = { mShake: false, nShake: false, water: false, workout: false };
+                save();
+            }
+        }
+
+        // --- DISCLAIMER LOGIC ---
+        function checkHomeDisclaimer() {
+            const today = new Date().toISOString().split('T')[0];
+            if (state.lastDisclaimerDate !== today) {
+                document.getElementById('homeDisclaimerModal').classList.remove('hide');
+            }
+        }
+
+        function acceptHomeDisclaimer() {
+            state.lastDisclaimerDate = new Date().toISOString().split('T')[0];
+            save();
+            document.getElementById('homeDisclaimerModal').classList.add('hide');
+        }
+
+        function checkWorkoutSafety() {
+            const today = new Date().toISOString().split('T')[0];
+            if (state.lastWorkoutSafetyDate !== today) {
+                document.getElementById('workoutSafetyModal').classList.remove('hide');
+            }
+        }
+
+        function acceptWorkoutSafety() {
+            state.lastWorkoutSafetyDate = new Date().toISOString().split('T')[0];
+            save();
+            document.getElementById('workoutSafetyModal').classList.add('hide');
+        }
+
+        // --- TAB SWITCHING ---
+        function showT(tab) {
+            document.getElementById('home-section').classList.toggle('hide', tab !== 'home');
+            document.getElementById('workout-section').classList.toggle('hide', tab !== 'workout');
+            document.getElementById('nav-home').className = tab === 'home' ? 'flex flex-col items-center gap-1 nav-active transition-all' : 'flex flex-col items-center gap-1 text-slate-300 transition-all';
+            document.getElementById('nav-workout').className = tab === 'workout' ? 'flex flex-col items-center gap-1 nav-active transition-all' : 'flex flex-col items-center gap-1 text-slate-300 transition-all';
+            
+            if(tab === 'workout') {
+                renderW();
+                checkWorkoutSafety(); // Trigger Safety Modal
+            }
+        }
+
+        // --- WEIGHT LOCK ---
+        function openW() { 
+            const now = Date.now();
+            const oneWeek = 7 * 24 * 60 * 60 * 1000;
+            const timeDiff = now - (state.lastWeightUpdate || 0);
+            if (timeDiff < oneWeek) {
+                const daysLeft = Math.ceil((oneWeek - timeDiff) / (24 * 60 * 60 * 1000));
+                document.getElementById('daysLeft').innerText = daysLeft;
+                document.getElementById('nextUpdateMsg').classList.remove('hide');
+                return alert(`⚠️ Weekly Lock Active\n\nConsistency is key! Please update your weight in ${daysLeft} days.`); 
+            }
+            document.getElementById('nextUpdateMsg').classList.add('hide');
+            document.getElementById('wModal').classList.remove('hide'); 
+        }
+
+        function closeW() { document.getElementById('wModal').classList.add('hide'); }
+        function saveW() { 
+            const v = parseFloat(document.getElementById('wIn').value); 
+            if(v) { state.weight = v; state.lastWeightUpdate = Date.now(); updateUI(); save(); closeW(); renderMeals(); } 
+        }
+
+        // --- APP LOGIC ---
+        function toggleTask(task) {
+            state.todayTasks[task] = !state.todayTasks[task];
+            const today = new Date().toISOString().split('T')[0];
+            if (!state.history) state.history = {};
+            let score = 0;
+            if (state.todayTasks.mShake) score++;
+            if (state.todayTasks.nShake) score++;
+            if (state.todayTasks.water) score++;
+            if (state.todayTasks.workout) score++;
+            state.history[today] = score;
+            renderTasks(); renderHistory(); save();
+        }
+
+        function renderTasks() {
+            const t = state.todayTasks;
+            setBtnState('task-mShake', t.mShake);
+            setBtnState('task-nShake', t.nShake);
+            setBtnState('task-water', t.water);
+            setBtnState('task-workout', t.workout);
+        }
+
+        function setBtnState(id, active) {
+            const btn = document.getElementById(id);
+            if(active) { btn.classList.add('check-active'); btn.querySelector('i').classList.remove('opacity-0'); } 
+            else { btn.classList.remove('check-active'); btn.querySelector('i').classList.add('opacity-0'); }
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyContainer');
+            let html = '';
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const dateKey = d.toISOString().split('T')[0];
+                const dayName = d.toLocaleDateString('en-US', { weekday: 'narrow' });
+                const score = state.history && state.history[dateKey] ? state.history[dateKey] : 0;
+                let bg = "bg-white text-slate-300";
+                if(score === 4) bg = "bg-punch text-white"; else if(score > 0) bg = "bg-orange-100 text-punch";
+                let border = i === 0 ? "border-2 border-marine" : "border border-slate-100";
+                html += `<div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black ${bg} ${border}">${score > 0 ? score : '-'}</div><span class="text-[9px] font-bold text-slate-400 uppercase">${dayName}</span></div>`;
+            }
+            container.innerHTML = html;
         }
 
         function renderMeals() {
@@ -227,31 +382,18 @@
 
         function item(i, t, time, c, l) { return `<div class="bg-mist p-5 rounded-3xl flex items-center gap-5 border border-slate-50 shadow-sm"><div class="${c} text-2xl w-10 text-center"><i class="fas ${i}"></i></div><div><p class="text-[10px] font-bold text-slate-300 uppercase leading-none mb-1">${l}</p><p class="font-extrabold text-[16px] leading-tight text-marine">${t}</p></div></div>`; }
         function addW(v) { state.waterC = Math.max(0, state.waterC + v); updateUI(); save(); }
-        function openW() { document.getElementById('wModal').classList.remove('hide'); }
-        function closeW() { document.getElementById('wModal').classList.add('hide'); }
-        function saveW() { const v = parseFloat(document.getElementById('wIn').value); if(v) { state.weight = v; updateUI(); save(); closeW(); renderMeals(); } }
         
         function updateUI() {
             document.getElementById('curW').innerText = state.weight; document.getElementById('goalW').innerText = state.goal;
             document.getElementById('watV').innerText = state.waterC; document.getElementById('watT').innerText = state.waterG;
-            const diff = Math.abs(state.startW - state.goal);
-            const prog = Math.abs(state.startW - state.weight);
+            const diff = Math.abs(state.startW - state.goal), prog = Math.abs(state.startW - state.weight);
             let width = 10; if (diff > 0) width = Math.min(100, Math.max(12, (prog/diff)*100));
             document.getElementById('wBar').style.width = width + '%';
             document.getElementById('watBar').style.width = (state.waterC/state.waterG*100) + '%';
         }
 
-        function showT(tab) {
-            document.getElementById('home-section').classList.toggle('hide', tab !== 'home');
-            document.getElementById('workout-section').classList.toggle('hide', tab !== 'workout');
-            document.getElementById('nav-home').className = tab === 'home' ? 'flex flex-col items-center gap-1 nav-active transition-all' : 'flex flex-col items-center gap-1 text-slate-300 transition-all';
-            document.getElementById('nav-workout').className = tab === 'workout' ? 'flex flex-col items-center gap-1 nav-active transition-all' : 'flex flex-col items-center gap-1 text-slate-300 transition-all';
-            if(tab === 'workout') renderW();
-        }
-
         function renderW() {
-            const day = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-            const p = MEALS[day];
+            const day = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = MEALS[day];
             document.getElementById('wTitle').innerText = p.t;
             document.getElementById('wThumb').src = p.vid === 'rest' ? "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" : `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
         }
@@ -261,16 +403,21 @@
             if(p.vid !== 'rest') window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank');
         }
 
-        function toggleCheck(btn) { btn.classList.toggle('check-active'); btn.querySelector('i').classList.toggle('opacity-0'); }
-        
         function shareWhatsApp() {
+            let score = 0;
+            if(state.todayTasks.mShake) score++;
+            if(state.todayTasks.nShake) score++;
+            if(state.todayTasks.water) score++;
+            if(state.todayTasks.workout) score++;
+            
+            let rating = "Needs Improvement ⚠️";
+            if(score >= 2) rating = "Good Effort 🔥";
+            if(score === 4) rating = "PERFECT DAY 🌟";
+
             const totalLost = (state.startW - state.weight).toFixed(1);
             const remainingWeight = Math.max(0, state.weight - state.goal);
             let weeksLeft = "--";
-
-            // INTELLIGENT WEEK CALCULATION
-            const startTimestamp = state.startDate || Date.now();
-            const daysActive = (Date.now() - startTimestamp) / (1000 * 60 * 60 * 24);
+            const daysActive = (Date.now() - state.startDate) / (1000 * 60 * 60 * 24);
             const loss = state.startW - state.weight;
 
             if (daysActive > 3 && loss > 0.5) {
@@ -282,15 +429,11 @@
             }
             
             const appLink = "https://krishnamu045-rgb.github.io/fitflow/";
-            const msg = `🌟 FITFLOW SUCCESS REPORT 🌟%0A%0A🏃‍♂️ Total Lost: ${totalLost}kg%0A⚖️ Current Weight: ${state.weight}kg%0A🎯 Target: ${state.goal}kg%0A⏳ Remaining: ~${weeksLeft} Weeks%0A%0A📲 Download App: ${appLink}`;
+            const msg = `🌟 FITFLOW SUCCESS REPORT 🌟%0A%0A📊 Rating: ${rating}%0A✅ Checklist Score: ${score}/4%0A%0A🏃‍♂️ Total Lost: ${totalLost}kg%0A⚖️ Current Weight: ${state.weight}kg%0A🎯 Target: ${state.goal}kg%0A⏳ Remaining: ~${weeksLeft} Weeks%0A%0A📲 Download App: ${appLink}`;
             window.open(`https://wa.me/?text=${msg}`, '_blank');
         }
 
-        function masterReset() {
-            const pin = prompt("Enter Master PIN (2710):");
-            if(pin === "2710") { localStorage.removeItem(KEY); location.reload(); }
-        }
-
+        function masterReset() { if(prompt("Enter Master PIN (2710):") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
         function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
     </script>
 </body>
