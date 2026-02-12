@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro</title>
+    <title>FitFlow Pro V1.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -28,15 +28,17 @@
         .thumbnail-gradient { background: linear-gradient(to top, rgba(10, 38, 71, 0.9) 0%, transparent 70%); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
-<body class="font-sans text-marine">
+<body class="font-sans text-marine select-none">
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
             <div>
                 <h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1>
-                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Profile Setup</p>
+                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 1.1 Setup</p>
             </div>
             
             <div class="space-y-3">
@@ -50,7 +52,7 @@
                     <input type="number" id="setupH" placeholder="Height (cm)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                     <input type="number" id="setupW" placeholder="Weight (kg)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 </div>
-                <button onclick="finishSetup()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4 text-lg">Calculate Plan</button>
+                <button onclick="finishSetup()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4 text-lg">Start Journey</button>
             </div>
         </div>
     </div>
@@ -59,36 +61,36 @@
         <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
             <div class="text-center">
                 <i class="fas fa-shield-heart text-5xl text-punch mb-4"></i>
-                <h2 class="text-2xl font-black uppercase tracking-tight text-marine">Health Disclaimer</h2>
+                <h2 class="text-2xl font-black uppercase tracking-tight text-marine">Daily Health Check</h2>
             </div>
             <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]">
-                <p>FitFlow Pro is a wellness tracking tool, not a medical service.</p>
+                <p>FitFlow Pro is a tracking tool, not a medical service.</p>
                 <ul class="list-disc pl-5 space-y-2">
-                    <li>Consult your physician before starting any diet or exercise program.</li>
-                    <li>If you experience dizziness, pain, or shortness of breath, stop immediately.</li>
-                    <li>The Herbalife meal plan is a recommendation; verify with your coach for suitability.</li>
+                    <li>Consult a physician before starting diet/exercise.</li>
+                    <li>Stop if you feel dizziness or pain.</li>
+                    <li>Verify meal plans with your wellness coach.</li>
                 </ul>
             </div>
-            <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept & Continue</button>
+            <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button>
         </div>
     </div>
 
     <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
             <div class="text-center">
                 <i class="fas fa-heart-pulse text-5xl text-water mb-4"></i>
-                <h2 class="text-2xl font-black uppercase tracking-tight text-marine">Workout Safety</h2>
+                <h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety First</h2>
             </div>
             <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]">
-                <p class="font-bold text-marine">Before you begin:</p>
+                <p class="font-bold text-marine">Before starting:</p>
                 <ul class="list-disc pl-5 space-y-2">
-                    <li>Clear a 6ft x 6ft space around you.</li>
-                    <li>Wear appropriate footwear to prevent injury.</li>
-                    <li>Keep a water bottle nearby and hydrate.</li>
-                    <li>Focus on form over speed.</li>
+                    <li>Clear a 6ft x 6ft safe space.</li>
+                    <li>Wear proper shoes to prevent injury.</li>
+                    <li>Keep water nearby and hydrate.</li>
+                    <li>Focus on form, not just speed.</li>
                 </ul>
             </div>
-            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I Am Ready</button>
+            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button>
         </div>
     </div>
 
@@ -99,9 +101,14 @@
                     <h1 class="text-2xl font-black italic tracking-tighter text-slate-900 leading-none">FITFLOW<span class="text-punch">PRO</span></h1>
                     <p class="text-[14px] font-bold text-slate-500 mt-1 uppercase italic">Namaste, <span id="userDisp">User</span></p>
                 </div>
-                <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center btn-click border border-green-100 shadow-sm animate-pulse">
-                    <i class="fab fa-whatsapp text-xl"></i>
-                </button>
+                <div class="flex gap-2">
+                    <button onclick="enableNotifications()" class="w-11 h-11 bg-orange-50 text-punch rounded-2xl flex items-center justify-center btn-click border border-orange-100 shadow-sm" id="notifBtn">
+                        <i class="fas fa-bell text-xl"></i>
+                    </button>
+                    <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center btn-click border border-green-100 shadow-sm animate-pulse">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </button>
+                </div>
             </header>
         </div>
 
@@ -110,7 +117,7 @@
                 <div class="space-y-3">
                     <div class="flex justify-between items-end">
                         <div><p class="text-[9px] font-bold text-slate-300 uppercase">Weight</p><h2 class="text-4xl font-extrabold tracking-tighter text-marine"><span id="curW">--</span><small class="text-xs opacity-20 ml-1 font-medium">kg</small></h2></div>
-                        <button onclick="openW()" class="bg-orange-50 text-punch px-4 py-2 rounded-xl text-[10px] font-black uppercase btn-click">Update</button>
+                        <button onclick="openW()" class="bg-orange-50 text-punch px-4 py-2 rounded-xl text-[10px] font-black uppercase btn-click shadow-sm shadow-orange-100">Update</button>
                         <div class="text-right"><p class="text-[9px] font-bold text-punch uppercase">Ideal Goal</p><p class="text-xl font-bold text-marine"><span id="goalW">--</span>kg</p></div>
                     </div>
                     <div class="w-full bg-mist h-2 rounded-full overflow-hidden p-0.5"><div id="wBar" class="h-full bg-punch rounded-full transition-all duration-1000"></div></div>
@@ -143,7 +150,7 @@
                         <p id="wStatus" class="text-punch font-black text-[10px] uppercase tracking-[0.2em] mb-1">Today's Session</p>
                         <h3 id="wTitle" class="text-3xl font-black text-white italic leading-none uppercase tracking-tight">--</h3>
                     </div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white"><i class="fas fa-play ml-1"></i></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-play ml-1"></i></div>
                 </div>
             </div>
 
@@ -170,7 +177,7 @@
             </div>
 
             <div class="space-y-3 text-left">
-                <h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Weekly History Log</h3>
+                <h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Weekly History</h3>
                 <div id="historyContainer" class="flex justify-between bg-mist p-4 rounded-[2rem] border border-slate-100 overflow-x-auto no-scrollbar"></div>
             </div>
 
@@ -188,18 +195,20 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FF_PRO_FINAL_V3";
+        const KEY = "FITFLOW_PRO_V1_NOTIF";
         let state = JSON.parse(localStorage.getItem(KEY));
         
-        const MEALS = {
+        const CONTENT = {
             "Monday": { veg: "Brown Rice (1 cup) + Sambhar", non: "Brown Rice + Kerala Fish Curry", vid: "b9ztxh-cTHI", t: "Body Basics" },
-            "Tuesday": { veg: "Ragi Mudde (1 med) + Saaru", non: "Ragi Mudde + Chicken Saaru", vid: "ELpVLwrDR_g", t: "Core Strength" },
+            "Tuesday": { veg: "Ragi Mudde (1 med) + Veg Saaru", non: "Ragi Mudde + Chicken Saaru", vid: "ELpVLwrDR_g", t: "Core Strength" },
             "Wednesday": { veg: "Millet Rice (1 cup) + Rasam", non: "Millet Rice + Egg Roast", vid: "VsAXZ34AJ-k", t: "Metabolism" },
             "Thursday": { veg: "2 Jowar Rotis + Veg Fry", non: "2 Jowar Rotis + Grilled Chicken", vid: "rmmWuI5Jinc", t: "Lower Body" },
             "Friday": { veg: "Brown Rice (1 cup) + Dal", non: "Brown Rice + Fish Tawa Fry", vid: "8r4Z-ghDI4k", t: "Cardio Kick" },
             "Saturday": { veg: "Veg Biryani + Raita", non: "Chicken Biryani + 1 Egg", vid: "uKXcLBjWqas", t: "Stability" },
             "Sunday": { veg: "Millet Curd Rice + Salad", non: "Chicken Pepper Soup + 1 Roti", vid: "rest", t: "Recovery" }
         };
+
+        const MEAL_TIMES = ["08:00", "11:00", "13:30", "17:00", "19:30"];
 
         window.onload = () => {
             if (state && (!state.weight || state.weight === 0)) { localStorage.removeItem(KEY); state = null; }
@@ -209,6 +218,8 @@
             } else {
                 init();
             }
+            // Start Notification Loop
+            setInterval(checkNotifications, 60000); // Check every minute
         };
 
         function selectGender(g) {
@@ -244,7 +255,7 @@
             document.getElementById('main-app').classList.remove('hide');
             document.getElementById('userDisp').innerText = state.name;
             checkNewDay();
-            checkHomeDisclaimer(); // Check Disclaimer on Init
+            checkHomeDisclaimer();
             updateUI(); renderMeals(); renderTasks(); renderHistory();
         }
 
@@ -257,47 +268,62 @@
             }
         }
 
-        // --- DISCLAIMER LOGIC ---
+        // --- NOTIFICATION LOGIC ---
+        function enableNotifications() {
+            if (!("Notification" in window)) {
+                alert("This browser does not support notifications.");
+            } else {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification("FitFlow Pro", { body: "Notifications Enabled! We will remind you to eat." });
+                        document.getElementById('notifBtn').classList.add('gender-active');
+                    } else {
+                        alert("Notifications blocked. Please enable them in browser settings.");
+                    }
+                });
+            }
+        }
+
+        function checkNotifications() {
+            if (Notification.permission !== "granted") return;
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            
+            if (MEAL_TIMES.includes(timeStr)) {
+                new Notification("FitFlow Pro", { 
+                    body: "⏰ It's Meal Time! Stick to your plan.",
+                    icon: "https://img.icons8.com/color/48/000000/meal.png"
+                });
+            }
+        }
+
+        // --- POPUP LOGIC ---
         function checkHomeDisclaimer() {
             const today = new Date().toISOString().split('T')[0];
-            if (state.lastDisclaimerDate !== today) {
-                document.getElementById('homeDisclaimerModal').classList.remove('hide');
-            }
+            if (state.lastDisclaimerDate !== today) { document.getElementById('homeDisclaimerModal').classList.remove('hide'); }
         }
-
         function acceptHomeDisclaimer() {
-            state.lastDisclaimerDate = new Date().toISOString().split('T')[0];
-            save();
+            state.lastDisclaimerDate = new Date().toISOString().split('T')[0]; save();
             document.getElementById('homeDisclaimerModal').classList.add('hide');
         }
-
         function checkWorkoutSafety() {
             const today = new Date().toISOString().split('T')[0];
-            if (state.lastWorkoutSafetyDate !== today) {
-                document.getElementById('workoutSafetyModal').classList.remove('hide');
-            }
+            if (state.lastWorkoutSafetyDate !== today) { document.getElementById('workoutSafetyModal').classList.remove('hide'); }
         }
-
         function acceptWorkoutSafety() {
-            state.lastWorkoutSafetyDate = new Date().toISOString().split('T')[0];
-            save();
+            state.lastWorkoutSafetyDate = new Date().toISOString().split('T')[0]; save();
             document.getElementById('workoutSafetyModal').classList.add('hide');
         }
 
-        // --- TAB SWITCHING ---
+        // --- CORE LOGIC ---
         function showT(tab) {
             document.getElementById('home-section').classList.toggle('hide', tab !== 'home');
             document.getElementById('workout-section').classList.toggle('hide', tab !== 'workout');
             document.getElementById('nav-home').className = tab === 'home' ? 'flex flex-col items-center gap-1 nav-active transition-all' : 'flex flex-col items-center gap-1 text-slate-300 transition-all';
             document.getElementById('nav-workout').className = tab === 'workout' ? 'flex flex-col items-center gap-1 nav-active transition-all' : 'flex flex-col items-center gap-1 text-slate-300 transition-all';
-            
-            if(tab === 'workout') {
-                renderW();
-                checkWorkoutSafety(); // Trigger Safety Modal
-            }
+            if(tab === 'workout') { renderW(); checkWorkoutSafety(); }
         }
 
-        // --- WEIGHT LOCK ---
         function openW() { 
             const now = Date.now();
             const oneWeek = 7 * 24 * 60 * 60 * 1000;
@@ -306,7 +332,7 @@
                 const daysLeft = Math.ceil((oneWeek - timeDiff) / (24 * 60 * 60 * 1000));
                 document.getElementById('daysLeft').innerText = daysLeft;
                 document.getElementById('nextUpdateMsg').classList.remove('hide');
-                return alert(`⚠️ Weekly Lock Active\n\nConsistency is key! Please update your weight in ${daysLeft} days.`); 
+                return alert(`Weekly Check-in Locked 🔒\n\nPlease wait ${daysLeft} days.`); 
             }
             document.getElementById('nextUpdateMsg').classList.add('hide');
             document.getElementById('wModal').classList.remove('hide'); 
@@ -318,7 +344,6 @@
             if(v) { state.weight = v; state.lastWeightUpdate = Date.now(); updateUI(); save(); closeW(); renderMeals(); } 
         }
 
-        // --- APP LOGIC ---
         function toggleTask(task) {
             state.todayTasks[task] = !state.todayTasks[task];
             const today = new Date().toISOString().split('T')[0];
@@ -364,7 +389,7 @@
 
         function renderMeals() {
             const day = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-            const p = MEALS[day] || MEALS["Monday"];
+            const p = CONTENT[day] || CONTENT["Monday"];
             document.getElementById('mealContainer').innerHTML = `
                 ${item("fa-blender", "F1 Shake (3) + PDM (2)", "08:00 AM", "text-punch", "Breakfast • 250ml")}
                 ${item("fa-mug-hot", "Afresh + 5 Almonds", "11:00 AM", "text-orange-400", "Snack")}
@@ -393,13 +418,13 @@
         }
 
         function renderW() {
-            const day = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = MEALS[day];
+            const day = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = CONTENT[day];
             document.getElementById('wTitle').innerText = p.t;
             document.getElementById('wThumb').src = p.vid === 'rest' ? "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" : `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
         }
 
         function launchWorkout() {
-            const day = new Date().toLocaleDateString('en-US', { weekday: 'long' }), p = MEALS[day];
+            const day = new Date().toLocaleDateString('en-US', { weekday: 'long' }), p = CONTENT[day];
             if(p.vid !== 'rest') window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank');
         }
 
