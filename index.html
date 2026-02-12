@@ -34,7 +34,7 @@
         <div class="w-full max-w-sm space-y-6 text-center">
             <div>
                 <h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1>
-                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Precision Setup</p>
+                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Profile Setup</p>
             </div>
             
             <div class="space-y-3">
@@ -63,7 +63,9 @@
                     <h1 class="text-2xl font-black italic tracking-tighter text-slate-900 leading-none">FITFLOW<span class="text-punch">PRO</span></h1>
                     <p class="text-[14px] font-bold text-slate-500 mt-1 uppercase italic">Namaste, <span id="userDisp">User</span></p>
                 </div>
-                <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center btn-click border border-green-100 shadow-sm"><i class="fab fa-whatsapp text-xl"></i></button>
+                <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center btn-click border border-green-100 shadow-sm animate-pulse">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                </button>
             </header>
         </div>
 
@@ -145,8 +147,7 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        // Updated Key to force refresh with new formula
-        const KEY = "FF_PRO_LORENTZ_V2";
+        const KEY = "FF_PRO_LINKED_V1";
         let state = JSON.parse(localStorage.getItem(KEY));
         
         const MEALS = {
@@ -160,7 +161,6 @@
         };
 
         window.onload = () => {
-            // Self-repair: If data exists but weight is 0 or goal is weird, wipe it
             if (state && (!state.weight || state.weight === 0 || !state.goal)) {
                 localStorage.removeItem(KEY);
                 state = null;
@@ -188,28 +188,12 @@
             
             if(!n || !h || !w || !g) return alert("Please fill all details!");
 
-            // LORENTZ FORMULA
-            // Male: (H - 100) - ((H - 150) / 4)
-            // Female: (H - 100) - ((H - 150) / 2)
-            let idealW;
-            if (g === 'male') {
-                idealW = (h - 100) - ((h - 150) / 4);
-            } else {
-                idealW = (h - 100) - ((h - 150) / 2);
-            }
-
-            // Fallback for very short height (Lorentz can go negative if H < 100 which is unlikely for adults, but safety first)
-            if (idealW < 30) idealW = 45; // Safety floor
+            let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2);
+            if (idealW < 40) idealW = 45;
 
             state = { 
-                name: n, 
-                gender: g,
-                weight: w, 
-                height: h, 
-                startW: w, 
-                goal: idealW.toFixed(1), 
-                waterG: Math.round(w * 35), // 35ml per kg logic
-                waterC: 0 
+                name: n, gender: g, weight: w, height: h, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0,
+                startDate: Date.now()
             };
             
             localStorage.setItem(KEY, JSON.stringify(state));
@@ -252,11 +236,7 @@
             document.getElementById('watV').innerText = state.waterC; document.getElementById('watT').innerText = state.waterG;
             const diff = Math.abs(state.startW - state.goal);
             const prog = Math.abs(state.startW - state.weight);
-            // Handle edge case where start weight equals goal (prog is 0)
-            let width = 10;
-            if (diff > 0) {
-                 width = Math.min(100, Math.max(12, (prog/diff)*100));
-            }
+            let width = 10; if (diff > 0) width = Math.min(100, Math.max(12, (prog/diff)*100));
             document.getElementById('wBar').style.width = width + '%';
             document.getElementById('watBar').style.width = (state.waterC/state.waterG*100) + '%';
         }
@@ -282,8 +262,27 @@
         }
 
         function toggleCheck(btn) { btn.classList.toggle('check-active'); btn.querySelector('i').classList.toggle('opacity-0'); }
+        
         function shareWhatsApp() {
-            const msg = `*FitFlow Pro Daily Report*%0A⚖️ ${state.weight}kg (Goal: ${state.goal}kg)%0A💧 ${state.waterC}ml / ${state.waterG}ml`;
+            const totalLost = (state.startW - state.weight).toFixed(1);
+            const remainingWeight = Math.max(0, state.weight - state.goal);
+            let weeksLeft = "--";
+
+            // INTELLIGENT WEEK CALCULATION
+            const startTimestamp = state.startDate || Date.now();
+            const daysActive = (Date.now() - startTimestamp) / (1000 * 60 * 60 * 24);
+            const loss = state.startW - state.weight;
+
+            if (daysActive > 3 && loss > 0.5) {
+                const lossPerDay = loss / daysActive;
+                if(lossPerDay > 0) weeksLeft = Math.ceil((remainingWeight / lossPerDay) / 7);
+                else weeksLeft = Math.ceil(remainingWeight / 0.7);
+            } else {
+                weeksLeft = Math.ceil(remainingWeight / 0.7);
+            }
+            
+            const appLink = "https://krishnamu045-rgb.github.io/fitflow/";
+            const msg = `🌟 FITFLOW SUCCESS REPORT 🌟%0A%0A🏃‍♂️ Total Lost: ${totalLost}kg%0A⚖️ Current Weight: ${state.weight}kg%0A🎯 Target: ${state.goal}kg%0A⏳ Remaining: ~${weeksLeft} Weeks%0A%0A📲 Download App: ${appLink}`;
             window.open(`https://wa.me/?text=${msg}`, '_blank');
         }
 
