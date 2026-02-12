@@ -38,7 +38,7 @@
         <div class="w-full max-w-sm space-y-6 text-center">
             <div>
                 <h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1>
-                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 2.0 Setup</p>
+                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 2.0 (Mega DB)</p>
             </div>
             
             <div class="space-y-3">
@@ -120,7 +120,7 @@
 
         <div id="workout-section" class="max-w-md mx-auto p-5 space-y-8 hide text-center">
             <div class="relative group cursor-pointer" onclick="launchWorkout()"><div class="bg-white rounded-[2.5rem] overflow-hidden pro-shadow border border-slate-50 relative aspect-video"><img id="wThumb" src="" alt="Workout" class="w-full h-full object-cover"><div class="absolute inset-0 thumbnail-gradient flex flex-col justify-end p-8 text-left"><p id="wStatus" class="text-punch font-black text-[10px] uppercase tracking-[0.2em] mb-1">Today's Session</p><h3 id="wTitle" class="text-3xl font-black text-white italic leading-none uppercase tracking-tight">--</h3></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-play ml-1"></i></div></div></div>
-            <div class="space-y-4 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Daily Checklist</h3><div id="tracker-list" class="grid grid-cols-2 gap-3"><button id="task-mShake" onclick="toggleTask('mShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase">Morning Shake</span></button><button id="task-nShake" onclick="toggleTask('nShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase">Night Shake</span></button><button id="task-water" onclick="toggleTask('water')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase text-water">Water Goal</span></button><button id="task-workout" onclick="toggleTask('workout')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase">Workout Done</span></button></div></div>
+            <div class="space-y-4 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Daily Checklist</h3><div id="tracker-list" class="grid grid-cols-2 gap-3"><button id="task-mShake" onclick="toggleTask('mShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase">Morning Shake</span></button><button id="task-nShake" onclick="toggleTask('nShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase">Night Shake</span></button><button id="task-water" onclick="toggleTask('water')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase">Water Goal</span></button><button id="task-workout" onclick="toggleTask('workout')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-[10px] font-extrabold uppercase">Workout Done</span></button></div></div>
             <div class="space-y-3 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Weekly History</h3><div id="historyContainer" class="flex justify-between bg-mist p-4 rounded-[2rem] border border-slate-100 overflow-x-auto no-scrollbar"></div></div>
             <button onclick="masterReset()" class="w-full py-6 text-[10px] font-black text-slate-200 uppercase tracking-[0.4em] hover:text-red-400 transition-all mt-6">Master Reset (PIN: 2710)</button>
         </div>
@@ -166,32 +166,126 @@
         const KEY = "FITFLOW_PRO_V2_FINAL";
         let state = JSON.parse(localStorage.getItem(KEY));
         
+        // --- EXPANDED 100+ SOUTH INDIAN FOOD DATABASE ---
         let foodDB = {
-            "idli": { cal: 39, unit: "pc", type: "good", effect: "Steam-cooked, gut-friendly & easy to digest." },
-            "dosa": { cal: 168, unit: "pc", type: "ok", effect: "Good carbs, but watch the oil/ghee amount." },
-            "masala dosa": { cal: 350, unit: "pc", type: "bad", effect: "High calorie potato filling + oil. Heavy on stomach." },
-            "rice": { cal: 130, unit: "cup", type: "ok", effect: "Instant energy, but high glycemic index. Portion control needed." },
-            "brown rice": { cal: 111, unit: "cup", type: "good", effect: "High fiber, keeps you full longer. Great choice." },
-            "samosa": { cal: 260, unit: "pc", type: "bad", effect: "Deep fried trans-fats. Causes acidity & fat gain." },
-            "biryani": { cal: 400, unit: "cup", type: "bad", effect: "Very high calorie & fat content. Eat sparingly." },
-            "chicken curry": { cal: 240, unit: "bowl", type: "ok", effect: "Good protein, but gravy can be high in fat." },
-            "grilled chicken": { cal: 150, unit: "pc", type: "good", effect: "Excellent lean protein source for muscle repair." },
-            "egg": { cal: 78, unit: "pc", type: "good", effect: "Perfect protein & healthy fats." },
-            "pizza": { cal: 285, unit: "slice", type: "bad", effect: "Refined flour (Maida) & cheese. Bloating & fat gain." },
-            "burger": { cal: 350, unit: "pc", type: "bad", effect: "High sodium & empty calories. Low satiety." },
-            "coke": { cal: 140, unit: "can", type: "bad", effect: "Pure sugar spike. Crashes energy later. Zero nutrition." },
-            "coconut water": { cal: 40, unit: "cup", type: "good", effect: "Natural electrolytes. Best for hydration." },
-            "tea": { cal: 40, unit: "cup", type: "ok", effect: "Okay in moderation. Avoid excess sugar." },
-            "coffee": { cal: 40, unit: "cup", type: "ok", effect: "Caffeine boost. Avoid excess sugar/cream." },
-            "biscuit": { cal: 50, unit: "pc", type: "bad", effect: "Hidden sugars & maida. Avoid if possible." },
-            "chapati": { cal: 104, unit: "pc", type: "good", effect: "Good complex carbs. better than white rice." },
-            "upma": { cal: 190, unit: "cup", type: "good", effect: "Good breakfast if made with less oil & more veggies." },
-            "vada": { cal: 170, unit: "pc", type: "bad", effect: "Oil sponge. Very hard to digest." },
-            "apple": { cal: 52, unit: "pc", type: "good", effect: "High fiber & vitamins. Doctors' favorite." },
-            "banana": { cal: 105, unit: "pc", type: "good", effect: "Great pre-workout energy source." },
-            "mango": { cal: 150, unit: "pc", type: "ok", effect: "King of fruits but high in sugar. Eat in moderation." },
-            "dal": { cal: 100, unit: "bowl", type: "good", effect: "Essential plant protein for vegetarians." },
-            "paneer": { cal: 100, unit: "pc", type: "ok", effect: "High protein but high saturated fat. Don't fry." }
+            // BREAKFAST & TIFFIN
+            "idli": { cal: 39, unit: "pc", type: "good", effect: "Steamed, fermented, gut-friendly." },
+            "mini idli": { cal: 15, unit: "pc", type: "good", effect: "Portion control needed." },
+            "rava idli": { cal: 60, unit: "pc", type: "ok", effect: "Higher carb than plain idli." },
+            "dosa": { cal: 168, unit: "pc", type: "ok", effect: "Good carbs, watch the oil." },
+            "masala dosa": { cal: 350, unit: "pc", type: "bad", effect: "Potato filling + high oil/butter." },
+            "rava dosa": { cal: 190, unit: "pc", type: "ok", effect: "Crispy but usually oily." },
+            "onion dosa": { cal: 200, unit: "pc", type: "ok", effect: "Tasty but check oil." },
+            "podi dosa": { cal: 220, unit: "pc", type: "bad", effect: "Ghee + lentil powder adds cals." },
+            "set dosa": { cal: 140, unit: "pc", type: "ok", effect: "Thicker, softer, usually 2-3 eaten." },
+            "wheat dosa": { cal: 130, unit: "pc", type: "good", effect: "Better fiber content." },
+            "ragi dosa": { cal: 140, unit: "pc", type: "good", effect: "High calcium & iron." },
+            "oats dosa": { cal: 120, unit: "pc", type: "good", effect: "Good fiber, diabetic friendly." },
+            "pesarattu": { cal: 180, unit: "pc", type: "good", effect: "Moong dal based, high protein." },
+            "adai": { cal: 190, unit: "pc", type: "good", effect: "Mixed lentils, high protein." },
+            "appam": { cal: 120, unit: "pc", type: "ok", effect: "Fermented rice, good for gut." },
+            "idiyappam": { cal: 50, unit: "pc", type: "good", effect: "Steamed rice noodles, light." },
+            "puttu": { cal: 150, unit: "cup", type: "good", effect: "Steamed rice/ragi, healthy." },
+            "upma": { cal: 250, unit: "cup", type: "ok", effect: "Rava based, can be oily." },
+            "semiya upma": { cal: 220, unit: "cup", type: "ok", effect: "Vermicelli, moderate carbs." },
+            "pongal": { cal: 300, unit: "cup", type: "bad", effect: "High ghee & rice, sleepy food." },
+            "poori": { cal: 150, unit: "pc", type: "bad", effect: "Deep fried wheat, calorie dense." },
+            "chapati": { cal: 104, unit: "pc", type: "good", effect: "Whole wheat, complex carbs." },
+            "parotta": { cal: 300, unit: "pc", type: "bad", effect: "Refined flour (maida), high fat." },
+            "vada": { cal: 170, unit: "pc", type: "bad", effect: "Deep fried lentil sponge." },
+            "sambar vada": { cal: 200, unit: "pc", type: "bad", effect: "Fried + soaked in lentils." },
+            "curd vada": { cal: 240, unit: "pc", type: "bad", effect: "Fried + creamy yogurt." },
+            "bajji": { cal: 150, unit: "pc", type: "bad", effect: "Oil soaked vegetable slice." },
+            "bonda": { cal: 180, unit: "pc", type: "bad", effect: "Potato filled deep fried ball." },
+
+            // RICE & LUNCH
+            "white rice": { cal: 130, unit: "cup", type: "ok", effect: "Quick energy, high glycemic index." },
+            "brown rice": { cal: 111, unit: "cup", type: "good", effect: "Fiber rich, slow digestion." },
+            "red rice": { cal: 109, unit: "cup", type: "good", effect: "Nutrient dense, antioxidant rich." },
+            "curd rice": { cal: 200, unit: "cup", type: "good", effect: "Cooling, probiotic, good for gut." },
+            "sambar rice": { cal: 220, unit: "cup", type: "ok", effect: "Protein from dal + carb mix." },
+            "lemon rice": { cal: 250, unit: "cup", type: "bad", effect: "Oily tadka, mostly carb." },
+            "tamarind rice": { cal: 280, unit: "cup", type: "bad", effect: "High oil preservative." },
+            "tomato rice": { cal: 230, unit: "cup", type: "ok", effect: "Tasty, moderate fat." },
+            "coconut rice": { cal: 300, unit: "cup", type: "bad", effect: "High saturated fat from coconut." },
+            "veg biryani": { cal: 250, unit: "cup", type: "bad", effect: "Oily rice, moderate veggies." },
+            "chicken biryani": { cal: 290, unit: "cup", type: "bad", effect: "Calorie bomb, high fat." },
+            "mutton biryani": { cal: 350, unit: "cup", type: "bad", effect: "Very high fat & cholesterol." },
+            "egg biryani": { cal: 270, unit: "cup", type: "ok", effect: "Better protein, still oily." },
+            "ghee rice": { cal: 350, unit: "cup", type: "bad", effect: "Pure fat & carbs." },
+            "jeera rice": { cal: 180, unit: "cup", type: "ok", effect: "Lighter than biryani." },
+            "fried rice": { cal: 250, unit: "cup", type: "bad", effect: "Oil + sauces (sodium)." },
+            "schezwan rice": { cal: 280, unit: "cup", type: "bad", effect: "Spicy oil overload." },
+            "ragi mudde": { cal: 180, unit: "ball", type: "good", effect: "Excellent slow-release energy." },
+            "jowar roti": { cal: 90, unit: "pc", type: "good", effect: "Gluten free, fiber rich." },
+
+            // CURRIES & SIDES
+            "sambar": { cal: 100, unit: "bowl", type: "good", effect: "Lentil & veggie stew, protein." },
+            "rasam": { cal: 60, unit: "bowl", type: "good", effect: "Digestion aid, immunity booster." },
+            "vatha kuzhambu": { cal: 150, unit: "bowl", type: "ok", effect: "Oily & salty." },
+            "avial": { cal: 150, unit: "bowl", type: "good", effect: "Mixed veg + coconut, healthy fats." },
+            "poriyal": { cal: 80, unit: "cup", type: "good", effect: "Sauteed veggies, fiber." },
+            "kootu": { cal: 120, unit: "cup", type: "good", effect: "Lentils + veg, creamy." },
+            "potato fry": { cal: 200, unit: "cup", type: "bad", effect: "High carb + high oil." },
+            "chicken curry": { cal: 240, unit: "bowl", type: "ok", effect: "Good protein, watch the gravy fat." },
+            "fish curry": { cal: 200, unit: "bowl", type: "good", effect: "Omega-3s, lighter than chicken." },
+            "fish fry": { cal: 180, unit: "pc", type: "ok", effect: "Protein, but fried." },
+            "mutton curry": { cal: 300, unit: "bowl", type: "bad", effect: "High saturated fat." },
+            "egg curry": { cal: 180, unit: "bowl", type: "good", effect: "Great protein source." },
+            "paneer butter masala": { cal: 350, unit: "bowl", type: "bad", effect: "Cream, butter, high fat." },
+            "dal tadka": { cal: 150, unit: "bowl", type: "good", effect: "Simple protein." },
+            "chutney": { cal: 100, unit: "tbsp", type: "bad", effect: "Coconut = high calorie density." },
+
+            // SNACKS & JUNK
+            "samosa": { cal: 260, unit: "pc", type: "bad", effect: "Trans fats, acidity." },
+            "veg puff": { cal: 250, unit: "pc", type: "bad", effect: "Margarine/dalda layers." },
+            "egg puff": { cal: 280, unit: "pc", type: "bad", effect: "Better protein but high fat." },
+            "murukku": { cal: 150, unit: "pc", type: "bad", effect: "Deep fried rice flour." },
+            "mixture": { cal: 250, unit: "cup", type: "bad", effect: "Deep fried sev & nuts." },
+            "banana chips": { cal: 180, unit: "cup", type: "bad", effect: "Fried in coconut oil." },
+            "sundal": { cal: 100, unit: "cup", type: "good", effect: "Boiled legumes, protein rich." },
+            "boiled peanuts": { cal: 160, unit: "cup", type: "good", effect: "Healthy fats & protein." },
+            "masala vada": { cal: 180, unit: "pc", type: "bad", effect: "Fried chana dal." },
+            "corn": { cal: 90, unit: "cob", type: "good", effect: "Fiber rich." },
+            "cutlet": { cal: 150, unit: "pc", type: "ok", effect: "Fried potato & veg." },
+            "biscuit": { cal: 50, unit: "pc", type: "bad", effect: "Hidden sugars." },
+            "maggi": { cal: 350, unit: "pack", type: "bad", effect: "Refined flour, high sodium." },
+            "pizza": { cal: 285, unit: "slice", type: "bad", effect: "Maida & cheese bloating." },
+            "burger": { cal: 350, unit: "pc", type: "bad", effect: "Empty calories." },
+
+            // SWEETS
+            "gulab jamun": { cal: 150, unit: "pc", type: "bad", effect: "Sugar syrup bomb." },
+            "rasgulla": { cal: 120, unit: "pc", type: "bad", effect: "Pure sugar sponge." },
+            "mysore pak": { cal: 250, unit: "pc", type: "bad", effect: "Ghee & sugar block." },
+            "laddu": { cal: 180, unit: "pc", type: "bad", effect: "Sugar & fat." },
+            "payasam": { cal: 200, unit: "cup", type: "bad", effect: "Milk & sugar rich." },
+            "kesari": { cal: 180, unit: "cup", type: "bad", effect: "Rava, ghee & sugar." },
+            "jalebi": { cal: 150, unit: "pc", type: "bad", effect: "Deep fried sugar." },
+            "halwa": { cal: 300, unit: "cup", type: "bad", effect: "Pure ghee & carb." },
+            "soan papdi": { cal: 150, unit: "pc", type: "bad", effect: "Flaky sugar." },
+
+            // BEVERAGES
+            "filter coffee": { cal: 40, unit: "cup", type: "ok", effect: "Caffeine kick." },
+            "tea": { cal: 40, unit: "cup", type: "ok", effect: "Comfort." },
+            "masala tea": { cal: 50, unit: "cup", type: "ok", effect: "Spices aid digestion." },
+            "green tea": { cal: 0, unit: "cup", type: "good", effect: "Metabolism booster." },
+            "milk": { cal: 120, unit: "cup", type: "good", effect: "Calcium." },
+            "buttermilk": { cal: 30, unit: "cup", type: "good", effect: "Probiotic coolant." },
+            "lassi": { cal: 180, unit: "cup", type: "bad", effect: "Sugar overload." },
+            "tender coconut": { cal: 40, unit: "cup", type: "good", effect: "Electrolytes." },
+            "coke": { cal: 140, unit: "can", type: "bad", effect: "Sugar spike." },
+            "fruit juice": { cal: 120, unit: "cup", type: "bad", effect: "Fiber removed sugar." },
+            "alcohol": { cal: 150, unit: "glass", type: "bad", effect: "Empty calories." },
+
+            // FRUITS
+            "banana": { cal: 105, unit: "pc", type: "good", effect: "Energy & Potassium." },
+            "apple": { cal: 52, unit: "pc", type: "good", effect: "Doctor away." },
+            "mango": { cal: 150, unit: "pc", type: "ok", effect: "Seasonal treat, high sugar." },
+            "papaya": { cal: 60, unit: "cup", type: "good", effect: "Enzymes for digestion." },
+            "guava": { cal: 68, unit: "pc", type: "good", effect: "Vitamin C powerhouse." },
+            "pomegranate": { cal: 83, unit: "cup", type: "good", effect: "Antioxidants." },
+            "watermelon": { cal: 30, unit: "cup", type: "good", effect: "Hydration." },
+            "jackfruit": { cal: 95, unit: "cup", type: "ok", effect: "High carb fruit." }
         };
 
         const CONTENT = {
