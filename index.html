@@ -38,7 +38,7 @@
         <div class="w-full max-w-sm space-y-6 text-center">
             <div>
                 <h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1>
-                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 2.0 (Saved Master)</p>
+                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 2.0 (Final Saved)</p>
             </div>
             
             <div class="space-y-3">
@@ -382,7 +382,27 @@
         function updateUI() { document.getElementById('curW').innerText = state.weight; document.getElementById('goalW').innerText = state.goal; document.getElementById('watV').innerText = state.waterC; document.getElementById('watT').innerText = state.waterG; document.getElementById('wBar').style.width = Math.min(100, (Math.abs(state.startW-state.weight)/Math.abs(state.startW-state.goal))*100)+'%'; document.getElementById('watBar').style.width = (state.waterC/state.waterG*100)+'%'; }
         function renderW() { const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = CONTENT[d]; document.getElementById('wTitle').innerText = p.t; document.getElementById('wThumb').src = p.vid === 'rest' ? "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" : `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`; }
         function launchWorkout() { const p = CONTENT[new Date().toLocaleDateString('en-US', { weekday: 'long' })]; if(p.vid !== 'rest') window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank'); }
-        function shareWhatsApp() { let s = 0; if(state.todayTasks.mShake) s++; if(state.todayTasks.nShake) s++; if(state.todayTasks.water) s++; if(state.todayTasks.workout) s++; window.open(`https://wa.me/?text=FitFlow Update: ${s}/4 Tasks Done!`, '_blank'); }
+        
+        // --- IMPROVED WHATSAPP SHARE FUNCTION ---
+        function shareWhatsApp() { 
+            const t = state.todayTasks;
+            const d = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+            const p = CONTENT[d] || CONTENT["Monday"];
+            
+            let text = `*FitFlow Pro Update* - ${new Date().toLocaleDateString()} 🚀%0a%0a`;
+            text += `*Daily Progress:*%0a`;
+            text += `${t.mShake ? '✅' : '❌'} Morning Shake%0a`;
+            text += `${t.nShake ? '✅' : '❌'} Night Shake%0a`;
+            text += `${t.water ? '✅' : '❌'} Water Goal (${state.waterC}/${state.waterG}ml)%0a`;
+            text += `${t.workout ? '✅' : '❌'} Workout (${p.t})%0a%0a`;
+            text += `*Current Weight:* ${state.weight}kg%0a`;
+            text += `*Goal:* ${state.goal}kg%0a%0a`;
+            text += `_"Consistency is key! 💪"_%0a%0a`;
+            text += `📲 *Get the App:* https://fitflow.app`;
+
+            window.open(`https://wa.me/?text=${text}`, '_blank'); 
+        }
+
         function masterReset() { if(prompt("PIN:") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
         function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
     </script>
