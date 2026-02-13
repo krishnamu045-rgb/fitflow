@@ -18,15 +18,14 @@
         .big-num { font-size: 1.8rem; font-weight: bold; display: block; }
         .small-lbl { font-size: 0.65rem; color: #7f8c8d; text-transform: uppercase; font-weight: bold; }
 
-        input, select, button { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #eee; border-radius: 12px; font-size: 1rem; box-sizing: border-box; }
+        input, select, button, textarea { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #eee; border-radius: 12px; font-size: 1rem; box-sizing: border-box; }
+        textarea { height: 80px; font-family: inherit; resize: none; }
         button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
         
-        /* Water Droplets */
         .water-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
         .glass { background: #e8f6ff; border-radius: 10px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; border: 1px solid #d4e9f7; transition: 0.2s; }
         .glass.full { background: #3498db; color: white; border-color: #3498db; }
 
-        /* Search & Results */
         .search-results { max-height: 200px; overflow-y: auto; background: #fff; border: 1px solid #eee; border-radius: 10px; display: none; margin-bottom: 10px; }
         .food-opt { padding: 12px; border-bottom: 1px solid #f9f9f9; cursor: pointer; font-size: 0.85rem; text-align: left; }
         .meal-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 8px 0; border-bottom: 1px solid #f9f9f9; }
@@ -39,16 +38,13 @@
 <div id="setupScreen" class="container">
     <div class="card" style="text-align: center; margin-top: 50px;">
         <h1 style="color: var(--primary); margin-bottom: 5px;">FitFlow Pro</h1>
-        <p style="font-size: 0.85rem; color: #666;">Personalize your lead coach dashboard</p>
+        <p style="font-size: 0.85rem; color: #666;">Configure your lead coach dashboard</p>
         <input type="text" id="setupName" placeholder="Full Name">
         <input type="number" id="setupH" placeholder="Height (cm)">
         <input type="number" id="setupW" placeholder="Current Weight (kg)">
         <input type="number" id="setupA" placeholder="Age">
-        <select id="setupG">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-        </select>
-        <button onclick="saveSetup()" style="background: var(--accent);">Create My Dashboard</button>
+        <select id="setupG"><option value="male">Male</option><option value="female">Female</option></select>
+        <button onclick="saveSetup()" style="background: var(--accent);">Initialize Dashboard</button>
     </div>
 </div>
 
@@ -73,7 +69,7 @@
         </div>
 
         <div class="card">
-            <div class="section-label" style="margin:0 0 10px 0;">🏃 Activity & Burn</div>
+            <div class="section-label" style="margin:0 0 10px 0;">🏃 Movement</div>
             <div style="display: flex; gap: 10px;">
                 <div style="flex:1;"><span style="font-size: 0.6rem; font-weight:bold; color:#777;">Steps Today</span><input type="number" id="steps" placeholder="0" oninput="updateStats()"></div>
                 <div style="flex:1;"><span style="font-size: 0.6rem; font-weight:bold; color:#777;">Burn (kcal)</span><div id="stepBurn" style="padding:14px; font-weight:bold; color:var(--burn);">0</div></div>
@@ -81,76 +77,67 @@
         </div>
 
         <div class="card">
-            <div class="section-label" style="margin:0;">💧 Water Tracker <span id="waterProgress" style="float:right; text-transform:none;">0/0 L</span></div>
+            <div class="section-label" style="margin:0;">💧 Water <span id="waterProgress" style="float:right; text-transform:none;">0/0 L</span></div>
             <div class="water-grid" id="waterGrid"></div>
         </div>
 
         <div class="card">
-            <div class="section-label" style="margin:0 0 10px 0;">🥗 Nutrition Search</div>
-            <input type="text" id="search" placeholder="Search 100+ Foods (Idli, Dosa, Shake...)" oninput="searchFood()">
+            <div class="section-label" style="margin:0 0 10px 0;">🥗 Search & Log Food</div>
+            <input type="text" id="search" placeholder="Type: Idli, Dosa, Chicken, Shake..." oninput="searchFood()">
             <div id="results" class="search-results"></div>
             <div id="mealList"></div>
         </div>
 
         <div class="card">
-            <div class="section-label" style="margin:0 0 10px 0;">➕ Add Missing Food</div>
-            <div style="display: flex; gap: 5px;">
-                <input type="text" id="customName" placeholder="Food Name">
-                <input type="number" id="customCal" placeholder="kcal">
-                <input type="number" id="customPro" placeholder="Pro(g)">
-            </div>
-            <button onclick="addCustomFood()" style="background: var(--accent); margin-top: 5px;">Add to Daily Log</button>
+            <div class="section-label" style="margin:0 0 10px 0;">💭 Daily Mood & Coach Notes</div>
+            <select id="mood">
+                <option value="Energetic">Energetic 😊</option>
+                <option value="Neutral">Normal 😐</option>
+                <option value="Hungry">Feeling Hungry 😋</option>
+                <option value="Tired">Tired/Low Energy 😴</option>
+            </select>
+            <textarea id="coachNote" placeholder="Any specific cravings, soreness, or victories today?"></textarea>
         </div>
 
         <button onclick="shareWhatsApp()" style="background: var(--whatsapp); border-radius: 15px;">📱 Share Report to Coach</button>
-        <button onclick="resetApp()" style="background: none; color: #e74c3c; font-size: 0.75rem; border: none; margin-top: 15px; text-decoration: underline; width: 100%;">Clear All Data & Reset</button>
+        <button onclick="resetApp()" style="background: none; color: #e74c3c; font-size: 0.75rem; border: none; margin-top: 15px; text-decoration: underline; width: 100%;">Reset Daily Logs</button>
     </div>
 </div>
 
 <script>
-    // EXPANDED FOOD DATABASE
     const foodDb = [
         {name:"Idli (2) + Sambar", cal:180, pro:8}, {name:"Masala Dosa", cal:350, pro:6},
-        {name:"Plain Dosa", cal:150, pro:3}, {name:"Curd Rice", cal:190, pro:5},
-        {name:"Herbalife F1 Shake (2 scoops)", cal:90, pro:9}, {name:"PPP (1 scoop)", cal:20, pro:5},
-        {name:"Afresh (1 serving)", cal:4, pro:0}, {name:"Chicken Curry (1 cup)", cal:250, pro:25},
+        {name:"Curd Rice", cal:190, pro:5}, {name:"Herbalife F1 Shake", cal:90, pro:9},
+        {name:"PPP (1 scoop)", cal:20, pro:5}, {name:"Chicken Curry", cal:250, pro:25},
         {name:"Boiled Egg (1)", cal:75, pro:6}, {name:"Whey Protein", cal:120, pro:25},
-        {name:"Chapati (1)", cal:85, pro:3}, {name:"Banana", cal:105, pro:1},
-        {name:"Greek Yogurt (100g)", cal:100, pro:10}, {name:"Tender Coconut", cal:40, pro:1}
+        {name:"Chapati (1)", cal:85, pro:3}, {name:"Banana", cal:105, pro:1}
     ];
 
     function initApp() {
-        const p = localStorage.getItem('ff_profile');
-        if (!p) document.getElementById('setupScreen').style.display = 'block';
+        if (!localStorage.getItem('ff_profile')) document.getElementById('setupScreen').style.display = 'block';
         else { document.getElementById('mainApp').style.display = 'block'; loadData(); }
     }
 
     function saveSetup() {
         const n=document.getElementById('setupName').value, h=document.getElementById('setupH').value, w=document.getElementById('setupW').value, a=document.getElementById('setupA').value, g=document.getElementById('setupG').value;
-        if(!n || !h || !w || !a) return alert("All fields are required for accuracy.");
-
-        // Mifflin-St Jeor BMR
-        let bmr = (10 * w) + (6.25 * h) - (5 * a);
-        bmr = (g === 'male') ? bmr + 5 : bmr - 161;
-
-        // BMI Calculation
+        if(!n || !h || !w || !a) return alert("All fields are required.");
+        let bmr = (10 * w) + (6.25 * h) - (5 * a) + (g === 'male' ? 5 : -161);
         const bmi = (w / ((h/100)*(h/100))).toFixed(1);
-        
-        // Target Logic
         const targetWeight = (23 * ((h/100)*(h/100))).toFixed(0);
         const pGoal = Math.round(targetWeight * 1.6);
         const wGoal = (w * 0.033).toFixed(1);
-
         localStorage.setItem('ff_profile', JSON.stringify({name:n, h, w, a, g, bmr: Math.round(bmr), bmi, pGoal, wGoal, targetWeight}));
         location.reload();
     }
 
     function loadData() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        document.getElementById('greet').innerText = "Coach Krishnamurthy's " + p.name;
+        document.getElementById('greet').innerText = "Coach's " + p.name;
         document.getElementById('bmiDisplay').innerText = `BMI: ${p.bmi} | Target: ${p.targetWeight}kg | Budget: ${p.bmr}kcal`;
         document.getElementById('proteinTarget').innerText = `Goal: ${p.pGoal}g`;
         document.getElementById('steps').value = localStorage.getItem('ff_steps') || '';
+        document.getElementById('coachNote').value = localStorage.getItem('ff_note') || '';
+        document.getElementById('mood').value = localStorage.getItem('ff_mood') || 'Neutral';
         setupWater(); renderMeals(); updateStats();
     }
 
@@ -176,17 +163,10 @@
         r.innerHTML = ''; r.style.display = 'block';
         fil.forEach(f => {
             const d = document.createElement('div'); d.className = 'food-opt';
-            d.innerHTML = `<strong>${f.name}</strong> • ${f.pro}g Protein`;
+            d.innerHTML = `<strong>${f.name}</strong> • ${f.pro}g P`;
             d.onclick = () => { addMeal(f); r.style.display='none'; document.getElementById('search').value=''; };
             r.appendChild(d);
         });
-    }
-
-    function addCustomFood() {
-        const n = document.getElementById('customName').value, c = parseInt(document.getElementById('customCal').value), p = parseInt(document.getElementById('customPro').value);
-        if(!n || isNaN(c)) return alert("Enter at least Food Name and Calories.");
-        addMeal({name: n, cal: c, pro: p || 0});
-        document.getElementById('customName').value = ''; document.getElementById('customCal').value = ''; document.getElementById('customPro').value = '';
     }
 
     function addMeal(f) {
@@ -201,30 +181,32 @@
         let tc = 0, tp = 0;
         m.forEach(i => { tc += i.cal; tp += i.pro; list.innerHTML += `<div class="meal-item"><span>${i.name}</span><span>${i.pro}g P</span></div>`; });
         document.getElementById('proteinDisplay').innerText = tp;
-        localStorage.setItem('temp_intake', tc);
-        updateStats();
+        localStorage.setItem('temp_intake', tc); updateStats();
     }
 
     function updateStats() {
         const s = document.getElementById('steps').value || 0;
         localStorage.setItem('ff_steps', s);
+        localStorage.setItem('ff_note', document.getElementById('coachNote').value);
+        localStorage.setItem('ff_mood', document.getElementById('mood').value);
         const burn = Math.round(s * 0.04);
         document.getElementById('stepBurn').innerText = burn + " kcal";
-        
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const intake = parseInt(localStorage.getItem('temp_intake') || 0);
-        const net = p.bmr - intake + burn;
+        const net = p.bmr - (parseInt(localStorage.getItem('temp_intake') || 0)) + burn;
         document.getElementById('netCalories').innerText = net;
         document.getElementById('netCalories').style.color = net < 0 ? "#e74c3c" : "#2ecc71";
     }
 
     function shareWhatsApp() {
+        updateStats(); // Ensure latest data
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const text = `*FitFlow Pro Daily Summary*%0ABMI: ${p.bmi}%0A🏃 Steps: ${document.getElementById('steps').value}%0A💪 Protein: ${document.getElementById('proteinDisplay').innerText}/${p.pGoal}g%0A🍎 Net Cal: ${document.getElementById('netCalories').innerText}`;
+        const mood = document.getElementById('mood').value;
+        const note = document.getElementById('coachNote').value;
+        const text = `*FitFlow Pro Daily Summary*%0AUser: ${p.name}%0ABMI: ${p.bmi}%0A🏃 Steps: ${document.getElementById('steps').value}%0A💪 Protein: ${document.getElementById('proteinDisplay').innerText}/${p.pGoal}g%0A🍎 Net Cal: ${document.getElementById('netCalories').innerText}%0A%0A*Mood:* ${mood}%0A*Note:* ${note}`;
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
-    function resetApp() { if(confirm("Erase all data and start over?")) { localStorage.clear(); location.reload(); } }
+    function resetApp() { if(confirm("Erase all data?")) { localStorage.clear(); location.reload(); } }
 </script>
 </body>
 </html>
