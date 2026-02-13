@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V6.3 (Compliance)</title>
+    <title>FitFlow Pro V6.4 (Smart Menu)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -35,7 +35,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.3 (Compliance)</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.4 (Smart Menu)</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -46,29 +46,9 @@
         </div>
     </div>
 
-    <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
-            <div class="text-center"><i class="fas fa-shield-heart text-5xl text-punch mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Daily Health Check</h2></div>
-            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p>FitFlow Pro is a tracking tool, not a medical service.</p><ul class="list-disc pl-5 space-y-2"><li>Consult a physician before starting diet/exercise.</li><li>Stop if you feel dizziness or pain.</li><li>Verify meal plans with your wellness coach.</li></ul></div>
-            <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button>
-        </div>
-    </div>
-
-    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
-            <div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety First</h2></div>
-            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p class="font-bold text-marine">Before starting:</p><ul class="list-disc pl-5 space-y-2"><li>Clear a 6ft x 6ft safe space.</li><li>Wear proper shoes to prevent injury.</li><li>Keep water nearby and hydrate.</li></ul></div>
-            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button>
-        </div>
-    </div>
-
-    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
-            <div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition Facts</h2></div>
-            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p class="font-bold text-marine">Please Note:</p><ul class="list-disc pl-5 space-y-2"><li>Calorie counts are <span class="text-punch font-bold">estimates</span> based on standard Indian portion sizes.</li><li>Cooking methods (oil, ghee) can change values significantly.</li></ul></div>
-            <button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button>
-        </div>
-    </div>
+    <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-shield-heart text-5xl text-punch mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Daily Health Check</h2></div><div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p>FitFlow Pro is a tracking tool, not a medical service.</p><ul class="list-disc pl-5 space-y-2"><li>Consult a physician before starting diet/exercise.</li><li>Stop if you feel dizziness or pain.</li></ul></div><button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button></div></div>
+    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety First</h2></div><div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p class="font-bold text-marine">Before starting:</p><ul class="list-disc pl-5 space-y-2"><li>Clear a 6ft x 6ft safe space.</li><li>Keep water nearby.</li></ul></div><button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button></div></div>
+    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition Facts</h2></div><div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p class="font-bold text-marine">Please Note:</p><ul class="list-disc pl-5 space-y-2"><li>Calorie counts are <span class="text-punch font-bold">estimates</span>.</li><li>Cooking methods vary significantly.</li></ul></div><button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button></div></div>
 
     <div id="main-app" class="pb-32 hide">
         <div class="max-w-md mx-auto p-5 pb-0">
@@ -96,7 +76,14 @@
                     <div class="w-full bg-mist h-2 rounded-full overflow-hidden p-0.5"><div id="watBar" class="h-full bg-water rounded-full transition-all duration-500"></div></div>
                 </div>
             </div>
-            <div class="space-y-4"><h3 class="font-extrabold text-xl uppercase tracking-tight px-1 italic">Suggested Menu</h3><div id="mealContainer" class="space-y-3"></div></div>
+            
+            <div class="space-y-4">
+                <div class="flex justify-between items-end px-1">
+                    <h3 class="font-extrabold text-xl uppercase tracking-tight italic">Suggested Menu</h3>
+                    <p class="text-[10px] font-bold text-cal bg-purple-50 px-2 py-1 rounded-lg border border-purple-100">Total: ~<span id="menuTotal">--</span> kcal</p>
+                </div>
+                <div id="mealContainer" class="space-y-3"></div>
+            </div>
         </div>
 
         <div id="workout-section" class="max-w-md mx-auto p-5 space-y-8 hide text-center">
@@ -111,14 +98,12 @@
                 <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Calories Remaining</p><h2 class="text-5xl font-black text-marine tracking-tighter" id="dispRemaining">--</h2><p class="text-xs font-bold text-cal mt-1">Goal: <span id="dispGoal">--</span></p></div>
                 <div class="relative w-24 h-24"><svg class="w-full h-full" viewBox="0 0 100 100"><circle class="text-mist stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="calRing" class="text-cal progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0"></circle></svg><div class="absolute inset-0 flex items-center justify-center text-marine font-bold text-xs"><i class="fas fa-fire"></i></div></div>
             </div>
-
             <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-3">
                 <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Scanner</p>
                 <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="e.g., Coconut Chutney, Fish Curry..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2"><button onclick="quickAdd('Coffee', 40)" class="whitespace-nowrap bg-orange-50 text-orange-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-orange-100">+ Coffee</button><button onclick="quickAdd('Tea', 40)" class="whitespace-nowrap bg-amber-50 text-amber-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-amber-100">+ Tea</button><button onclick="quickAdd('Water', 0)" class="whitespace-nowrap bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-blue-100">+ Water</button><button onclick="quickAdd('Banana', 105)" class="whitespace-nowrap bg-yellow-50 text-yellow-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-yellow-100">+ Banana</button></div>
                 <div id="analysisResult" class="hide bg-mist p-4 rounded-xl border border-slate-100 animate-slide-up"><div class="flex justify-between items-center mb-2"><h3 id="resName" class="font-black text-marine capitalize text-lg">--</h3><span id="resCal" class="bg-white px-2 py-1 rounded-lg text-xs font-bold text-slate-500 border border-slate-100">-- kcal</span></div><p id="resDesc" class="text-xs text-slate-500 font-medium mb-3">--</p><div class="flex gap-2"><input type="number" id="resQty" value="1" class="w-16 bg-white p-3 rounded-xl font-bold text-center border border-slate-100"><button onclick="confirmAdd()" class="flex-1 bg-marine text-white font-bold rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button></div></div>
             </div>
-
             <div class="space-y-4"><p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-1">Today's Meals</p><div id="logContainer" class="space-y-3 pb-10"></div></div>
         </div>
 
@@ -134,11 +119,10 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_V6_3_LEGAL";
+        const KEY = "FITFLOW_PRO_V6_4_SMART_MENU";
         let state = JSON.parse(localStorage.getItem(KEY));
         let tempFood = null; 
         
-        // --- FULL DB (SAME AS V6.2) ---
         let foodDB = {
             "idli": { cal: 39, unit: "pc", type: "good", effect: "Steamed, fermented, gut-friendly." },
             "dosa": { cal: 168, unit: "pc", type: "ok", effect: "Good carbs, watch the oil." },
@@ -148,57 +132,42 @@
             "chapati": { cal: 104, unit: "pc", type: "good", effect: "Whole wheat, complex carbs." },
             "parotta": { cal: 300, unit: "pc", type: "bad", effect: "Refined flour, high fat." },
             "vada": { cal: 170, unit: "pc", type: "bad", effect: "Deep fried lentil sponge." },
-            
             "coconut chutney": { cal: 100, unit: "tbsp", type: "bad", effect: "High fat content." },
             "tomato chutney": { cal: 40, unit: "tbsp", type: "good", effect: "Lighter option." },
-            "mint chutney": { cal: 20, unit: "tbsp", type: "good", effect: "Digestion aid." },
-            "peanut chutney": { cal: 120, unit: "tbsp", type: "bad", effect: "Protein but high calorie." },
-            
             "sambar": { cal: 100, unit: "bowl", type: "good", effect: "Lentil & veggie stew, protein." },
             "rasam": { cal: 40, unit: "bowl", type: "good", effect: "Great for immunity." },
             "chicken curry": { cal: 240, unit: "bowl", type: "ok", effect: "Good protein, watch gravy." },
-            "chettinad chicken": { cal: 280, unit: "bowl", type: "bad", effect: "Spicy & oily." },
             "fish curry": { cal: 200, unit: "bowl", type: "good", effect: "Omega-3s, lighter than chicken." },
-            "mutton curry": { cal: 350, unit: "bowl", type: "bad", effect: "High saturated fat." },
-            "egg curry": { cal: 180, unit: "bowl", type: "good", effect: "Good protein balance." },
-            "paneer butter masala": { cal: 350, unit: "bowl", type: "bad", effect: "Heavy cream & butter." },
-            "veg korma": { cal: 220, unit: "bowl", type: "ok", effect: "Coconut base, moderate fat." },
-            "kadala curry": { cal: 200, unit: "bowl", type: "good", effect: "Black chickpeas, high protein." },
-            
             "white rice": { cal: 130, unit: "cup", type: "ok", effect: "Quick energy, high glycemic index." },
             "brown rice": { cal: 111, unit: "cup", type: "good", effect: "Fiber rich, slow digestion." },
-            "curd rice": { cal: 200, unit: "cup", type: "good", effect: "Cooling, probiotic." },
-            "sambar rice": { cal: 220, unit: "cup", type: "ok", effect: "Protein from dal + carb mix." },
             "veg biryani": { cal: 250, unit: "cup", type: "bad", effect: "Oily rice, moderate veggies." },
             "chicken biryani": { cal: 290, unit: "cup", type: "bad", effect: "Calorie bomb, high fat." },
-            
             "filter coffee": { cal: 40, unit: "cup", type: "ok", effect: "Caffeine kick." },
             "tea": { cal: 40, unit: "cup", type: "ok", effect: "Comfort." },
             "banana": { cal: 105, unit: "pc", type: "good", effect: "Energy & Potassium." },
-            "egg": { cal: 70, unit: "pc", type: "good", effect: "Boiled. Great protein." }
+            // NEW ENTRIES
+            "f1 shake": { cal: 242, unit: "glass", type: "good", effect: "Complete nutrition meal." },
+            "afresh": { cal: 4, unit: "cup", type: "good", effect: "Low cal energy drink." },
+            "almonds": { cal: 7, unit: "pc", type: "good", effect: "Healthy fats." }
         };
 
         const CONTENT = {
-            "Monday": { veg: "Brown Rice (1 cup) + Sambhar", non: "Brown Rice + Kerala Fish Curry", vid: "b9ztxh-cTHI", t: "Body Basics" },
-            "Tuesday": { veg: "Ragi Mudde (1 med) + Veg Saaru", non: "Ragi Mudde + Chicken Saaru", vid: "ELpVLwrDR_g", t: "Core Strength" },
-            "Wednesday": { veg: "Millet Rice (1 cup) + Rasam", non: "Millet Rice + Egg Roast", vid: "VsAXZ34AJ-k", t: "Metabolism" },
-            "Thursday": { veg: "2 Jowar Rotis + Veg Fry", non: "2 Jowar Rotis + Grilled Chicken", vid: "rmmWuI5Jinc", t: "Lower Body" },
-            "Friday": { veg: "Brown Rice (1 cup) + Dal", non: "Brown Rice + Fish Tawa Fry", vid: "8r4Z-ghDI4k", t: "Cardio Kick" },
-            "Saturday": { veg: "Veg Biryani + Raita", non: "Chicken Biryani + 1 Egg", vid: "uKXcLBjWqas", t: "Stability" },
-            "Sunday": { veg: "Millet Curd Rice + Salad", non: "Chicken Pepper Soup + 1 Roti", vid: "rest", t: "Recovery" }
+            "Monday": { veg: "Brown Rice + Sambhar", non: "Brown Rice + Fish Curry", vCal: 360, nCal: 420, vid: "b9ztxh-cTHI", t: "Body Basics" },
+            "Tuesday": { veg: "Ragi Mudde + Veg Saaru", non: "Ragi Mudde + Chicken Saaru", vCal: 340, nCal: 390, vid: "ELpVLwrDR_g", t: "Core Strength" },
+            "Wednesday": { veg: "Millet Rice + Rasam", non: "Millet Rice + Egg Roast", vCal: 310, nCal: 360, vid: "VsAXZ34AJ-k", t: "Metabolism" },
+            "Thursday": { veg: "2 Jowar Rotis + Veg Fry", non: "2 Jowar Rotis + Grill Chicken", vCal: 320, nCal: 380, vid: "rmmWuI5Jinc", t: "Lower Body" },
+            "Friday": { veg: "Brown Rice + Dal", non: "Brown Rice + Fish Fry", vCal: 350, nCal: 410, vid: "8r4Z-ghDI4k", t: "Cardio Kick" },
+            "Saturday": { veg: "Veg Biryani + Raita", non: "Chicken Biryani + Egg", vCal: 450, nCal: 550, vid: "uKXcLBjWqas", t: "Stability" },
+            "Sunday": { veg: "Millet Curd Rice + Salad", non: "Pepper Soup + 1 Roti", vCal: 280, nCal: 320, vid: "rest", t: "Recovery" }
         };
 
         const MEAL_TIMES = ["08:00", "11:00", "13:30", "17:00", "19:30"];
 
         window.onload = () => {
             if (!state) {
-                const v62 = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_2_HEADER"));
-                if(v62) state = v62;
-                else {
-                    const v61 = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_1_FULL_MENU"));
-                    if(v61) state = v61;
-                    else { document.getElementById('setup-screen').classList.remove('hide'); document.getElementById('main-app').classList.add('hide'); return; }
-                }
+                const prev = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_3_LEGAL"));
+                if(prev) state = prev;
+                else { document.getElementById('setup-screen').classList.remove('hide'); document.getElementById('main-app').classList.add('hide'); return; }
             }
             if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; 
             if(!state.consumed) state.consumed = [];
@@ -212,11 +181,7 @@
             document.getElementById('main-app').classList.remove('hide'); 
             document.getElementById('userDisp').innerText = state.name; 
             checkNewDay(); 
-            
-            // CHECK DISCLAIMERS
             checkHomeDisclaimer();
-            // checkWorkout/Food called in showT
-            
             updateUI(); 
             updateInfoUI(); 
             renderMeals();
@@ -224,7 +189,6 @@
             renderHistory(); 
         }
 
-        // --- DISCLAIMER LOGIC ---
         function checkHomeDisclaimer() { if (state.lastDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('homeDisclaimerModal').classList.remove('hide'); }
         function acceptHomeDisclaimer() { state.lastDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('homeDisclaimerModal').classList.add('hide'); }
         function acceptWorkoutSafety() { state.lastWorkoutSafetyDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('workoutSafetyModal').classList.add('hide'); }
@@ -232,127 +196,98 @@
         function checkWorkoutSafety() { if (state.lastWorkoutSafetyDate !== new Date().toISOString().split('T')[0]) document.getElementById('workoutSafetyModal').classList.remove('hide'); }
         function checkFoodDisclaimer() { if (state.lastFoodDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('foodDisclaimerModal').classList.remove('hide'); }
 
-
-        // --- HOME UI ---
         function updateUI() { 
             document.getElementById('curW').innerText = state.weight; 
             document.getElementById('goalW').innerText = state.goal; 
-            const wPct = Math.min(100, (Math.abs(state.startW-state.weight)/Math.abs(state.startW-state.goal))*100);
-            document.getElementById('wBar').style.width = wPct + '%'; 
-
+            document.getElementById('wBar').style.width = Math.min(100, (Math.abs(state.startW-state.weight)/Math.abs(state.startW-state.goal))*100) + '%'; 
             document.getElementById('watV').innerText = state.waterC; 
             document.getElementById('watT').innerText = state.waterG;
-            const watPct = (state.waterC / state.waterG) * 100;
-            document.getElementById('watBar').style.width = watPct + '%';
+            document.getElementById('watBar').style.width = (state.waterC / state.waterG) * 100 + '%';
         }
 
-        // --- INFO UI (CALORIE MANAGER) ---
         function updateInfoUI() {
             const total = state.consumed.reduce((sum, item) => sum + item.cal, 0);
             const remaining = Math.max(0, state.calGoal - total);
-            
-            // UPDATE HEADER
             document.getElementById('headerCal').innerText = total;
             document.getElementById('headerGoal').innerText = state.calGoal;
-            
-            // UPDATE INFO CARD
             document.getElementById('dispRemaining').innerText = remaining;
             document.getElementById('dispGoal').innerText = state.calGoal + " kcal";
-
-            const radius = 40;
-            const circumference = 2 * Math.PI * radius; 
-            const offset = circumference - (total / state.calGoal) * circumference;
+            const offset = (2 * Math.PI * 40) - (total / state.calGoal) * (2 * Math.PI * 40);
             const ring = document.getElementById('calRing');
             ring.style.strokeDashoffset = offset;
-            
-            if(total > state.calGoal) ring.classList.replace('text-cal', 'text-danger');
-            else ring.classList.replace('text-danger', 'text-cal');
-
+            if(total > state.calGoal) ring.classList.replace('text-cal', 'text-danger'); else ring.classList.replace('text-danger', 'text-cal');
             renderLog();
         }
 
-        // --- FOOD LOGIC ---
+        function renderMeals() { 
+            const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); 
+            const p = CONTENT[d] || CONTENT["Monday"]; 
+            const totalEst = 242 + 40 + p.vCal + 40 + 200; // Roughly B+S+L+S+D
+            document.getElementById('menuTotal').innerText = totalEst;
+            
+            document.getElementById('mealContainer').innerHTML = `
+                ${item("fa-blender","Morning Shake (F1+PDM)","text-punch","Breakfast", 242)}
+                ${item("fa-mug-hot","Afresh + 5 Almonds","text-orange-400","Snack", 40)}
+                
+                <div class="bg-mist p-5 rounded-[2rem] border border-slate-50 shadow-sm space-y-3">
+                    <p class="text-[10px] font-bold text-slate-300 uppercase leading-none">Lunch (${d})</p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm font-extrabold text-marine flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span> ${p.veg}</p>
+                            <button onclick="quickLog('Veg Lunch', ${p.vCal})" class="text-[10px] font-bold bg-white border border-slate-200 px-2 py-1 rounded-lg text-marine hover:bg-punch hover:text-white transition-all">+ ${p.vCal}</button>
+                        </div>
+                        <div class="w-full h-px bg-slate-100"></div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm font-extrabold text-marine flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> ${p.non}</p>
+                            <button onclick="quickLog('Non-Veg Lunch', ${p.nCal})" class="text-[10px] font-bold bg-white border border-slate-200 px-2 py-1 rounded-lg text-marine hover:bg-punch hover:text-white transition-all">+ ${p.nCal}</button>
+                        </div>
+                    </div>
+                </div>
+
+                ${item("fa-carrot","Guava / Cucumber","text-orange-400","Snack", 40)}
+                ${item("fa-moon","Night Shake (Light)","text-punch","Dinner", 200)}
+            `;
+        }
+
+        function item(i, t, c, l, cal) { 
+            return `
+            <div class="bg-mist p-4 rounded-[2rem] flex justify-between items-center border border-slate-50 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <div class="${c} text-xl w-8 text-center"><i class="fas ${i}"></i></div>
+                    <div><p class="text-[9px] font-bold text-slate-400 uppercase leading-none mb-0.5">${l} (~${cal} kcal)</p><p class="font-extrabold text-sm text-marine leading-tight">${t}</p></div>
+                </div>
+                <button onclick="quickLog('${t}', ${cal})" class="text-lg text-slate-300 hover:text-punch transition-all px-2"><i class="fas fa-plus-circle"></i></button>
+            </div>`; 
+        }
+
         function showSuggestions(val) {
             val = val.toLowerCase(); const list = document.getElementById('suggestions');
             if(val.length < 1) { list.classList.add('hide'); return; }
             const matches = Object.keys(foodDB).filter(k => k.includes(val));
             if(matches.length === 0) { list.classList.add('hide'); return; }
-            list.innerHTML = matches.map(f => `<div onclick="selectFood('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center transition-all"><span class="font-bold text-marine capitalize text-sm">${f}</span><span class="text-xs text-slate-400 font-bold bg-slate-100 px-2 py-1 rounded-full">${foodDB[f].cal}</span></div>`).join('');
+            list.innerHTML = matches.map(f => `<div onclick="selectFood('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center transition-all"><span class="font-bold text-marine capitalize text-sm">${f}</span><span class="text-xs text-slate-400 font-bold bg-slate-100 px-2 py-1 rounded-full">${foodDB[f].cal} kcal</span></div>`).join('');
             list.classList.remove('hide');
         }
-
         function selectFood(name) {
-            const item = foodDB[name];
-            const desc = item.effect || item.desc || "No description.";
-            tempFood = { name: name, calPerUnit: item.cal, desc: desc };
-            
-            document.getElementById('foodName').value = ""; 
-            document.getElementById('suggestions').classList.add('hide');
-            document.getElementById('resName').innerText = name; 
-            document.getElementById('resCal').innerText = item.cal + " kcal/unit"; 
-            document.getElementById('resDesc').innerText = desc;
-            document.getElementById('analysisResult').classList.remove('hide'); 
-            document.getElementById('resQty').value = 1; 
-            document.getElementById('resQty').focus();
+            const item = foodDB[name]; const desc = item.effect || item.desc || "No description."; tempFood = { name: name, calPerUnit: item.cal, desc: desc };
+            document.getElementById('foodName').value = ""; document.getElementById('suggestions').classList.add('hide');
+            document.getElementById('resName').innerText = name; document.getElementById('resCal').innerText = item.cal + " kcal/unit"; document.getElementById('resDesc').innerText = desc;
+            document.getElementById('analysisResult').classList.remove('hide'); document.getElementById('resQty').value = 1; document.getElementById('resQty').focus();
         }
-
-        function quickAdd(name, cal) {
-             state.consumed.unshift({ name: name, cal: cal, qty: 1, time: Date.now() });
-             save(); updateInfoUI();
-        }
-
-        function confirmAdd() {
-            if(!tempFood) return;
-            const qty = parseFloat(document.getElementById('resQty').value);
-            if(qty <= 0) return;
-            const totalCal = Math.round(tempFood.calPerUnit * qty);
-            state.consumed.unshift({ name: tempFood.name, cal: totalCal, qty: qty, time: Date.now() });
-            save(); updateInfoUI();
-            document.getElementById('analysisResult').classList.add('hide');
-        }
-
-        function deleteItem(index) {
-            state.consumed.splice(index, 1);
-            save(); updateInfoUI();
-        }
-
+        function quickLog(name, cal) { state.consumed.unshift({ name: name, cal: cal, qty: 1, time: Date.now() }); save(); updateInfoUI(); alert(`Added ${name} (+${cal} kcal)`); }
+        function confirmAdd() { if(!tempFood) return; const qty = parseFloat(document.getElementById('resQty').value); if(qty <= 0) return; const totalCal = Math.round(tempFood.calPerUnit * qty); state.consumed.unshift({ name: tempFood.name, cal: totalCal, qty: qty, time: Date.now() }); save(); updateInfoUI(); document.getElementById('analysisResult').classList.add('hide'); }
+        function deleteItem(index) { state.consumed.splice(index, 1); save(); updateInfoUI(); }
         function renderLog() {
             const list = document.getElementById('logContainer');
-            if(state.consumed.length === 0) {
-                list.innerHTML = `<div class="text-center py-8 text-slate-300 text-xs font-bold italic">No meals logged yet. Eat something! 🍽️</div>`;
-                return;
-            }
-            list.innerHTML = state.consumed.map((item, i) => `
-                <div class="bg-white p-4 rounded-2xl border border-slate-50 flex justify-between items-center shadow-sm">
-                    <div><h4 class="font-bold text-marine capitalize text-sm">${item.name}</h4><p class="text-[10px] text-slate-400 font-bold">Qty: ${item.qty} • ${item.cal} kcal</p></div>
-                    <button onclick="deleteItem(${i})" class="text-slate-300 hover:text-danger p-2"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            `).join('');
+            if(state.consumed.length === 0) { list.innerHTML = `<div class="text-center py-8 text-slate-300 text-xs font-bold italic">No meals logged yet. Eat something! 🍽️</div>`; return; }
+            list.innerHTML = state.consumed.map((item, i) => `<div class="bg-white p-4 rounded-2xl border border-slate-50 flex justify-between items-center shadow-sm"><div><h4 class="font-bold text-marine capitalize text-sm">${item.name}</h4><p class="text-[10px] text-slate-400 font-bold">Qty: ${item.qty} • ${item.cal} kcal</p></div><button onclick="deleteItem(${i})" class="text-slate-300 hover:text-danger p-2"><i class="fas fa-trash-alt"></i></button></div>`).join('');
         }
-
-        // --- CORE & NAV ---
-        function renderMeals() { const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = CONTENT[d] || CONTENT["Monday"]; document.getElementById('mealContainer').innerHTML = `${item("fa-blender","F1 Shake (3) + PDM (2)","text-punch","Breakfast")}${item("fa-mug-hot","Afresh + 5 Almonds","text-orange-400","Snack")}<div class="bg-mist p-6 rounded-[2rem] border border-slate-50 shadow-sm space-y-3"><p class="text-[10px] font-bold text-slate-300 uppercase leading-none">South Indian Lunch</p><div class="space-y-3 text-marine"><p class="text-[14px] font-extrabold flex items-start gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-green-500 shrink-0"></span> ${p.veg}</p><p class="text-[14px] font-extrabold flex items-start gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-red-500 shrink-0"></span> ${p.non}</p></div></div>${item("fa-carrot","1 Guava / Cucumber","text-orange-400","Snack")}${item("fa-moon","F1 Shake (3) + PDM (1)","text-punch","Dinner")}`; }
-        function item(i, t, c, l) { return `<div class="bg-mist p-5 rounded-3xl flex items-center gap-5 border border-slate-50 shadow-sm"><div class="${c} text-2xl w-10 text-center"><i class="fas ${i}"></i></div><div><p class="text-[10px] font-bold text-slate-300 uppercase leading-none mb-1">${l}</p><p class="font-extrabold text-[16px] leading-tight text-marine">${t}</p></div></div>`; }
         function addW(v) { state.waterC = Math.max(0, state.waterC + v); updateUI(); save(); }
         function selectGender(g) { document.getElementById('setupGender').value = g; document.getElementById('btnMale').className = g === 'male' ? 'flex-1 bg-mist p-4 rounded-2xl font-bold gender-active transition-all' : 'flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all'; document.getElementById('btnFemale').className = g === 'female' ? 'flex-1 bg-mist p-4 rounded-2xl font-bold gender-active transition-all' : 'flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all'; }
-        function finishSetup() { const n = document.getElementById('setupName').value; const h = parseFloat(document.getElementById('setupH').value); const w = parseFloat(document.getElementById('setupW').value); const g = document.getElementById('setupGender').value; if(!n || !h || !w || !g) return alert("Please fill all details!"); let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2); if (idealW < 40) idealW = 45; 
-            const goal = g === 'male' ? 2200 : 1800;
-            state = { name: n, gender: g, weight: w, height: h, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0, calGoal: goal, consumed: [], startDate: Date.now(), lastWeightUpdate: 0, history: {}, todayTasks: { mShake: false, nShake: false, water: false, workout: false }, customFoods: {} }; save(); location.reload(); 
-        }
+        function finishSetup() { const n = document.getElementById('setupName').value; const h = parseFloat(document.getElementById('setupH').value); const w = parseFloat(document.getElementById('setupW').value); const g = document.getElementById('setupGender').value; if(!n || !h || !w || !g) return alert("Please fill all details!"); let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2); if (idealW < 40) idealW = 45; const goal = g === 'male' ? 2200 : 1800; state = { name: n, gender: g, weight: w, height: h, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0, calGoal: goal, consumed: [], startDate: Date.now(), lastWeightUpdate: 0, history: {}, todayTasks: { mShake: false, nShake: false, water: false, workout: false }, customFoods: {} }; save(); location.reload(); }
         function checkNewDay() { const today = new Date().toISOString().split('T')[0]; if (!state.lastLogin || state.lastLogin !== today) { state.lastLogin = today; state.todayTasks = { mShake: false, nShake: false, water: false, workout: false }; state.consumed = []; state.waterC = 0; save(); } }
         function enableNotifications() { if (!("Notification" in window)) { alert("Not supported."); } else { Notification.requestPermission().then(p => { if (p === "granted") { new Notification("FitFlow Pro", { body: "Notifications Enabled!" }); document.getElementById('notifBtn').classList.add('gender-active'); } }); } }
-        function checkNotifications() { if (Notification.permission !== "granted") return; const now = new Date(); const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }); if (MEAL_TIMES.includes(timeStr)) new Notification("FitFlow Pro", { body: "⏰ Meal Time!", icon: "https://img.icons8.com/color/48/000000/meal.png" }); }
-        
-        function showT(tab) { 
-            ['home','workout','info'].forEach(t => document.getElementById(`${t}-section`).classList.add('hide')); 
-            ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300 transition-all'); 
-            document.getElementById(`${tab}-section`).classList.remove('hide'); 
-            document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active transition-all'; 
-            
-            if(tab === 'workout') { renderW(); checkWorkoutSafety(); } 
-            if(tab === 'info') { document.getElementById('foodName').focus(); checkFoodDisclaimer(); } 
-        }
-
+        function showT(tab) { ['home','workout','info'].forEach(t => document.getElementById(`${t}-section`).classList.add('hide')); ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300 transition-all'); document.getElementById(`${tab}-section`).classList.remove('hide'); document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active transition-all'; if(tab === 'workout') { renderW(); checkWorkoutSafety(); } if(tab === 'info') { document.getElementById('foodName').focus(); checkFoodDisclaimer(); } }
         function openW() { const now = Date.now(); const oneWeek = 604800000; const diff = now - (state.lastWeightUpdate || 0); if (diff < oneWeek) return alert(`Locked 🔒`); document.getElementById('wModal').classList.remove('hide'); }
         function closeW() { document.getElementById('wModal').classList.add('hide'); }
         function saveW() { const v = parseFloat(document.getElementById('wIn').value); if(v) { state.weight = v; state.lastWeightUpdate = Date.now(); updateUI(); save(); closeW(); renderMeals(); } }
