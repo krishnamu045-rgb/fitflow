@@ -38,7 +38,7 @@
         <div class="w-full max-w-sm space-y-6 text-center">
             <div>
                 <h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1>
-                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 2.0 (Final Saved)</p>
+                <p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 2.0 (Smart Prediction)</p>
             </div>
             
             <div class="space-y-3">
@@ -389,16 +389,39 @@
             const d = new Date().toLocaleDateString('en-US', { weekday: 'long' });
             const p = CONTENT[d] || CONTENT["Monday"];
             
+            // Calculate Remaining Weight
+            const remaining = (state.weight - state.goal).toFixed(1);
+            
+            // Calculate Rate & Estimate
+            const msPerDay = 86400000;
+            const daysPassed = Math.max(1, Math.floor((Date.now() - state.startDate) / msPerDay));
+            const lost = state.startW - state.weight;
+            
+            // Calculate rate (kg/day). Fallback to 0.5kg/week (~0.071kg/day) if no loss yet.
+            let rate = 0;
+            if (lost > 0) rate = lost / daysPassed;
+            else rate = 0.5 / 7; 
+            
+            const estDays = Math.ceil(remaining / rate);
+            let timeStr = "";
+            if (remaining <= 0) timeStr = "Goal Reached! 🎉";
+            else if (estDays > 365) timeStr = (estDays / 365).toFixed(1) + " Years";
+            else if (estDays > 30) timeStr = (estDays / 30).toFixed(1) + " Months";
+            else timeStr = estDays + " Days";
+
             let text = `*FitFlow Pro Update* - ${new Date().toLocaleDateString()} 🚀%0a%0a`;
             text += `*Daily Progress:*%0a`;
             text += `${t.mShake ? '✅' : '❌'} Morning Shake%0a`;
             text += `${t.nShake ? '✅' : '❌'} Night Shake%0a`;
             text += `${t.water ? '✅' : '❌'} Water Goal (${state.waterC}/${state.waterG}ml)%0a`;
             text += `${t.workout ? '✅' : '❌'} Workout (${p.t})%0a%0a`;
-            text += `*Current Weight:* ${state.weight}kg%0a`;
-            text += `*Goal:* ${state.goal}kg%0a%0a`;
+            text += `*Stats:*%0a`;
+            text += `• Current: ${state.weight}kg%0a`;
+            text += `• Goal: ${state.goal}kg%0a`;
+            text += `• Remaining: ${remaining}kg%0a`;
+            text += `• Est. Time: ${timeStr}%0a%0a`;
             text += `_"Consistency is key! 💪"_%0a%0a`;
-            text += `📲 *Get the App:* https://fitflow.app`;
+            text += `📲 *Get the App:* https://github.com/krishnamu045-rgb/fitflow`;
 
             window.open(`https://wa.me/?text=${text}`, '_blank'); 
         }
