@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V6.4 (Smart Menu)</title>
+    <title>FitFlow Pro V6.6 (Final Polish)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -35,7 +35,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.4 (Smart Menu)</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.6 (Final Polish)</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -119,7 +119,7 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_V6_4_SMART_MENU";
+        const KEY = "FITFLOW_PRO_V6_6_FINAL";
         let state = JSON.parse(localStorage.getItem(KEY));
         let tempFood = null; 
         
@@ -145,7 +145,6 @@
             "filter coffee": { cal: 40, unit: "cup", type: "ok", effect: "Caffeine kick." },
             "tea": { cal: 40, unit: "cup", type: "ok", effect: "Comfort." },
             "banana": { cal: 105, unit: "pc", type: "good", effect: "Energy & Potassium." },
-            // NEW ENTRIES
             "f1 shake": { cal: 242, unit: "glass", type: "good", effect: "Complete nutrition meal." },
             "afresh": { cal: 4, unit: "cup", type: "good", effect: "Low cal energy drink." },
             "almonds": { cal: 7, unit: "pc", type: "good", effect: "Healthy fats." }
@@ -165,7 +164,7 @@
 
         window.onload = () => {
             if (!state) {
-                const prev = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_3_LEGAL"));
+                const prev = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_5_SMART_SHARE"));
                 if(prev) state = prev;
                 else { document.getElementById('setup-screen').classList.remove('hide'); document.getElementById('main-app').classList.add('hide'); return; }
             }
@@ -222,7 +221,7 @@
         function renderMeals() { 
             const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); 
             const p = CONTENT[d] || CONTENT["Monday"]; 
-            const totalEst = 242 + 40 + p.vCal + 40 + 200; // Roughly B+S+L+S+D
+            const totalEst = 242 + 40 + p.vCal + 40 + 200; 
             document.getElementById('menuTotal').innerText = totalEst;
             
             document.getElementById('mealContainer').innerHTML = `
@@ -287,6 +286,25 @@
         function finishSetup() { const n = document.getElementById('setupName').value; const h = parseFloat(document.getElementById('setupH').value); const w = parseFloat(document.getElementById('setupW').value); const g = document.getElementById('setupGender').value; if(!n || !h || !w || !g) return alert("Please fill all details!"); let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2); if (idealW < 40) idealW = 45; const goal = g === 'male' ? 2200 : 1800; state = { name: n, gender: g, weight: w, height: h, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0, calGoal: goal, consumed: [], startDate: Date.now(), lastWeightUpdate: 0, history: {}, todayTasks: { mShake: false, nShake: false, water: false, workout: false }, customFoods: {} }; save(); location.reload(); }
         function checkNewDay() { const today = new Date().toISOString().split('T')[0]; if (!state.lastLogin || state.lastLogin !== today) { state.lastLogin = today; state.todayTasks = { mShake: false, nShake: false, water: false, workout: false }; state.consumed = []; state.waterC = 0; save(); } }
         function enableNotifications() { if (!("Notification" in window)) { alert("Not supported."); } else { Notification.requestPermission().then(p => { if (p === "granted") { new Notification("FitFlow Pro", { body: "Notifications Enabled!" }); document.getElementById('notifBtn').classList.add('gender-active'); } }); } }
+        function checkNotifications() { if (Notification.permission !== "granted") return; const now = new Date(); const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }); if (MEAL_TIMES.includes(timeStr)) new Notification("FitFlow Pro", { body: "⏰ Meal Time!", icon: "https://img.icons8.com/color/48/000000/meal.png" }); }
+        
+        function shareWhatsApp() { 
+            const t = state.todayTasks; 
+            const total = state.consumed.reduce((sum, item) => sum + item.cal, 0); 
+            const remaining = (state.weight - state.goal).toFixed(1);
+            
+            // Calculate Prediction
+            const msPerDay = 86400000;
+            const daysPassed = Math.max(1, Math.floor((Date.now() - state.startDate) / msPerDay));
+            const lost = state.startW - state.weight;
+            let rate = lost > 0 ? lost / daysPassed : 0.071; // default ~0.5kg/week
+            let estDays = Math.ceil(remaining / rate);
+            let timeStr = remaining <= 0 ? "Goal Reached! 🎉" : (estDays > 30 ? (estDays / 30).toFixed(1) + " Months" : estDays + " Days");
+            
+            const text = `*FitFlow Pro Update* 🚀%0a%0a*Daily Progress:*%0a${t.mShake?'✅':'❌'} Morning Shake%0a${t.nShake?'✅':'❌'} Night Shake%0a${t.water?'✅':'❌'} Water (${state.waterC}ml)%0a🔥 Calories: ${total}/${state.calGoal}%0a%0a*Stats:*%0a• Current: ${state.weight}kg%0a• Target Weight: ${state.goal}kg%0a• Est. Time: ${timeStr}%0a%0a📲 *Get App:* https://github.com/krishnamu045-rgb/fitflow`; 
+            window.open(`https://wa.me/?text=${text}`, '_blank'); 
+        }
+
         function showT(tab) { ['home','workout','info'].forEach(t => document.getElementById(`${t}-section`).classList.add('hide')); ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300 transition-all'); document.getElementById(`${tab}-section`).classList.remove('hide'); document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active transition-all'; if(tab === 'workout') { renderW(); checkWorkoutSafety(); } if(tab === 'info') { document.getElementById('foodName').focus(); checkFoodDisclaimer(); } }
         function openW() { const now = Date.now(); const oneWeek = 604800000; const diff = now - (state.lastWeightUpdate || 0); if (diff < oneWeek) return alert(`Locked 🔒`); document.getElementById('wModal').classList.remove('hide'); }
         function closeW() { document.getElementById('wModal').classList.add('hide'); }
@@ -297,7 +315,6 @@
         function renderHistory() { const container = document.getElementById('historyContainer'); let html = ''; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const k = d.toISOString().split('T')[0]; const dn = d.toLocaleDateString('en-US', { weekday: 'narrow' }); const s = state.history && state.history[k] ? state.history[k] : 0; let bg = "bg-white text-slate-300"; if(s === 4) bg = "bg-punch text-white"; else if(s > 0) bg = "bg-orange-100 text-punch"; html += `<div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black ${bg} border border-slate-100">${s > 0 ? s : '-'}</div><span class="text-[10px] font-bold text-slate-400 uppercase">${dn}</span></div>`; } container.innerHTML = html; }
         function renderW() { const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = CONTENT[d]; document.getElementById('wTitle').innerText = p.t; document.getElementById('wThumb').src = p.vid === 'rest' ? "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" : `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`; }
         function launchWorkout() { const p = CONTENT[new Date().toLocaleDateString('en-US', { weekday: 'long' })]; if(p.vid !== 'rest') window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank'); }
-        function shareWhatsApp() { const t = state.todayTasks; const total = state.consumed.reduce((sum, item) => sum + item.cal, 0); const text = `*FitFlow Pro Update* 🚀%0a%0a*Daily Progress:*%0a${t.mShake?'✅':'❌'} Morning Shake%0a${t.nShake?'✅':'❌'} Night Shake%0a${t.water?'✅':'❌'} Water (${state.waterC}ml)%0a🔥 Calories: ${total}/${state.calGoal}%0a%0a*Stats:*%0a• Current: ${state.weight}kg%0a• Goal: ${state.goal}kg%0a`; window.open(`https://wa.me/?text=${text}`, '_blank'); }
         function masterReset() { if(prompt("PIN:") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
         function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
     </script>
