@@ -27,21 +27,26 @@
 
 <div class="header">
     <h1 style="margin:0; font-size: 1.5rem;">FitFlow Pro</h1>
-    <span style="font-size: 0.8rem; opacity: 0.9;">Daily Wellness Log | Lead Coach</span>
+    <span style="font-size: 0.8rem; opacity: 0.9;">Lead Coach Dashboard</span>
 </div>
 
 <div class="container">
     <div class="card">
-        <h2>Your Flow Goal</h2>
-        <input type="number" id="h" placeholder="Enter Height (cm)">
-        <button onclick="calc()">Set Goal</button>
+        <h2>Target Weight Goal</h2>
+        <input type="number" id="h" placeholder="Enter Height (cm)" onchange="calc()">
         <div id="targetDisplay" style="text-align:center; font-weight:bold; margin-top:10px; color:var(--primary);"></div>
     </div>
 
     <div class="card">
-        <h2>Water Intake (250ml)</h2>
+        <h2>Daily Activity</h2>
+        <input type="number" id="stepCount" placeholder="Enter Steps (e.g. 10000)" oninput="saveSteps()">
+        <p style="text-align:center; font-size: 0.8rem; color: #666;">Recommended: 10,000 steps/day</p>
+    </div>
+
+    <div class="card">
+        <h2>Hydration (250ml glasses)</h2>
         <div class="water-grid" id="waterGrid"></div>
-        <p style="text-align:center; margin-top:10px; font-weight:bold;">Current Total: <span id="totalWater">0</span> Liters</p>
+        <p style="text-align:center; margin-top:10px; font-weight:bold;">Total: <span id="totalWater">0</span> Liters</p>
     </div>
 
     <div class="card">
@@ -51,23 +56,20 @@
             <option value="350">Masala Dosa</option>
             <option value="200">Curd Rice (1 Cup)</option>
             <option value="150">Ragi Malt</option>
-            <option value="450">Veg Meals (Thali)</option>
-            <option value="100">Filter Coffee / Tea</option>
+            <option value="450">Veg Thali</option>
+            <option value="100">Coffee / Tea</option>
         </select>
-        <button class="btn-add" onclick="addMeal()">Add to Log</button>
+        <button class="btn-add" onclick="addMeal()">Add Meal</button>
         <div id="mealList"></div>
-        <p style="text-align:right; font-weight:bold; color: var(--primary);">Total: <span id="totalCal">0</span> kcal</p>
+        <p style="text-align:right; font-weight:bold;">Total: <span id="totalCal">0</span> kcal</p>
     </div>
 
     <div class="card" style="border: 2px solid var(--whatsapp);">
         <h2>Coach Review</h2>
-        <p style="font-size: 0.8rem;">Send your daily summary to your Lead Coach.</p>
-        <button class="btn-whatsapp" onclick="shareWhatsApp()">
-            Share Summary via WhatsApp
-        </button>
+        <button class="btn-whatsapp" onclick="shareWhatsApp()">Share Report via WhatsApp</button>
     </div>
 
-    <button class="btn-reset" onclick="resetDay()">Reset for New Day</button>
+    <button class="btn-reset" onclick="resetDay()">Clear Daily Logs</button>
 
     <div class="footer">
         <a href="legal.html" style="text-decoration:none; color:inherit;">Privacy Policy</a> | 
@@ -78,7 +80,7 @@
 <script>
     let waterState = [0,0,0,0,0,0,0,0];
 
-    // Initialize/Setup Water Grid
+    // --- Water Logic ---
     function setupWater() {
         const grid = document.getElementById('waterGrid');
         grid.innerHTML = '';
@@ -94,32 +96,38 @@
 
     function toggleWater(index) {
         waterState[index] = waterState[index] ? 0 : 1;
-        localStorage.setItem('fitflow_water', JSON.stringify(waterState));
+        localStorage.setItem('ff_water', JSON.stringify(waterState));
         setupWater();
     }
 
-    // Goal Logic
+    // --- Goal/Weight Logic ---
     function calc() {
         let h = document.getElementById('h').value;
         if(!h) return;
         let target = (23 * ((h/100)*(h/100))).toFixed(1);
-        document.getElementById('targetDisplay').innerText = "Target Body Weight: " + target + " kg";
-        localStorage.setItem('fitflow_height', h);
+        document.getElementById('targetDisplay').innerText = "Healthy Goal: " + target + " kg";
+        localStorage.setItem('ff_height', h);
     }
 
-    // Meal Logic
+    // --- Steps Logic ---
+    function saveSteps() {
+        let steps = document.getElementById('stepCount').value;
+        localStorage.setItem('ff_steps', steps);
+    }
+
+    // --- Meal Logic ---
     function addMeal() {
         let select = document.getElementById('meal');
         let name = select.options[select.selectedIndex].text;
         let cal = parseInt(select.value);
-        let meals = JSON.parse(localStorage.getItem('fitflow_meals') || '[]');
+        let meals = JSON.parse(localStorage.getItem('ff_meals') || '[]');
         meals.push({name, cal});
-        localStorage.setItem('fitflow_meals', JSON.stringify(meals));
+        localStorage.setItem('ff_meals', JSON.stringify(meals));
         renderMeals();
     }
 
     function renderMeals() {
-        let meals = JSON.parse(localStorage.getItem('fitflow_meals') || '[]');
+        let meals = JSON.parse(localStorage.getItem('ff_meals') || '[]');
         let list = document.getElementById('mealList');
         list.innerHTML = '';
         let total = 0;
@@ -130,36 +138,46 @@
         document.getElementById('totalCal').innerText = total;
     }
 
-    // WhatsApp Function
+    // --- WhatsApp Logic ---
     function shareWhatsApp() {
         let water = document.getElementById('totalWater').innerText;
-        let calories = document.getElementById('totalCal').innerText;
+        let cals = document.getElementById('totalCal').innerText;
         let target = document.getElementById('targetDisplay').innerText;
+        let steps = document.getElementById('stepCount').value || "Not logged";
         
-        let text = `*FitFlow Pro Daily Summary*%0A---------------------------%0A` +
-                   `🎯 ${target}%0A` +
-                   `💧 Water: ${water} Liters%0A` +
-                   `🍎 Nutrition: ${calories} kcal%0A` +
+        let text = `*FitFlow Pro: Daily Summary*%0A` +
                    `---------------------------%0A` +
-                   `Sent via FitFlow Pro App`;
+                   `🎯 ${target}%0A` +
+                   `🏃 Steps: ${steps}%0A` +
+                   `💧 Water: ${water} Liters%0A` +
+                   `🍎 Nutrition: ${cals} kcal%0A` +
+                   `---------------------------%0A` +
+                   `Review requested by Lead Coach.`;
         
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
+    // --- App Lifecycle ---
     function loadData() {
-        let savedH = localStorage.getItem('fitflow_height');
-        if(savedH) { document.getElementById('h').value = savedH; calc(); }
-        let savedWater = localStorage.getItem('fitflow_water');
-        if(savedWater) waterState = JSON.parse(savedWater);
+        let h = localStorage.getItem('ff_height');
+        if(h) { document.getElementById('h').value = h; calc(); }
+        
+        let s = localStorage.getItem('ff_steps');
+        if(s) document.getElementById('stepCount').value = s;
+
+        let w = localStorage.getItem('ff_water');
+        if(w) waterState = JSON.parse(w);
         setupWater();
         renderMeals();
     }
 
     function resetDay() {
-        if(confirm("Start a new day? Logs will be cleared.")) {
-            localStorage.removeItem('fitflow_water');
-            localStorage.removeItem('fitflow_meals');
+        if(confirm("Clear today's logs (Steps, Water, Meals)?")) {
+            localStorage.removeItem('ff_water');
+            localStorage.removeItem('ff_meals');
+            localStorage.removeItem('ff_steps');
             waterState = [0,0,0,0,0,0,0,0];
+            document.getElementById('stepCount').value = '';
             setupWater();
             renderMeals();
         }
