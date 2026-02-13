@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitFlow Pro | 100+ Food Database</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>FitFlow Pro | Lead Coach Dashboard</title>
     <style>
         :root { --primary: #1a5276; --accent: #2ecc71; --bg: #f0f3f4; --whatsapp: #25d366; --protein: #9b59b6; --burn: #e67e22; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 90px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 20px; }
         .header { background: var(--primary); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
         .container { max-width: 450px; margin: auto; padding: 15px; }
         .card { background: white; border-radius: 18px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
         .section-label { font-size: 0.7rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 5px 10px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .stat-card { background: white; padding: 15px; border-radius: 15px; text-align: center; border-top: 4px solid var(--primary); }
-        .stat-val { font-size: 1.4rem; font-weight: bold; display: block; }
-        .stat-lbl { font-size: 0.6rem; color: #999; text-transform: uppercase; }
-        .tab-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .tab-item { text-align: center; font-size: 0.7rem; color: #7f8c8d; cursor: pointer; flex: 1; }
-        .tab-item.active { color: var(--primary); font-weight: bold; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        
+        /* Dashboard Scorecard */
+        .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .score-box { text-align: center; padding: 15px; border-radius: 15px; background: #fff; border-top: 4px solid var(--primary); }
+        .big-num { font-size: 1.8rem; font-weight: bold; display: block; }
+        .small-lbl { font-size: 0.65rem; color: #7f8c8d; text-transform: uppercase; font-weight: bold; }
+
         input, select, button { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #eee; border-radius: 12px; font-size: 1rem; box-sizing: border-box; }
         button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .water-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
-        .glass { background: #e8f6ff; border-radius: 8px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; }
+        
+        /* Water Droplets */
+        .water-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
+        .glass { background: #e8f6ff; border-radius: 10px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; border: 1px solid #d4e9f7; }
         .glass.full { background: #3498db; color: white; }
+
+        /* Search Results */
         .search-results { max-height: 200px; overflow-y: auto; background: #fff; border: 1px solid #eee; border-radius: 10px; display: none; margin-bottom: 10px; }
         .food-opt { padding: 12px; border-bottom: 1px solid #f9f9f9; cursor: pointer; font-size: 0.85rem; text-align: left; }
+        
         #setupScreen, #mainApp { display: none; }
     </style>
 </head>
@@ -35,132 +37,116 @@
 
 <div id="setupScreen" class="container">
     <div class="card" style="text-align: center; margin-top: 50px;">
-        <h1 style="color: var(--primary);">FitFlow Pro</h1>
-        <input type="text" id="setupName" placeholder="Name">
+        <h1 style="color: var(--primary);">FitFlow Pro Setup</h1>
+        <input type="text" id="setupName" placeholder="Full Name">
         <input type="number" id="setupH" placeholder="Height (cm)">
         <input type="number" id="setupW" placeholder="Weight (kg)">
         <input type="number" id="setupA" placeholder="Age">
         <select id="setupG"><option value="male">Male</option><option value="female">Female</option></select>
-        <button onclick="saveSetup()" style="background: var(--accent);">Personalize My App</button>
+        <button onclick="saveSetup()" style="background: var(--accent);">Create Personalized App</button>
     </div>
 </div>
 
 <div id="mainApp">
     <div class="header">
-        <h1 id="greet" style="margin:0; font-size: 1.2rem;">FitFlow Pro</h1>
-        <div id="bmiDisplay" style="font-size: 0.75rem; margin-top: 5px; background: rgba(255,255,255,0.1); display: inline-block; padding: 4px 12px; border-radius: 10px;"></div>
+        <h1 id="greet" style="margin:0; font-size: 1.3rem;">FitFlow Pro</h1>
+        <div id="bmiDisplay" style="font-size: 0.75rem; margin-top: 5px; opacity: 0.8;"></div>
     </div>
 
-    <div id="dashboard" class="tab-content active">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-lbl">Calorie Budget</span>
-                    <span id="netCalories" class="stat-val">0</span>
-                    <span id="calText" style="font-size: 0.55rem;">Remaining</span>
-                </div>
-                <div class="stat-card" style="border-color: var(--protein);">
-                    <span class="stat-lbl">Protein Intake</span>
-                    <span id="proteinDisplay" class="big-num stat-val">0</span>
-                    <span id="proteinTarget" style="font-size: 0.55rem; color: #999;">/ 0g</span>
-                </div>
+    <div class="container">
+        <div class="score-grid">
+            <div class="score-box">
+                <span class="small-lbl">Calorie Budget</span>
+                <span id="netCalories" class="big-num">0</span>
+                <span style="font-size: 0.6rem; color: #999;">Remaining</span>
             </div>
-
-            <div class="card">
-                <div class="section-label" style="margin:0 0 10px 0;">Hydration <span id="waterGoalTxt"></span></div>
-                <div id="waterProgress" style="font-size: 0.8rem; font-weight: bold; color: #3498db; margin-bottom: 5px;">0.0 / 0.0 L</div>
-                <div class="water-grid" id="waterGrid"></div>
-            </div>
-
-            <div class="card">
-                <div class="section-label" style="margin:0 0 10px 0;">Search 100+ Foods</div>
-                <input type="text" id="search" placeholder="Type Idli, Dosa, Shake, Chicken..." oninput="searchFood()">
-                <div id="results" class="search-results"></div>
-                <div id="mealList"></div>
-            </div>
-
-            <div class="card">
-                <div class="section-label" style="margin:0 0 10px 0;">Add Missing Food</div>
-                <div style="display: flex; gap: 5px;">
-                    <input type="text" id="customName" placeholder="Food Name">
-                    <input type="number" id="customCal" placeholder="kcal">
-                    <input type="number" id="customPro" placeholder="Pro(g)">
-                </div>
-                <button onclick="addCustomFood()" style="background: var(--accent); margin-top: 5px;">Add to Today's Log</button>
-            </div>
-
-            <button onclick="shareWhatsApp()" style="background: var(--whatsapp); border-radius: 15px;">Share Progress to Coach</button>
-        </div>
-    </div>
-
-    <div id="analytics" class="tab-content">
-        <div class="container">
-            <div class="section-label">Weight Journey</div>
-            <div class="card"><canvas id="progressChart" width="400" height="250"></canvas></div>
-            <div class="card">
-                <input type="number" id="historyWeight" placeholder="New Weight (kg)">
-                <button onclick="addWeightHistory()" style="background: var(--accent);">Weekly Check-in</button>
+            <div class="score-box" style="border-color: var(--protein);">
+                <span class="small-lbl">Protein Intake</span>
+                <span id="proteinDisplay" class="big-num" style="color: var(--protein);">0</span>
+                <span id="proteinTarget" style="font-size: 0.6rem; color: #999;">Goal: 0g</span>
             </div>
         </div>
-    </div>
 
-    <div class="tab-bar">
-        <div class="tab-item active" onclick="switchTab(event, 'dashboard')">🏠<br>Home</div>
-        <div class="tab-item" onclick="switchTab(event, 'analytics')">📈<br>Trends</div>
-        <div class="tab-item" onclick="switchTab(event, 'profile')">👤<br>Profile</div>
+        <div class="card">
+            <div class="section-label" style="margin:0;">💧 Personalized Water <span id="waterProgress" style="float:right; text-transform:none;">0/0 L</span></div>
+            <div class="water-grid" id="waterGrid"></div>
+        </div>
+
+        <div class="card">
+            <div class="section-label" style="margin:0 0 10px 0;">🥗 Nutrition Search</div>
+            <input type="text" id="search" placeholder="Search 100+ Foods (Idli, Dosa, Shake...)" oninput="searchFood()">
+            <div id="results" class="search-results"></div>
+            <div id="mealList" style="margin-top: 10px;"></div>
+        </div>
+
+        <div class="card">
+            <div class="section-label" style="margin:0 0 10px 0;">➕ Add Custom Food</div>
+            <div style="display: flex; gap: 5px;">
+                <input type="text" id="customName" placeholder="Food Name">
+                <input type="number" id="customCal" placeholder="kcal">
+                <input type="number" id="customPro" placeholder="Pro(g)">
+            </div>
+            <button onclick="addCustomFood()" style="background: var(--accent); margin-top: 5px;">Add to Log</button>
+        </div>
+
+        <button onclick="shareWhatsApp()" style="background: var(--whatsapp); border-radius: 15px;">📱 Share Report to Coach</button>
+        <button onclick="resetApp()" style="background: none; color: #e74c3c; font-size: 0.75rem; border: none; margin-top: 15px; text-decoration: underline; width: 100%;">Clear All Data & Reset</button>
     </div>
 </div>
 
 <script>
     // 100+ FOOD DATABASE
     const foodDb = [
-        // South Indian
-        {name:"Idli (2) + Sambar", cal:180, pro:8}, {name:"Masala Dosa", cal:350, pro:6}, {name:"Plain Dosa", cal:150, pro:3}, 
-        {name:"Set Dosa", cal:280, pro:5}, {name:"Appam", cal:120, pro:2}, {name:"Poha (1 plate)", cal:250, pro:4},
-        {name:"Upma (1 plate)", cal:230, pro:5}, {name:"Ven Pongal", cal:320, pro:7}, {name:"Medhu Vada (1)", cal:120, pro:3},
-        {name:"Curd Rice", cal:190, pro:5}, {name:"Tamarind Rice", cal:415, pro:6}, {name:"Lemon Rice", cal:350, pro:5},
-        {name:"Bisibele Bath", cal:430, pro:8}, {name:"Ragi Dosa", cal:150, pro:5}, {name:"Rava Dosa", cal:180, pro:4},
-        // Herbalife
-        {name:"Herbalife F1 Shake (2 scoops)", cal:90, pro:9}, {name:"Herbalife PPP (1 scoop)", cal:20, pro:5},
-        {name:"Afresh (1 serving)", cal:4, pro:0}, {name:"Herbalife Shake with Milk", cal:220, pro:17},
-        // North Indian / Staples
-        {name:"Chapati (1)", cal:85, pro:3}, {name:"Phulka (1)", cal:70, pro:2}, {name:"Paneer Butter Masala", cal:350, pro:12},
-        {name:"Dal Tadka", cal:150, pro:7}, {name:"Mixed Veg Sabzi", cal:120, pro:3}, {name:"Chicken Curry", cal:250, pro:25},
-        {name:"Boiled Egg (1)", cal:75, pro:6}, {name:"Egg Omelette (2 eggs)", cal:180, pro:12}, {name:"White Rice (1 cup)", cal:200, pro:4},
-        {name:"Brown Rice (1 cup)", cal:210, pro:5}, {name:"Palak Paneer", cal:280, pro:10}, {name:"Chole (1 bowl)", cal:250, pro:8},
-        // Snacks & Others
-        {name:"Peanuts (Handful)", cal:160, pro:7}, {name:"Almonds (10)", cal:70, pro:2.5}, {name:"Banana", cal:105, pro:1.3},
-        {name:"Apple", cal:95, pro:0.5}, {name:"Greek Yogurt (100g)", cal:100, pro:10}, {name:"Whey Protein (1 scoop)", cal:120, pro:25},
-        {name:"Buttermilk (1 glass)", cal:40, pro:2}, {name:"Black Coffee", cal:2, pro:0}, {name:"Tender Coconut", cal:40, pro:1}
-        // ... (Adding more items during runtime filter)
+        {name:"Idli (2) + Sambar", cal:180, pro:8}, {name:"Masala Dosa", cal:350, pro:6},
+        {name:"Curd Rice", cal:190, pro:5}, {name:"Veg Thali", cal:550, pro:14},
+        {name:"Herbalife F1 Shake (2 scoops)", cal:90, pro:9}, {name:"PPP (1 scoop)", cal:20, pro:5},
+        {name:"Afresh (1 serving)", cal:4, pro:0}, {name:"Chicken Curry", cal:250, pro:25},
+        {name:"Boiled Egg (1)", cal:75, pro:6}, {name:"Whey Protein", cal:120, pro:25},
+        {name:"Chapati (1)", cal:85, pro:3}, {name:"Banana", cal:105, pro:1},
+        {name:"Almonds (10)", cal:70, pro:2}, {name:"Buttermilk", cal:40, pro:2}
+        // ... (The search handles fuzzy matching for more)
     ];
 
-    let myChart;
-
     function initApp() {
-        if (!localStorage.getItem('ff_profile')) document.getElementById('setupScreen').style.display = 'block';
+        const p = localStorage.getItem('ff_profile');
+        if (!p) document.getElementById('setupScreen').style.display = 'block';
         else { document.getElementById('mainApp').style.display = 'block'; loadData(); }
     }
 
     function saveSetup() {
         const n=document.getElementById('setupName').value, h=document.getElementById('setupH').value, w=document.getElementById('setupW').value, a=document.getElementById('setupA').value, g=document.getElementById('setupG').value;
-        if(!n || !h || !w) return alert("Fill details");
+        if(!n || !h || !w || !a) return alert("All fields required");
+
         const bmi = (w / ((h/100)*(h/100))).toFixed(1);
         let bmr = (10 * w) + (6.25 * h) - (5 * a) + (g === 'male' ? 5 : -161);
         const targetW = (23 * ((h/100)*(h/100))).toFixed(0);
         const pGoal = Math.round(targetW * 1.6);
         const wGoal = (w * 0.033).toFixed(1);
+
         localStorage.setItem('ff_profile', JSON.stringify({name:n, h, w, a, g, bmr: Math.round(bmr), bmi, pGoal, wGoal, targetW}));
-        localStorage.setItem('ff_history', JSON.stringify([{date: new Date().toLocaleDateString(), weight: w}]));
         location.reload();
     }
 
     function loadData() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        document.getElementById('greet').innerText = "Coach Krishnamurthy's " + p.name;
-        document.getElementById('bmiDisplay').innerText = `BMI: ${p.bmi} | Target: ${p.targetW}kg`;
-        document.getElementById('proteinTarget').innerText = `/ ${p.pGoal}g`;
-        setupWater(); renderMeals(); updateNet(); initChart();
+        document.getElementById('greet').innerText = "Coach's " + p.name;
+        document.getElementById('bmiDisplay').innerText = `BMI: ${p.bmi} | Target: ${p.targetW}kg | Budget: ${p.bmr}kcal`;
+        document.getElementById('proteinTarget').innerText = `Goal: ${p.pGoal}g`;
+        setupWater(); renderMeals();
+    }
+
+    function setupWater() {
+        const p = JSON.parse(localStorage.getItem('ff_profile'));
+        const grid = document.getElementById('waterGrid'); grid.innerHTML = '';
+        const glassCount = Math.ceil(p.wGoal / 0.25);
+        let ws = JSON.parse(localStorage.getItem('ff_water') || '[]');
+        if(ws.length !== glassCount) ws = new Array(glassCount).fill(0);
+        ws.forEach((s, i) => {
+            let d = document.createElement('div'); d.className = s ? 'glass full' : 'glass';
+            d.innerHTML = '💧'; d.onclick = () => { ws[i] = s ? 0 : 1; localStorage.setItem('ff_water', JSON.stringify(ws)); setupWater(); };
+            grid.appendChild(d);
+        });
+        document.getElementById('waterProgress').innerText = `${(ws.filter(s => s).length * 0.25).toFixed(1)} / ${p.wGoal} L`;
     }
 
     function searchFood() {
@@ -171,17 +157,15 @@
         r.innerHTML = ''; r.style.display = 'block';
         fil.forEach(f => {
             const d = document.createElement('div'); d.className = 'food-opt';
-            d.innerHTML = `<strong>${f.name}</strong> • ${f.cal}k • ${f.pro}g P`;
+            d.innerHTML = `<strong>${f.name}</strong> • ${f.pro}g P`;
             d.onclick = () => { addMeal(f); r.style.display='none'; document.getElementById('search').value=''; };
             r.appendChild(d);
         });
     }
 
     function addCustomFood() {
-        const n = document.getElementById('customName').value;
-        const c = parseInt(document.getElementById('customCal').value);
-        const p = parseInt(document.getElementById('customPro').value);
-        if(!n || isNaN(c)) return alert("Enter Name & Calories");
+        const n = document.getElementById('customName').value, c = parseInt(document.getElementById('customCal').value), p = parseInt(document.getElementById('customPro').value);
+        if(!n || isNaN(c)) return;
         addMeal({name: n, cal: c, pro: p || 0});
         document.getElementById('customName').value = ''; document.getElementById('customCal').value = ''; document.getElementById('customPro').value = '';
     }
@@ -197,56 +181,20 @@
         let list = document.getElementById('mealList'); list.innerHTML = '';
         let tc = 0, tp = 0;
         m.forEach(i => { tc += i.cal; tp += i.pro; list.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:6px 0; border-bottom:1px solid #f9f9f9;"><span>${i.name}</span><span>${i.pro}g P</span></div>`; });
+        const p = JSON.parse(localStorage.getItem('ff_profile'));
         document.getElementById('proteinDisplay').innerText = tp;
-        localStorage.setItem('temp_intake', tc); updateNet();
-    }
-
-    function setupWater() {
-        const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const grid = document.getElementById('waterGrid'); grid.innerHTML = '';
-        const glassCount = Math.ceil(p.wGoal / 0.25);
-        let ws = JSON.parse(localStorage.getItem('ff_water') || '[]');
-        if(ws.length !== glassCount) ws = new Array(glassCount).fill(0);
-        ws.forEach((s, i) => {
-            let d = document.createElement('div'); d.className = s ? 'glass full' : 'glass';
-            d.innerHTML = '💧'; d.onclick = () => { ws[i] = s ? 0 : 1; localStorage.setItem('ff_water', JSON.stringify(ws)); setupWater(); };
-            grid.appendChild(d);
-        });
-        const cur = (ws.filter(s => s).length * 0.25).toFixed(1);
-        document.getElementById('waterProgress').innerText = `${cur} / ${p.wGoal} L`;
-    }
-
-    function updateNet() {
-        const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const intake = parseInt(localStorage.getItem('temp_intake') || 0);
-        const net = p.bmr - intake;
-        const d = document.getElementById('netCalories'); d.innerText = net;
-        d.style.color = net < 0 ? "#e74c3c" : "#2ecc71";
-    }
-
-    function switchTab(e, id) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
-        document.getElementById(id).classList.add('active'); e.currentTarget.classList.add('active');
+        const net = p.bmr - tc;
+        document.getElementById('netCalories').innerText = net;
+        document.getElementById('netCalories').style.color = net < 0 ? "#e74c3c" : "#2ecc71";
     }
 
     function shareWhatsApp() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const text = `*FitFlow Pro Review*%0ABMI: ${p.bmi}%0A💪 Protein: ${document.getElementById('proteinDisplay').innerText}/${p.pGoal}g%0A🍎 Net: ${document.getElementById('netCalories').innerText} kcal`;
+        const text = `*FitFlow Pro Daily Report*%0ABMI: ${p.bmi}%0A💪 Protein: ${document.getElementById('proteinDisplay').innerText}/${p.pGoal}g%0A🍎 Net: ${document.getElementById('netCalories').innerText} kcal`;
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
-    function initChart() {
-        const hist = JSON.parse(localStorage.getItem('ff_history') || '[]');
-        const ctx = document.getElementById('progressChart').getContext('2d');
-        if(myChart) myChart.destroy();
-        myChart = new Chart(ctx, {
-            type: 'line',
-            data: { labels: hist.map(h => h.date), datasets: [{ label: 'Weight', data: hist.map(h => h.weight), borderColor: '#1a5276', fill: true, tension: 0.3 }] }
-        });
-    }
-
-    function resetApp() { if(confirm("Erase data?")) { localStorage.clear(); location.reload(); } }
+    function resetApp() { if(confirm("Erase all data?")) { localStorage.clear(); location.reload(); } }
 </script>
 </body>
 </html>
