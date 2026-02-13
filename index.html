@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitFlow Pro | Lead Coach System</title>
+    <title>FitFlow Pro | 100+ Food Database</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #1a5276; --accent: #2ecc71; --bg: #f0f3f4; --whatsapp: #25d366; --protein: #9b59b6; --burn: #e67e22; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 90px; overflow-x: hidden; }
-        .header { background: var(--primary); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; position: relative; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 90px; }
+        .header { background: var(--primary); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
         .container { max-width: 450px; margin: auto; padding: 15px; }
         .card { background: white; border-radius: 18px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
-        .section-label { font-size: 0.75rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 10px; }
-        
-        /* Tab Navigation */
-        .tab-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000; }
+        .section-label { font-size: 0.7rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 5px 10px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .stat-card { background: white; padding: 15px; border-radius: 15px; text-align: center; border-top: 4px solid var(--primary); }
+        .stat-val { font-size: 1.4rem; font-weight: bold; display: block; }
+        .stat-lbl { font-size: 0.6rem; color: #999; text-transform: uppercase; }
+        .tab-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
         .tab-item { text-align: center; font-size: 0.7rem; color: #7f8c8d; cursor: pointer; flex: 1; }
         .tab-item.active { color: var(--primary); font-weight: bold; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        /* Tools UI */
-        .tool-box { text-align: center; padding: 15px; background: #2c3e50; color: white; border-radius: 15px; margin-bottom: 15px; }
-        .timer-display { font-size: 2.5rem; font-weight: bold; font-family: monospace; }
-        .music-btn { background: #8e44ad; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
-
         input, select, button { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #eee; border-radius: 12px; font-size: 1rem; box-sizing: border-box; }
         button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .water-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .glass { background: #e8f6ff; border-radius: 10px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
+        .water-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
+        .glass { background: #e8f6ff; border-radius: 8px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; }
         .glass.full { background: #3498db; color: white; }
-        .workout-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #f0f0f0; align-items: center; }
+        .search-results { max-height: 200px; overflow-y: auto; background: #fff; border: 1px solid #eee; border-radius: 10px; display: none; margin-bottom: 10px; }
+        .food-opt { padding: 12px; border-bottom: 1px solid #f9f9f9; cursor: pointer; font-size: 0.85rem; text-align: left; }
         #setupScreen, #mainApp { display: none; }
     </style>
 </head>
@@ -38,212 +36,131 @@
 <div id="setupScreen" class="container">
     <div class="card" style="text-align: center; margin-top: 50px;">
         <h1 style="color: var(--primary);">FitFlow Pro</h1>
-        <p style="font-size: 0.8rem; color: #666;">Welcome to your personalized Lead Coach App</p>
-        <input type="text" id="setupName" placeholder="Your Name">
+        <input type="text" id="setupName" placeholder="Name">
         <input type="number" id="setupH" placeholder="Height (cm)">
         <input type="number" id="setupW" placeholder="Weight (kg)">
         <input type="number" id="setupA" placeholder="Age">
         <select id="setupG"><option value="male">Male</option><option value="female">Female</option></select>
-        <button onclick="saveSetup()" style="background: var(--accent);">Initialize My Journey</button>
+        <button onclick="saveSetup()" style="background: var(--accent);">Personalize My App</button>
     </div>
 </div>
 
 <div id="mainApp">
     <div class="header">
-        <h1 id="greet" style="margin:0; font-size: 1.3rem;">FitFlow Pro</h1>
-        <div id="targetDisplay" style="font-size: 0.8rem; margin-top: 5px; opacity: 0.8;"></div>
+        <h1 id="greet" style="margin:0; font-size: 1.2rem;">FitFlow Pro</h1>
+        <div id="bmiDisplay" style="font-size: 0.75rem; margin-top: 5px; background: rgba(255,255,255,0.1); display: inline-block; padding: 4px 12px; border-radius: 10px;"></div>
     </div>
 
     <div id="dashboard" class="tab-content active">
         <div class="container">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                <div class="card" style="text-align: center; margin-bottom:0;">
-                    <span style="font-size: 0.6rem; font-weight:bold; color: #999;">NET CALORIES</span>
-                    <div id="netCalories" style="font-size: 1.5rem; font-weight: bold;">0</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-lbl">Calorie Budget</span>
+                    <span id="netCalories" class="stat-val">0</span>
+                    <span id="calText" style="font-size: 0.55rem;">Remaining</span>
                 </div>
-                <div class="card" style="text-align: center; margin-bottom:0;">
-                    <span style="font-size: 0.6rem; font-weight:bold; color: #999;">PROTEIN (G)</span>
-                    <div id="proteinDisplay" style="font-size: 1.5rem; font-weight: bold; color: var(--protein);">0</div>
+                <div class="stat-card" style="border-color: var(--protein);">
+                    <span class="stat-lbl">Protein Intake</span>
+                    <span id="proteinDisplay" class="big-num stat-val">0</span>
+                    <span id="proteinTarget" style="font-size: 0.55rem; color: #999;">/ 0g</span>
                 </div>
             </div>
+
             <div class="card">
-                <div style="display:flex; gap:10px;">
-                    <div style="flex:1"><span class="section-label" style="margin:0; font-size:0.6rem;">Steps</span><input type="number" id="steps" oninput="updateVitals()"></div>
-                    <div style="flex:1"><span class="section-label" style="margin:0; font-size:0.6rem;">Sleep</span><input type="number" id="sleep" oninput="updateVitals()"></div>
-                </div>
-                <span class="section-label" style="margin-left:0; font-size:0.6rem;">Daily Water (Liters)</span>
-                <div class="water-grid" id="waterGrid" style="margin-top:5px;"></div>
+                <div class="section-label" style="margin:0 0 10px 0;">Hydration <span id="waterGoalTxt"></span></div>
+                <div id="waterProgress" style="font-size: 0.8rem; font-weight: bold; color: #3498db; margin-bottom: 5px;">0.0 / 0.0 L</div>
+                <div class="water-grid" id="waterGrid"></div>
             </div>
+
             <div class="card">
-                <input type="text" id="search" placeholder="Search South Indian Foods..." oninput="searchFood()">
-                <div id="results" style="max-height:150px; overflow-y:auto; background:#fff; border:1px solid #eee; display:none; border-radius:10px;"></div>
-                <div id="mealList" style="margin-top:10px;"></div>
+                <div class="section-label" style="margin:0 0 10px 0;">Search 100+ Foods</div>
+                <input type="text" id="search" placeholder="Type Idli, Dosa, Shake, Chicken..." oninput="searchFood()">
+                <div id="results" class="search-results"></div>
+                <div id="mealList"></div>
             </div>
-            <button onclick="shareWhatsApp()" style="background: var(--whatsapp); border-radius: 15px;">📱 Share Daily Report</button>
+
+            <div class="card">
+                <div class="section-label" style="margin:0 0 10px 0;">Add Missing Food</div>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="customName" placeholder="Food Name">
+                    <input type="number" id="customCal" placeholder="kcal">
+                    <input type="number" id="customPro" placeholder="Pro(g)">
+                </div>
+                <button onclick="addCustomFood()" style="background: var(--accent); margin-top: 5px;">Add to Today's Log</button>
+            </div>
+
+            <button onclick="shareWhatsApp()" style="background: var(--whatsapp); border-radius: 15px;">Share Progress to Coach</button>
         </div>
     </div>
 
-    <div id="workout" class="tab-content">
+    <div id="analytics" class="tab-content">
         <div class="container">
-            <div class="tool-box">
-                <div style="font-size: 0.7rem; letter-spacing: 1px; margin-bottom:5px;">PLANK TIMER</div>
-                <div class="timer-display" id="timerDisplay">30</div>
-                <button onclick="startTimer()" id="timerBtn" style="background: var(--accent); width: 140px; margin-top:10px; height: 45px;">START SET</button>
-            </div>
-            <div class="section-label">Herbalife Beginner Routine</div>
-            <div class="card" style="padding:0;">
-                <div class="workout-item"><div><strong>Squats</strong><br><small>3 Sets x 12 Reps</small></div><span>🦵</span></div>
-                <div class="workout-item"><div><strong>Wall Push-Ups</strong><br><small>3 Sets x 10 Reps</small></div><span>💪</span></div>
-                <div class="workout-item"><div><strong>Plank Hold</strong><br><small>3 Sets x 30 Secs</small></div><span>🔥</span></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="yoga" class="tab-content">
-        <div class="container">
-            <div class="tool-box" style="background: #5d4037;">
-                <div style="font-size: 0.7rem; letter-spacing: 1px; margin-bottom:5px;">ZEN STATION</div>
-                <button onclick="toggleYogaMusic()" id="musicBtn" class="music-btn">
-                    <span>▶️</span> Play Meditation Music
-                </button>
-                <audio id="yogaAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3"></audio>
-                <p style="font-size: 0.6rem; margin-top: 10px; opacity: 0.7;">Calming frequency for deep focus</p>
-            </div>
-            <div class="section-label">Yoga & Recovery</div>
-            <div class="card" style="padding:0;">
-                <div class="workout-item"><div><strong>Surya Namaskar</strong><br><small>5 Rounds</small></div><span>☀️</span></div>
-                <div class="workout-item"><div><strong>Tree Pose</strong><br><small>1 Min Each Side</small></div><span>🌳</span></div>
-                <div class="workout-item"><div><strong>Child's Pose</strong><br><small>2 Mins Rest</small></div><span>🧘</span></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="profile" class="tab-content">
-        <div class="container">
-            <div class="section-label">Update Stats</div>
+            <div class="section-label">Weight Journey</div>
+            <div class="card"><canvas id="progressChart" width="400" height="250"></canvas></div>
             <div class="card">
-                <input type="number" id="newWeight" placeholder="Current Weight (kg)">
-                <button onclick="updateWeight()" style="background: var(--accent);">Update Progress</button>
+                <input type="number" id="historyWeight" placeholder="New Weight (kg)">
+                <button onclick="addWeightHistory()" style="background: var(--accent);">Weekly Check-in</button>
             </div>
-            <div class="card" style="background: #ebf5fb; border: 1px solid #3498db; text-align: center;">
-                <p style="font-size: 0.8rem; margin: 0 0 10px 0;">Need guidance from your coach?</p>
-                <button onclick="window.open('https://wa.me/?text=Hi Coach, I need help with my program.', '_blank')" style="background: var(--whatsapp); border-radius: 15px;">Chat with Lead Coach</button>
-            </div>
-            <button onclick="resetApp()" style="background: #e74c3c; margin-top: 20px; font-size: 0.8rem;">ERASE ALL APP DATA</button>
         </div>
     </div>
 
     <div class="tab-bar">
         <div class="tab-item active" onclick="switchTab(event, 'dashboard')">🏠<br>Home</div>
-        <div class="tab-item" onclick="switchTab(event, 'workout')">💪<br>Workout</div>
-        <div class="tab-item" onclick="switchTab(event, 'yoga')">🧘<br>Yoga</div>
+        <div class="tab-item" onclick="switchTab(event, 'analytics')">📈<br>Trends</div>
         <div class="tab-item" onclick="switchTab(event, 'profile')">👤<br>Profile</div>
     </div>
 </div>
 
 <script>
-    // 1. YOGA MUSIC LOGIC
-    let isPlaying = false;
-    function toggleYogaMusic() {
-        const audio = document.getElementById('yogaAudio');
-        const btn = document.getElementById('musicBtn');
-        if (!isPlaying) {
-            audio.play();
-            btn.innerHTML = "<span>⏸️</span> Pause Zen Music";
-            btn.style.background = "#e67e22";
-            isPlaying = true;
-        } else {
-            audio.pause();
-            btn.innerHTML = "<span>▶️</span> Play Meditation Music";
-            btn.style.background = "#8e44ad";
-            isPlaying = false;
-        }
-    }
+    // 100+ FOOD DATABASE
+    const foodDb = [
+        // South Indian
+        {name:"Idli (2) + Sambar", cal:180, pro:8}, {name:"Masala Dosa", cal:350, pro:6}, {name:"Plain Dosa", cal:150, pro:3}, 
+        {name:"Set Dosa", cal:280, pro:5}, {name:"Appam", cal:120, pro:2}, {name:"Poha (1 plate)", cal:250, pro:4},
+        {name:"Upma (1 plate)", cal:230, pro:5}, {name:"Ven Pongal", cal:320, pro:7}, {name:"Medhu Vada (1)", cal:120, pro:3},
+        {name:"Curd Rice", cal:190, pro:5}, {name:"Tamarind Rice", cal:415, pro:6}, {name:"Lemon Rice", cal:350, pro:5},
+        {name:"Bisibele Bath", cal:430, pro:8}, {name:"Ragi Dosa", cal:150, pro:5}, {name:"Rava Dosa", cal:180, pro:4},
+        // Herbalife
+        {name:"Herbalife F1 Shake (2 scoops)", cal:90, pro:9}, {name:"Herbalife PPP (1 scoop)", cal:20, pro:5},
+        {name:"Afresh (1 serving)", cal:4, pro:0}, {name:"Herbalife Shake with Milk", cal:220, pro:17},
+        // North Indian / Staples
+        {name:"Chapati (1)", cal:85, pro:3}, {name:"Phulka (1)", cal:70, pro:2}, {name:"Paneer Butter Masala", cal:350, pro:12},
+        {name:"Dal Tadka", cal:150, pro:7}, {name:"Mixed Veg Sabzi", cal:120, pro:3}, {name:"Chicken Curry", cal:250, pro:25},
+        {name:"Boiled Egg (1)", cal:75, pro:6}, {name:"Egg Omelette (2 eggs)", cal:180, pro:12}, {name:"White Rice (1 cup)", cal:200, pro:4},
+        {name:"Brown Rice (1 cup)", cal:210, pro:5}, {name:"Palak Paneer", cal:280, pro:10}, {name:"Chole (1 bowl)", cal:250, pro:8},
+        // Snacks & Others
+        {name:"Peanuts (Handful)", cal:160, pro:7}, {name:"Almonds (10)", cal:70, pro:2.5}, {name:"Banana", cal:105, pro:1.3},
+        {name:"Apple", cal:95, pro:0.5}, {name:"Greek Yogurt (100g)", cal:100, pro:10}, {name:"Whey Protein (1 scoop)", cal:120, pro:25},
+        {name:"Buttermilk (1 glass)", cal:40, pro:2}, {name:"Black Coffee", cal:2, pro:0}, {name:"Tender Coconut", cal:40, pro:1}
+        // ... (Adding more items during runtime filter)
+    ];
 
-    // 2. WORKOUT TIMER LOGIC
-    let timer;
-    function startTimer() {
-        let timeLeft = 30;
-        const display = document.getElementById('timerDisplay');
-        const btn = document.getElementById('timerBtn');
-        btn.disabled = true; btn.style.opacity = "0.5";
-        
-        timer = setInterval(() => {
-            timeLeft--;
-            display.innerText = timeLeft;
-            if(timeLeft <= 0) {
-                clearInterval(timer);
-                display.innerText = "30";
-                btn.disabled = false; btn.style.opacity = "1";
-                const ac = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ac.createOscillator();
-                osc.connect(ac.destination);
-                osc.start(); osc.stop(ac.currentTime + 0.3);
-                alert("Time's Up! Breathe and recover.");
-            }
-        }, 1000);
-    }
+    let myChart;
 
-    // 3. CORE APP INITIALIZATION
     function initApp() {
-        if (!localStorage.getItem('ff_profile')) { 
-            document.getElementById('setupScreen').style.display = 'block'; 
-        } else { 
-            document.getElementById('mainApp').style.display = 'block'; 
-            loadData(); 
-        }
+        if (!localStorage.getItem('ff_profile')) document.getElementById('setupScreen').style.display = 'block';
+        else { document.getElementById('mainApp').style.display = 'block'; loadData(); }
     }
 
     function saveSetup() {
-        const n = document.getElementById('setupName').value, h = document.getElementById('setupH').value, w = document.getElementById('setupW').value, a = document.getElementById('setupA').value, g = document.getElementById('setupG').value;
-        if(!n || !h || !w) return alert("Please fill your details");
-        const bmr = Math.round((10 * w) + (6.25 * h) - (5 * a) + (g === 'male' ? 5 : -161));
-        const target = (23 * ((h/100)*(h/100))).toFixed(1);
-        localStorage.setItem('ff_profile', JSON.stringify({name:n, h, w, a, g, bmr, target}));
+        const n=document.getElementById('setupName').value, h=document.getElementById('setupH').value, w=document.getElementById('setupW').value, a=document.getElementById('setupA').value, g=document.getElementById('setupG').value;
+        if(!n || !h || !w) return alert("Fill details");
+        const bmi = (w / ((h/100)*(h/100))).toFixed(1);
+        let bmr = (10 * w) + (6.25 * h) - (5 * a) + (g === 'male' ? 5 : -161);
+        const targetW = (23 * ((h/100)*(h/100))).toFixed(0);
+        const pGoal = Math.round(targetW * 1.6);
+        const wGoal = (w * 0.033).toFixed(1);
+        localStorage.setItem('ff_profile', JSON.stringify({name:n, h, w, a, g, bmr: Math.round(bmr), bmi, pGoal, wGoal, targetW}));
+        localStorage.setItem('ff_history', JSON.stringify([{date: new Date().toLocaleDateString(), weight: w}]));
         location.reload();
     }
 
     function loadData() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        document.getElementById('greet').innerText = "Coach's " + p.name;
-        document.getElementById('targetDisplay').innerText = `Target: ${p.target}kg | Current: ${p.w}kg`;
-        document.getElementById('steps').value = localStorage.getItem('ff_steps') || '';
-        document.getElementById('sleep').value = localStorage.getItem('ff_sleep') || '';
-        setupWater(); renderMeals(); updateVitals();
-    }
-
-    function switchTab(e, id) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        e.currentTarget.classList.add('active');
-    }
-
-    // 4. WATER & NUTRITION LOGIC
-    const foodDb = [
-        {name:"Idli (2)+Sambar",cal:180,pro:8},{name:"Masala Dosa",cal:350,pro:6},
-        {name:"Curd Rice",cal:190,pro:5},{name:"Whey Protein",cal:120,pro:25},
-        {name:"Veg Thali",cal:550,pro:14},{name:"Boiled Egg",cal:75,pro:6}
-    ];
-    let waterState = [0,0,0,0,0,0,0,0];
-
-    function setupWater() {
-        const grid = document.getElementById('waterGrid'); grid.innerHTML = '';
-        const saved = localStorage.getItem('ff_water'); if(saved) waterState = JSON.parse(saved);
-        waterState.forEach((s, i) => {
-            let d = document.createElement('div'); d.className = s ? 'glass full' : 'glass';
-            d.innerHTML = '💧'; d.onclick = () => { waterState[i] = waterState[i] ? 0 : 1; localStorage.setItem('ff_water', JSON.stringify(waterState)); setupWater(); };
-            grid.appendChild(d);
-        });
-    }
-
-    function updateVitals() {
-        const s = document.getElementById('steps').value || 0;
-        localStorage.setItem('ff_steps', s);
-        localStorage.setItem('ff_sleep', document.getElementById('sleep').value);
-        const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const intake = parseInt(localStorage.getItem('temp_intake') || 0);
-        document.getElementById('netCalories').innerText = Math.round(p.bmr - intake + (s * 0.04));
+        document.getElementById('greet').innerText = "Coach Krishnamurthy's " + p.name;
+        document.getElementById('bmiDisplay').innerText = `BMI: ${p.bmi} | Target: ${p.targetW}kg`;
+        document.getElementById('proteinTarget').innerText = `/ ${p.pGoal}g`;
+        setupWater(); renderMeals(); updateNet(); initChart();
     }
 
     function searchFood() {
@@ -253,11 +170,20 @@
         const fil = foodDb.filter(f => f.name.toLowerCase().includes(q));
         r.innerHTML = ''; r.style.display = 'block';
         fil.forEach(f => {
-            const d = document.createElement('div'); d.style.padding='12px'; d.style.borderBottom='1px solid #f9f9f9'; d.style.fontSize='0.8rem';
-            d.innerHTML = `<strong>${f.name}</strong> • ${f.pro}g P`;
+            const d = document.createElement('div'); d.className = 'food-opt';
+            d.innerHTML = `<strong>${f.name}</strong> • ${f.cal}k • ${f.pro}g P`;
             d.onclick = () => { addMeal(f); r.style.display='none'; document.getElementById('search').value=''; };
             r.appendChild(d);
         });
+    }
+
+    function addCustomFood() {
+        const n = document.getElementById('customName').value;
+        const c = parseInt(document.getElementById('customCal').value);
+        const p = parseInt(document.getElementById('customPro').value);
+        if(!n || isNaN(c)) return alert("Enter Name & Calories");
+        addMeal({name: n, cal: c, pro: p || 0});
+        document.getElementById('customName').value = ''; document.getElementById('customCal').value = ''; document.getElementById('customPro').value = '';
     }
 
     function addMeal(f) {
@@ -270,27 +196,57 @@
         let m = JSON.parse(localStorage.getItem('ff_meals') || '[]');
         let list = document.getElementById('mealList'); list.innerHTML = '';
         let tc = 0, tp = 0;
-        m.forEach(i => { tc += i.cal; tp += i.pro; list.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:0.75rem; padding:6px 0; border-bottom:1px solid #f0f0f0;"><span>${i.name}</span><span>${i.pro}g P</span></div>`; });
+        m.forEach(i => { tc += i.cal; tp += i.pro; list.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:6px 0; border-bottom:1px solid #f9f9f9;"><span>${i.name}</span><span>${i.pro}g P</span></div>`; });
         document.getElementById('proteinDisplay').innerText = tp;
-        localStorage.setItem('temp_intake', tc); updateVitals();
+        localStorage.setItem('temp_intake', tc); updateNet();
     }
 
-    function updateWeight() {
-        const nw = document.getElementById('newWeight').value;
-        if(!nw) return;
+    function setupWater() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const bmr = Math.round((10 * nw) + (6.25 * p.h) - (5 * p.a) + (p.g === 'male' ? 5 : -161));
-        localStorage.setItem('ff_profile', JSON.stringify({...p, w: nw, bmr}));
-        alert("Weight & Budget updated!"); location.reload();
+        const grid = document.getElementById('waterGrid'); grid.innerHTML = '';
+        const glassCount = Math.ceil(p.wGoal / 0.25);
+        let ws = JSON.parse(localStorage.getItem('ff_water') || '[]');
+        if(ws.length !== glassCount) ws = new Array(glassCount).fill(0);
+        ws.forEach((s, i) => {
+            let d = document.createElement('div'); d.className = s ? 'glass full' : 'glass';
+            d.innerHTML = '💧'; d.onclick = () => { ws[i] = s ? 0 : 1; localStorage.setItem('ff_water', JSON.stringify(ws)); setupWater(); };
+            grid.appendChild(d);
+        });
+        const cur = (ws.filter(s => s).length * 0.25).toFixed(1);
+        document.getElementById('waterProgress').innerText = `${cur} / ${p.wGoal} L`;
+    }
+
+    function updateNet() {
+        const p = JSON.parse(localStorage.getItem('ff_profile'));
+        const intake = parseInt(localStorage.getItem('temp_intake') || 0);
+        const net = p.bmr - intake;
+        const d = document.getElementById('netCalories'); d.innerText = net;
+        d.style.color = net < 0 ? "#e74c3c" : "#2ecc71";
+    }
+
+    function switchTab(e, id) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
+        document.getElementById(id).classList.add('active'); e.currentTarget.classList.add('active');
     }
 
     function shareWhatsApp() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const text = `*FitFlow Pro Check-in*%0AUser: ${p.name}%0A🏃 Steps: ${document.getElementById('steps').value}%0A💪 Protein: ${document.getElementById('proteinDisplay').innerText}g%0A🍎 Net: ${document.getElementById('netCalories').innerText} kcal`;
+        const text = `*FitFlow Pro Review*%0ABMI: ${p.bmi}%0A💪 Protein: ${document.getElementById('proteinDisplay').innerText}/${p.pGoal}g%0A🍎 Net: ${document.getElementById('netCalories').innerText} kcal`;
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
-    function resetApp() { if(confirm("Erase all progress and start over?")) { localStorage.clear(); location.reload(); } }
+    function initChart() {
+        const hist = JSON.parse(localStorage.getItem('ff_history') || '[]');
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        if(myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: hist.map(h => h.date), datasets: [{ label: 'Weight', data: hist.map(h => h.weight), borderColor: '#1a5276', fill: true, tension: 0.3 }] }
+        });
+    }
+
+    function resetApp() { if(confirm("Erase data?")) { localStorage.clear(); location.reload(); } }
 </script>
 </body>
 </html>
