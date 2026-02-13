@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V6.2 (Header Cal)</title>
+    <title>FitFlow Pro V6.3 (Compliance)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -35,7 +35,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.2 (Header Cal)</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.3 (Compliance)</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -46,17 +46,39 @@
         </div>
     </div>
 
+    <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-shield-heart text-5xl text-punch mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Daily Health Check</h2></div>
+            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p>FitFlow Pro is a tracking tool, not a medical service.</p><ul class="list-disc pl-5 space-y-2"><li>Consult a physician before starting diet/exercise.</li><li>Stop if you feel dizziness or pain.</li><li>Verify meal plans with your wellness coach.</li></ul></div>
+            <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button>
+        </div>
+    </div>
+
+    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety First</h2></div>
+            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p class="font-bold text-marine">Before starting:</p><ul class="list-disc pl-5 space-y-2"><li>Clear a 6ft x 6ft safe space.</li><li>Wear proper shoes to prevent injury.</li><li>Keep water nearby and hydrate.</li></ul></div>
+            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button>
+        </div>
+    </div>
+
+    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition Facts</h2></div>
+            <div class="space-y-4 text-slate-600 font-medium leading-relaxed text-[15px]"><p class="font-bold text-marine">Please Note:</p><ul class="list-disc pl-5 space-y-2"><li>Calorie counts are <span class="text-punch font-bold">estimates</span> based on standard Indian portion sizes.</li><li>Cooking methods (oil, ghee) can change values significantly.</li></ul></div>
+            <button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button>
+        </div>
+    </div>
+
     <div id="main-app" class="pb-32 hide">
         <div class="max-w-md mx-auto p-5 pb-0">
             <header class="flex justify-between items-center py-4">
                 <div><h1 class="text-2xl font-black italic tracking-tighter text-slate-900 leading-none">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-[14px] font-bold text-slate-500 mt-1 uppercase italic">Namaste, <span id="userDisp">User</span></p></div>
                 <div class="flex gap-2 items-center">
-                    
                     <div class="bg-purple-50 px-3 py-2 rounded-xl text-right border border-purple-100 cursor-pointer" onclick="showT('info')">
                         <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Calories</p>
                         <p class="text-xs font-black text-cal leading-tight"><span id="headerCal">0</span>/<span id="headerGoal">--</span></p>
                     </div>
-
                     <button onclick="enableNotifications()" class="w-11 h-11 bg-orange-50 text-punch rounded-2xl flex items-center justify-center btn-click border border-orange-100 shadow-sm" id="notifBtn"><i class="fas fa-bell text-xl"></i></button>
                     <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center btn-click border border-green-100 shadow-sm animate-pulse"><i class="fab fa-whatsapp text-xl"></i></button>
                 </div>
@@ -112,10 +134,11 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_V6_2_HEADER";
+        const KEY = "FITFLOW_PRO_V6_3_LEGAL";
         let state = JSON.parse(localStorage.getItem(KEY));
         let tempFood = null; 
         
+        // --- FULL DB (SAME AS V6.2) ---
         let foodDB = {
             "idli": { cal: 39, unit: "pc", type: "good", effect: "Steamed, fermented, gut-friendly." },
             "dosa": { cal: 168, unit: "pc", type: "ok", effect: "Good carbs, watch the oil." },
@@ -169,11 +192,11 @@
 
         window.onload = () => {
             if (!state) {
-                const v61 = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_1_FULL_MENU"));
-                if(v61) state = v61;
+                const v62 = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_2_HEADER"));
+                if(v62) state = v62;
                 else {
-                    const v6 = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_COMBINED"));
-                    if(v6) state = v6;
+                    const v61 = JSON.parse(localStorage.getItem("FITFLOW_PRO_V6_1_FULL_MENU"));
+                    if(v61) state = v61;
                     else { document.getElementById('setup-screen').classList.remove('hide'); document.getElementById('main-app').classList.add('hide'); return; }
                 }
             }
@@ -189,12 +212,26 @@
             document.getElementById('main-app').classList.remove('hide'); 
             document.getElementById('userDisp').innerText = state.name; 
             checkNewDay(); 
+            
+            // CHECK DISCLAIMERS
+            checkHomeDisclaimer();
+            // checkWorkout/Food called in showT
+            
             updateUI(); 
             updateInfoUI(); 
             renderMeals();
             renderTasks(); 
             renderHistory(); 
         }
+
+        // --- DISCLAIMER LOGIC ---
+        function checkHomeDisclaimer() { if (state.lastDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('homeDisclaimerModal').classList.remove('hide'); }
+        function acceptHomeDisclaimer() { state.lastDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('homeDisclaimerModal').classList.add('hide'); }
+        function acceptWorkoutSafety() { state.lastWorkoutSafetyDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('workoutSafetyModal').classList.add('hide'); }
+        function acceptFoodDisclaimer() { state.lastFoodDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('foodDisclaimerModal').classList.add('hide'); }
+        function checkWorkoutSafety() { if (state.lastWorkoutSafetyDate !== new Date().toISOString().split('T')[0]) document.getElementById('workoutSafetyModal').classList.remove('hide'); }
+        function checkFoodDisclaimer() { if (state.lastFoodDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('foodDisclaimerModal').classList.remove('hide'); }
+
 
         // --- HOME UI ---
         function updateUI() { 
@@ -305,7 +342,17 @@
         function checkNewDay() { const today = new Date().toISOString().split('T')[0]; if (!state.lastLogin || state.lastLogin !== today) { state.lastLogin = today; state.todayTasks = { mShake: false, nShake: false, water: false, workout: false }; state.consumed = []; state.waterC = 0; save(); } }
         function enableNotifications() { if (!("Notification" in window)) { alert("Not supported."); } else { Notification.requestPermission().then(p => { if (p === "granted") { new Notification("FitFlow Pro", { body: "Notifications Enabled!" }); document.getElementById('notifBtn').classList.add('gender-active'); } }); } }
         function checkNotifications() { if (Notification.permission !== "granted") return; const now = new Date(); const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }); if (MEAL_TIMES.includes(timeStr)) new Notification("FitFlow Pro", { body: "⏰ Meal Time!", icon: "https://img.icons8.com/color/48/000000/meal.png" }); }
-        function showT(tab) { ['home','workout','info'].forEach(t => document.getElementById(`${t}-section`).classList.add('hide')); ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300 transition-all'); document.getElementById(`${tab}-section`).classList.remove('hide'); document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active transition-all'; if(tab === 'workout') { renderW(); } if(tab === 'info') { document.getElementById('foodName').focus(); } }
+        
+        function showT(tab) { 
+            ['home','workout','info'].forEach(t => document.getElementById(`${t}-section`).classList.add('hide')); 
+            ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300 transition-all'); 
+            document.getElementById(`${tab}-section`).classList.remove('hide'); 
+            document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active transition-all'; 
+            
+            if(tab === 'workout') { renderW(); checkWorkoutSafety(); } 
+            if(tab === 'info') { document.getElementById('foodName').focus(); checkFoodDisclaimer(); } 
+        }
+
         function openW() { const now = Date.now(); const oneWeek = 604800000; const diff = now - (state.lastWeightUpdate || 0); if (diff < oneWeek) return alert(`Locked 🔒`); document.getElementById('wModal').classList.remove('hide'); }
         function closeW() { document.getElementById('wModal').classList.add('hide'); }
         function saveW() { const v = parseFloat(document.getElementById('wIn').value); if(v) { state.weight = v; state.lastWeightUpdate = Date.now(); updateUI(); save(); closeW(); renderMeals(); } }
