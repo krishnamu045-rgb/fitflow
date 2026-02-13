@@ -3,134 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitflow Pro | Master Edition</title>
+    <title>Fitflow Pro | Structured Dashboard</title>
     <style>
         :root { --primary: #1a5276; --accent: #2ecc71; --bg: #f0f3f4; --whatsapp: #25d366; --protein: #9b59b6; --burn: #e67e22; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 60px; }
+        .header { background: var(--primary); color: white; padding: 25px 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; position: relative; }
         .container { max-width: 450px; margin: auto; padding: 15px; }
-        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        h2 { font-size: 1rem; color: var(--primary); margin-top: 0; text-transform: uppercase; border-left: 4px solid var(--accent); padding-left: 10px; }
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        
+        /* Section Styling */
+        .section-label { font-size: 0.75rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 10px; }
+        .card { background: white; border-radius: 18px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+        
+        /* Scorecard */
+        .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .score-box { text-align: center; padding: 15px; border-radius: 15px; background: #fff; border: 1px solid #eee; }
+        .big-num { font-size: 1.8rem; font-weight: bold; display: block; }
+        .small-lbl { font-size: 0.65rem; color: #7f8c8d; text-transform: uppercase; font-weight: bold; }
+        
+        /* Inputs */
+        input, select, button { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #eee; border-radius: 12px; font-size: 1rem; box-sizing: border-box; }
         button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-add { background: var(--accent); }
-        .search-results { max-height: 200px; overflow-y: auto; border: 1px solid #eee; display: none; margin-bottom: 10px; border-radius: 10px; }
-        .food-opt { padding: 12px; border-bottom: 1px solid #f9f9f9; cursor: pointer; font-size: 0.9rem; }
-        .water-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
-        .glass { background: #e8f6ff; border: 2px solid #3498db; border-radius: 8px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        .water-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .glass { background: #e8f6ff; border-radius: 10px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; border: 1px solid #d4e9f7; }
         .glass.full { background: #3498db; color: white; }
-        .stat-line { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; margin-top: 5px; }
-        .budget-box { text-align: center; padding: 15px; background: #e8f4fd; border-radius: 10px; margin-bottom: 15px; }
+        
+        .search-results { max-height: 180px; overflow-y: auto; background: #fff; border: 1px solid #eee; border-radius: 10px; display: none; }
+        .food-opt { padding: 12px; border-bottom: 1px solid #f9f9f9; cursor: pointer; font-size: 0.85rem; }
+        
         #setupScreen, #mainApp { display: none; }
+        .goal-icon { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; }
     </style>
 </head>
 <body onload="initApp()">
 
 <div id="setupScreen" class="container">
-    <div class="card" style="text-align: center;">
+    <div class="card" style="text-align: center; margin-top: 50px;">
         <h1 style="color: var(--primary);">Fitflow Pro Setup</h1>
         <input type="text" id="userName" placeholder="Your Name">
         <input type="number" id="userHeight" placeholder="Height (cm)">
         <input type="number" id="userWeight" placeholder="Current Weight (kg)">
-        <input type="number" id="userAge" placeholder="Age (e.g. 41)">
+        <input type="number" id="userAge" placeholder="Age">
         <select id="userGender">
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select>
-        <button onclick="saveProfile()" class="btn-add">Save & Calculate Budget</button>
+        <button onclick="saveProfile()" style="background: var(--accent);">Initialize My Flow</button>
     </div>
 </div>
 
 <div id="mainApp">
     <div class="header">
-        <h1 id="greet" style="margin:0; font-size: 1.4rem;">Fitflow Pro</h1>
-        <span id="targetDisplay" style="font-size: 0.8rem; opacity: 0.9;"></span>
+        <div class="goal-icon" onclick="alert('BMI Status: Healthy\nTarget: ' + JSON.parse(localStorage.getItem('ff_profile')).target + 'kg')">📊</div>
+        <h1 id="greet" style="margin:0; font-size: 1.3rem;">Fitflow Pro</h1>
+        <div id="targetDisplay" style="font-size: 0.8rem; margin-top: 5px; opacity: 0.8;"></div>
     </div>
 
     <div class="container">
-        <div class="card">
-            <h2>Calorie Manager</h2>
-            <div class="budget-box">
-                <div style="font-size: 0.8rem; color: #555;">REMAINING BUDGET</div>
-                <div id="netCalories" style="font-size: 2rem; color: var(--primary);">0</div>
-                <div style="font-size: 0.8rem;">Target: <span id="budgetDisplay">0</span> | Intake: <span id="intakeDisplay">0</span> | Burn: <span id="burnDisplay">0</span></div>
+        
+        <div class="section-label">Zone 1: Metabolic Scorecard</div>
+        <div class="score-grid">
+            <div class="score-box" style="border-top: 4px solid var(--primary);">
+                <span class="small-lbl">Calorie Budget</span>
+                <span id="netCalories" class="big-num">0</span>
+                <span style="font-size: 0.6rem; color: #999;">Remaining</span>
             </div>
-            <div id="tipDisplay" style="font-style: italic; font-size: 0.85rem; text-align: center; color: #666;"></div>
+            <div class="score-box" style="border-top: 4px solid var(--protein);">
+                <span class="small-lbl">Protein Goal</span>
+                <span id="proteinDisplay" class="big-num" style="color: var(--protein);">0</span>
+                <span id="proteinGoalText" style="font-size: 0.6rem; color: #999;">Goal: 0g</span>
+            </div>
         </div>
 
+        <div class="section-label">Zone 2: Movement & Recovery</div>
         <div class="card">
-            <h2>Activity & Sleep</h2>
-            <input type="number" id="steps" placeholder="Steps Today" oninput="updateVitals()">
-            <input type="number" id="sleep" placeholder="Sleep Hours" oninput="updateVitals()">
-        </div>
-
-        <div class="card">
-            <h2>Hydration (250ml)</h2>
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;"><span class="small-lbl">Steps</span><input type="number" id="steps" oninput="updateVitals()"></div>
+                <div style="flex: 1;"><span class="small-lbl">Sleep (h)</span><input type="number" id="sleep" oninput="updateVitals()"></div>
+            </div>
+            <div style="text-align:center; color:var(--burn); font-weight:bold; font-size:0.8rem; margin-top:5px;">Est. Burn: <span id="burnDisplay">0</span> kcal</div>
+            
+            <h2 style="margin-top: 20px; font-size: 0.9rem;">💧 Hydration <span style="font-size: 0.7rem; font-weight: normal;">(Total: <span id="totalWater">0</span>L)</span></h2>
             <div class="water-grid" id="waterGrid"></div>
-            <p style="text-align:center; font-weight:bold;">Total: <span id="totalWater">0</span>L</p>
         </div>
 
+        <div class="section-label">Zone 3: Fuel (South Indian Database)</div>
         <div class="card">
-            <h2>South Indian Nutrition</h2>
             <input type="text" id="search" placeholder="Search Food..." oninput="searchFood()">
             <div id="results" class="search-results"></div>
-            <div id="mealList"></div>
-            <div class="stat-line" style="color:var(--protein); margin-top:10px;"><span>Total Protein:</span> <span id="totalPro">0</span> g</div>
+            <div id="mealList" style="margin-top: 10px;"></div>
         </div>
 
-        <button style="background: var(--whatsapp);" onclick="shareWhatsApp()">Share Report to Coach</button>
-        <button onclick="resetDay()" style="background:#e74c3c; margin-top:10px; font-size:0.8rem;">Clear Daily Logs</button>
+        <button style="background: var(--whatsapp); border-radius: 15px;" onclick="shareWhatsApp()">📱 Share Summary to Coach</button>
+        <button onclick="resetDay()" style="background: none; color: #e74c3c; font-size: 0.75rem; border: none; margin-top: 10px; text-decoration: underline;">Reset All Daily Logs</button>
+
     </div>
 </div>
 
 <script>
     const foodDb = [
-        { name: "Idli (2) + Sambar", cal: 180, pro: 6 }, { name: "Masala Dosa", cal: 350, pro: 6 },
-        { name: "Curd Rice", cal: 190, pro: 5 }, { name: "Veg Meals (Thali)", cal: 550, pro: 14 },
-        { name: "Chicken Curry", cal: 250, pro: 25 }, { name: "Whey Protein", cal: 120, pro: 25 },
-        { name: "Chapati (1)", cal: 85, pro: 3 }, { name: "Filter Coffee", cal: 90, pro: 2 }
-    ];
-
-    const coachTips = [
-        "Drink water 30 mins before meals to improve digestion.",
-        "Protein at breakfast reduces cravings for the whole day.",
-        "10,000 steps is great, but 7,000 steps consistently is better.",
-        "Sleep is where the fat burn actually happens. Aim for 7h+.",
-        "South Indian tip: Add more fiber with a side of Poriyal."
+        { name: "Idli (2) + Sambar", cal: 180, pro: 8 }, { name: "Masala Dosa", cal: 350, pro: 6 },
+        { name: "Curd Rice", cal: 190, pro: 5 }, { name: "Chicken Curry", cal: 250, pro: 25 },
+        { name: "Whey Protein", cal: 120, pro: 25 }, { name: "Veg Thali", cal: 550, pro: 14 }
     ];
 
     let waterState = [0,0,0,0,0,0,0,0];
 
     function initApp() {
         const profile = localStorage.getItem('ff_profile');
-        if (!profile) { document.getElementById('setupScreen').style.display = 'block'; } 
+        if (!profile) document.getElementById('setupScreen').style.display = 'block';
         else { document.getElementById('mainApp').style.display = 'block'; loadData(); }
     }
 
     function saveProfile() {
-        const name = document.getElementById('userName').value;
-        const h = document.getElementById('userHeight').value;
-        const w = document.getElementById('userWeight').value;
-        const a = document.getElementById('userAge').value;
-        const g = document.getElementById('userGender').value;
-        if (!name || !h || !w || !a) return alert("Fill all fields");
+        const name = document.getElementById('userName').value, h = document.getElementById('userHeight').value, w = document.getElementById('userWeight').value, a = document.getElementById('userAge').value, g = document.getElementById('userGender').value;
+        if (!name || !h || !w || !a) return alert("Missing fields");
 
-        // Mifflin-St Jeor Formula for BMR
-        let bmr = (10 * w) + (6.25 * h) - (5 * a);
-        bmr = (g === 'male') ? bmr + 5 : bmr - 161;
-        const targetWeight = (23 * ((h/100)*(h/100))).toFixed(1);
+        let bmr = (10 * w) + (6.25 * h) - (5 * a); bmr = (g === 'male') ? bmr + 5 : bmr - 161;
+        const target = (23 * ((h/100)*(h/100))).toFixed(1);
+        const pGoal = Math.round(target * 1.5); // Protein Goal: 1.5g per kg of target weight
 
-        localStorage.setItem('ff_profile', JSON.stringify({ name, h, w, a, g, bmr: Math.round(bmr), target: targetWeight }));
+        localStorage.setItem('ff_profile', JSON.stringify({ name, h, w, a, g, bmr: Math.round(bmr), target, pGoal }));
         location.reload();
     }
 
     function loadData() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
         document.getElementById('greet').innerText = "Fitflow Pro: " + p.name;
-        document.getElementById('targetDisplay').innerText = `Goal: ${p.target}kg | BMR: ${p.bmr} kcal`;
-        document.getElementById('budgetDisplay').innerText = p.bmr;
-        document.getElementById('tipDisplay').innerText = "Coach Tip: " + coachTips[Math.floor(Math.random()*coachTips.length)];
-        
+        document.getElementById('targetDisplay').innerText = `Target: ${p.target}kg | Budget: ${p.bmr} kcal`;
+        document.getElementById('proteinGoalText').innerText = `Goal: ${p.pGoal}g`;
         document.getElementById('steps').value = localStorage.getItem('ff_steps') || '';
         document.getElementById('sleep').value = localStorage.getItem('ff_sleep') || '';
         
@@ -154,7 +155,7 @@
         r.innerHTML = ''; r.style.display = 'block';
         fil.forEach(f => {
             const d = document.createElement('div'); d.className = 'food-opt';
-            d.innerHTML = `<strong>${f.name}</strong> - ${f.cal}kcal / ${f.pro}g P`;
+            d.innerHTML = `<strong>${f.name}</strong> • ${f.pro}g Protein`;
             d.onclick = () => { addMeal(f); r.style.display='none'; document.getElementById('search').value=''; };
             r.appendChild(d);
         });
@@ -170,17 +171,20 @@
         let m = JSON.parse(localStorage.getItem('ff_meals') || '[]');
         let list = document.getElementById('mealList'); list.innerHTML = '';
         let tc = 0, tp = 0;
-        m.forEach(i => { tc += i.cal; tp += i.pro; list.innerHTML += `<div class="meal-item"><span>${i.name}</span><span>${i.cal}k / ${i.pro}g</span></div>`; });
-        document.getElementById('intakeDisplay').innerText = tc;
-        document.getElementById('totalPro').innerText = tp;
+        m.forEach(i => { 
+            tc += i.cal; tp += i.pro; 
+            list.innerHTML += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #f9f9f9; padding:5px 0; font-size:0.8rem;"><span>${i.name}</span><span>${i.pro}g P</span></div>`; 
+        });
+        document.getElementById('proteinDisplay').innerText = tp;
+        localStorage.setItem('temp_intake', tc);
         updateNet();
     }
 
     function updateNet() {
-        const bmr = parseInt(document.getElementById('budgetDisplay').innerText);
-        const intake = parseInt(document.getElementById('intakeDisplay').innerText);
+        const p = JSON.parse(localStorage.getItem('ff_profile'));
+        const intake = parseInt(localStorage.getItem('temp_intake') || 0);
         const burn = parseInt(document.getElementById('burnDisplay').innerText);
-        const net = bmr - intake + burn;
+        const net = p.bmr - intake + burn;
         const display = document.getElementById('netCalories');
         display.innerText = net;
         display.style.color = (net < 0) ? "#e74c3c" : "var(--primary)";
@@ -198,11 +202,11 @@
 
     function shareWhatsApp() {
         const p = JSON.parse(localStorage.getItem('ff_profile'));
-        const text = `*Fitflow Pro: ${p.name} Report*%0A🏃 Steps: ${document.getElementById('steps').value}%0A🍎 Intake: ${document.getElementById('intakeDisplay').innerText} / Budget: ${p.bmr}%0A💪 Protein: ${document.getElementById('totalPro').innerText}g%0A🔥 Net Cal: ${document.getElementById('netCalories').innerText}`;
+        const text = `*Fitflow Pro Daily Summary*%0A🏃 Steps: ${document.getElementById('steps').value}%0A💪 Protein: ${document.getElementById('proteinDisplay').innerText} / ${p.pGoal}g%0A🍎 Net Cal: ${document.getElementById('netCalories').innerText}`;
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
-    function resetDay() { if(confirm("Reset logs?")) { localStorage.removeItem('ff_water'); localStorage.removeItem('ff_meals'); localStorage.removeItem('ff_steps'); localStorage.removeItem('ff_sleep'); location.reload(); } }
+    function resetDay() { if(confirm("Clear logs?")) { localStorage.removeItem('ff_water'); localStorage.removeItem('ff_meals'); localStorage.removeItem('ff_steps'); localStorage.removeItem('ff_sleep'); location.reload(); } }
 </script>
 </body>
 </html>
