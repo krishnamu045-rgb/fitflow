@@ -5,184 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitFlow Pro | Lead Coach Dashboard</title>
     <style>
-        :root { --primary: #1a5276; --accent: #2ecc71; --bg: #f0f3f4; --whatsapp: #25d366; }
+        :root { --primary: #1a5276; --accent: #2ecc71; --bg: #f0f3f4; --whatsapp: #25d366; --protein: #9b59b6; --burn: #e67e22; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .container { max-width: 450px; margin: auto; padding: 15px; }
         .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         h2 { font-size: 1rem; color: var(--primary); margin-top: 0; text-transform: uppercase; border-left: 4px solid var(--accent); padding-left: 10px; }
-        .water-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
-        .glass { background: #e8f6ff; border: 2px solid #3498db; border-radius: 8px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
-        .glass.full { background: #3498db; color: white; }
         input, select, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; }
-        button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
+        button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { opacity: 0.9; }
         .btn-add { background: var(--accent); }
-        .btn-whatsapp { background: var(--whatsapp); margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-reset { background: #e74c3c; margin-top: 20px; opacity: 0.8; }
-        .meal-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.9rem; }
-        .footer { text-align: center; font-size: 0.8rem; color: #7f8c8d; margin-top: 20px; }
+        .btn-whatsapp { background: var(--whatsapp); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .search-results { max-height: 200px; overflow-y: auto; border: 1px solid #eee; display: none; margin-bottom: 10px; border-radius: 10px; }
+        .food-opt { padding: 12px; border-bottom: 1px solid #f9f9f9; cursor: pointer; font-size: 0.9rem; }
+        .meal-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.85rem; }
+        .water-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .glass { background: #e8f6ff; border: 2px solid #3498db; border-radius: 8px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .glass.full { background: #3498db; color: white; }
+        .stat-line { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; margin-top: 5px; }
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 400px; }
     </style>
 </head>
 <body onload="loadData()">
 
+<div id="welcomeModal" class="modal-overlay">
+    <div class="modal-content">
+        <div style="font-size: 3rem;">🌊</div>
+        <h1>FitFlow Pro</h1>
+        <p>Welcome! I am your <strong>Lead Coach</strong>. Let's find your "Flow" through balanced nutrition and recovery.</p>
+        <button class="btn-add" onclick="closeWelcome()">Start Journey</button>
+    </div>
+</div>
+
 <div class="header">
-    <h1 style="margin:0; font-size: 1.5rem;">FitFlow Pro</h1>
+    <h1 style="margin:0; font-size: 1.4rem;">FitFlow Pro</h1>
     <span style="font-size: 0.8rem; opacity: 0.9;">Lead Coach Dashboard</span>
 </div>
 
 <div class="container">
     <div class="card">
-        <h2>Target Weight Goal</h2>
-        <input type="number" id="h" placeholder="Enter Height (cm)" onchange="calc()">
-        <div id="targetDisplay" style="text-align:center; font-weight:bold; margin-top:10px; color:var(--primary);"></div>
+        <h2>Daily Vitals</h2>
+        <input type="number" id="h" placeholder="Height (cm)" onchange="updateGoal()">
+        <div id="goalText" style="text-align:center; font-weight:bold; color:var(--primary); margin: 5px 0;"></div>
+        <input type="number" id="steps" placeholder="Steps Today" oninput="saveVitals()">
+        <input type="number" id="sleep" placeholder="Sleep Hours" oninput="saveVitals()">
+        <div id="burnText" style="text-align:center; color:var(--burn); font-size:0.9rem; font-weight:bold;">Burn: 0 kcal</div>
     </div>
 
     <div class="card">
-        <h2>Daily Activity</h2>
-        <input type="number" id="stepCount" placeholder="Enter Steps (e.g. 10000)" oninput="saveSteps()">
-        <p style="text-align:center; font-size: 0.8rem; color: #666;">Recommended: 10,000 steps/day</p>
-    </div>
-
-    <div class="card">
-        <h2>Hydration (250ml glasses)</h2>
+        <h2>Water (250ml/glass)</h2>
         <div class="water-grid" id="waterGrid"></div>
-        <p style="text-align:center; margin-top:10px; font-weight:bold;">Total: <span id="totalWater">0</span> Liters</p>
+        <p style="text-align:center; font-weight:bold;">Total: <span id="totalWater">0</span>L</p>
     </div>
 
     <div class="card">
-        <h2>South Indian Meal Log</h2>
-        <select id="meal">
-            <option value="250">2 Idli + Sambar</option>
-            <option value="350">Masala Dosa</option>
-            <option value="200">Curd Rice (1 Cup)</option>
-            <option value="150">Ragi Malt</option>
-            <option value="450">Veg Thali</option>
-            <option value="100">Coffee / Tea</option>
-        </select>
-        <button class="btn-add" onclick="addMeal()">Add Meal</button>
+        <h2>Nutrition Search</h2>
+        <input type="text" id="search" placeholder="Search: Idli, Dosa, Whey..." oninput="searchFood()">
+        <div id="results" class="search-results"></div>
         <div id="mealList"></div>
-        <p style="text-align:right; font-weight:bold;">Total: <span id="totalCal">0</span> kcal</p>
+        <div style="margin-top:15px; border-top: 1px solid #eee; padding-top:10px;">
+            <div class="stat-line" style="color:var(--primary);"><span>Calories:</span> <span id="totalCal">0</span> kcal</div>
+            <div class="stat-line" style="color:var(--protein);"><span>Protein:</span> <span id="totalPro">0</span> g</div>
+        </div>
     </div>
 
     <div class="card" style="border: 2px solid var(--whatsapp);">
         <h2>Coach Review</h2>
-        <button class="btn-whatsapp" onclick="shareWhatsApp()">Share Report via WhatsApp</button>
+        <button class="btn-whatsapp" onclick="shareWhatsApp()">Share Summary to Coach</button>
+        <button onclick="shareApp()" style="background:#fff; color:var(--primary); border:2px solid var(--primary); margin-top:10px;">🔗 Invite Friends to FitFlow</button>
     </div>
 
-    <button class="btn-reset" onclick="resetDay()">Clear Daily Logs</button>
-
-    <div class="footer">
-        <a href="legal.html" style="text-decoration:none; color:inherit;">Privacy Policy</a> | 
-        <a href="contact.html" style="text-decoration:none; color:inherit;">Contact Coach</a>
+    <button onclick="resetDay()" style="background:#e74c3c; margin-top:20px;">Reset Daily Logs</button>
+    
+    <div style="text-align:center; margin-top:20px; font-size:0.8rem;">
+        <a href="legal.html" style="color:#777;">Privacy & Terms</a> | <a href="contact.html" style="color:#777;">Contact</a>
     </div>
 </div>
 
 <script>
+    const foodDb = [
+        { name: "Idli (2 pcs) + Sambar", cal: 180, pro: 6 }, { name: "Masala Dosa", cal: 350, pro: 6 },
+        { name: "Curd Rice (1 cup)", cal: 190, pro: 5 }, { name: "Whey Protein (1 scoop)", cal: 120, pro: 25 },
+        { name: "Chicken Curry (S. Indian)", cal: 250, pro: 25 }, { name: "Boiled Egg (1 pc)", cal: 75, pro: 6 },
+        { name: "Veg Thali (Full)", cal: 450, pro: 12 }, { name: "Ragi Malt", cal: 150, pro: 4 },
+        { name: "Medhu Vada (1 pc)", cal: 120, pro: 3 }, { name: "Filter Coffee", cal: 90, pro: 2 }
+    ];
+
     let waterState = [0,0,0,0,0,0,0,0];
 
-    // --- Water Logic ---
-    function setupWater() {
-        const grid = document.getElementById('waterGrid');
-        grid.innerHTML = '';
-        waterState.forEach((state, i) => {
-            let div = document.createElement('div');
-            div.className = state ? 'glass full' : 'glass';
-            div.innerHTML = '💧';
-            div.onclick = () => toggleWater(i);
-            grid.appendChild(div);
+    function searchFood() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const res = document.getElementById('results');
+        if(query.length < 1) { res.style.display = 'none'; return; }
+        const filtered = foodDb.filter(f => f.name.toLowerCase().includes(query));
+        res.innerHTML = ''; res.style.display = 'block';
+        filtered.forEach(f => {
+            const d = document.createElement('div'); d.className = 'food-opt';
+            d.innerHTML = `<strong>${f.name}</strong> - ${f.cal}kcal / ${f.pro}g P`;
+            d.onclick = () => { addMeal(f); res.style.display = 'none'; document.getElementById('search').value=''; };
+            res.appendChild(d);
         });
-        document.getElementById('totalWater').innerText = (waterState.filter(s => s).length * 0.25).toFixed(2);
     }
 
-    function toggleWater(index) {
-        waterState[index] = waterState[index] ? 0 : 1;
-        localStorage.setItem('ff_water', JSON.stringify(waterState));
-        setupWater();
-    }
-
-    // --- Goal/Weight Logic ---
-    function calc() {
-        let h = document.getElementById('h').value;
-        if(!h) return;
-        let target = (23 * ((h/100)*(h/100))).toFixed(1);
-        document.getElementById('targetDisplay').innerText = "Healthy Goal: " + target + " kg";
-        localStorage.setItem('ff_height', h);
-    }
-
-    // --- Steps Logic ---
-    function saveSteps() {
-        let steps = document.getElementById('stepCount').value;
-        localStorage.setItem('ff_steps', steps);
-    }
-
-    // --- Meal Logic ---
-    function addMeal() {
-        let select = document.getElementById('meal');
-        let name = select.options[select.selectedIndex].text;
-        let cal = parseInt(select.value);
-        let meals = JSON.parse(localStorage.getItem('ff_meals') || '[]');
-        meals.push({name, cal});
-        localStorage.setItem('ff_meals', JSON.stringify(meals));
+    function addMeal(f) {
+        let m = JSON.parse(localStorage.getItem('ff_meals') || '[]');
+        m.push(f); localStorage.setItem('ff_meals', JSON.stringify(m));
         renderMeals();
     }
 
     function renderMeals() {
-        let meals = JSON.parse(localStorage.getItem('ff_meals') || '[]');
-        let list = document.getElementById('mealList');
-        list.innerHTML = '';
-        let total = 0;
-        meals.forEach(m => {
-            total += m.cal;
-            list.innerHTML += `<div class="meal-item"><span>${m.name}</span><span>${m.cal} kcal</span></div>`;
-        });
-        document.getElementById('totalCal').innerText = total;
+        let m = JSON.parse(localStorage.getItem('ff_meals') || '[]');
+        let list = document.getElementById('mealList'); list.innerHTML = '';
+        let tc = 0, tp = 0;
+        m.forEach(i => { tc += i.cal; tp += i.pro; list.innerHTML += `<div class="meal-item"><span>${i.name}</span><span>${i.cal}k / ${i.pro}g</span></div>`; });
+        document.getElementById('totalCal').innerText = tc; document.getElementById('totalPro').innerText = tp;
     }
 
-    // --- WhatsApp Logic ---
+    function setupWater() {
+        const grid = document.getElementById('waterGrid'); grid.innerHTML = '';
+        waterState.forEach((s, i) => {
+            let d = document.createElement('div'); d.className = s ? 'glass full' : 'glass';
+            d.innerHTML = '💧'; d.onclick = () => { waterState[i] = waterState[i] ? 0 : 1; localStorage.setItem('ff_water', JSON.stringify(waterState)); setupWater(); };
+            grid.appendChild(d);
+        });
+        document.getElementById('totalWater').innerText = (waterState.filter(s => s).length * 0.25).toFixed(2);
+    }
+
+    function saveVitals() {
+        const s = document.getElementById('steps').value;
+        const sl = document.getElementById('sleep').value;
+        localStorage.setItem('ff_steps', s); localStorage.setItem('ff_sleep', sl);
+        document.getElementById('burnText').innerText = `Burn: ${(s * 0.04).toFixed(0)} kcal`;
+    }
+
+    function updateGoal() {
+        const h = document.getElementById('h').value;
+        if(h) {
+            const t = (23 * ((h/100)*(h/100))).toFixed(1);
+            document.getElementById('goalText').innerText = `Target: ${t} kg`;
+            localStorage.setItem('ff_height', h);
+        }
+    }
+
     function shareWhatsApp() {
-        let water = document.getElementById('totalWater').innerText;
-        let cals = document.getElementById('totalCal').innerText;
-        let target = document.getElementById('targetDisplay').innerText;
-        let steps = document.getElementById('stepCount').value || "Not logged";
-        
-        let text = `*FitFlow Pro: Daily Summary*%0A` +
-                   `---------------------------%0A` +
-                   `🎯 ${target}%0A` +
-                   `🏃 Steps: ${steps}%0A` +
-                   `💧 Water: ${water} Liters%0A` +
-                   `🍎 Nutrition: ${cals} kcal%0A` +
-                   `---------------------------%0A` +
-                   `Review requested by Lead Coach.`;
-        
+        const text = `*FitFlow Pro Daily Summary*%0A🏃 Steps: ${document.getElementById('steps').value}%0A🌙 Sleep: ${document.getElementById('sleep').value}h%0A💧 Water: ${document.getElementById('totalWater').innerText}L%0A🍎 Intake: ${document.getElementById('totalCal').innerText} kcal%0A💪 Protein: ${document.getElementById('totalPro').innerText}g%0AReview Req: Lead Coach`;
         window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
-    // --- App Lifecycle ---
+    function shareApp() {
+        const url = window.location.href;
+        const txt = `Join me on FitFlow Pro! Track your South Indian nutrition and wellness here: ${url}`;
+        if(navigator.share) { navigator.share({title:'FitFlow Pro', url:url}); } else { window.open(`https://wa.me/?text=${txt}`, '_blank'); }
+    }
+
+    function closeWelcome() { localStorage.setItem('ff_visited', '1'); document.getElementById('welcomeModal').style.display = 'none'; }
+
     function loadData() {
-        let h = localStorage.getItem('ff_height');
-        if(h) { document.getElementById('h').value = h; calc(); }
-        
-        let s = localStorage.getItem('ff_steps');
-        if(s) document.getElementById('stepCount').value = s;
-
-        let w = localStorage.getItem('ff_water');
-        if(w) waterState = JSON.parse(w);
-        setupWater();
-        renderMeals();
+        if(!localStorage.getItem('ff_visited')) document.getElementById('welcomeModal').style.display='flex';
+        document.getElementById('h').value = localStorage.getItem('ff_height') || ''; updateGoal();
+        document.getElementById('steps').value = localStorage.getItem('ff_steps') || '';
+        document.getElementById('sleep').value = localStorage.getItem('ff_sleep') || '';
+        saveVitals();
+        let w = localStorage.getItem('ff_water'); if(w) waterState = JSON.parse(w);
+        setupWater(); renderMeals();
     }
 
-    function resetDay() {
-        if(confirm("Clear today's logs (Steps, Water, Meals)?")) {
-            localStorage.removeItem('ff_water');
-            localStorage.removeItem('ff_meals');
-            localStorage.removeItem('ff_steps');
-            waterState = [0,0,0,0,0,0,0,0];
-            document.getElementById('stepCount').value = '';
-            setupWater();
-            renderMeals();
-        }
-    }
+    function resetDay() { if(confirm("Clear daily logs?")) { localStorage.removeItem('ff_water'); localStorage.removeItem('ff_meals'); localStorage.removeItem('ff_steps'); localStorage.removeItem('ff_sleep'); location.reload(); } }
 </script>
-
 </body>
 </html>
