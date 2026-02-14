@@ -28,7 +28,6 @@
         .animate-slide-up { animation: slideUp 0.3s ease-out; }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .progress-ring__circle { transition: stroke-dashoffset 0.5s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
-        .gender-active { background-color: #FF4D00 !important; color: white !important; }
         .check-active { background-color: #FF4D00 !important; color: white !important; border-color: #FF4D00 !important; }
         .thumbnail-gradient { background: linear-gradient(to top, rgba(10, 38, 71, 0.9) 0%, transparent 70%); }
     </style>
@@ -36,7 +35,7 @@
 <body class="font-sans text-marine select-none">
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
-        <div class="w-full max-w-sm space-y-6 text-center">
+        <div class="w-full max-sm space-y-6 text-center">
             <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 3.0</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
@@ -325,7 +324,6 @@
         function masterReset() { if(prompt("PIN:") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
         function selectGender(g) { document.getElementById('setupGender').value = g; document.getElementById('btnMale').className = g==='male'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; document.getElementById('btnFemale').className = g==='female'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; }
         function checkNewDay() { const today = new Date().toISOString().split('T')[0]; if (state.lastLogin !== today) { state.lastLogin = today; state.waterC = 0; state.consumed = []; state.todayTasks = {}; save(); } }
-        function enableNotifications() { Notification.requestPermission(); }
     </script>
 </body>
 </html>
