@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V3 (Smart Analyzer)</title>
+    <title>FitFlow Pro V3 (Fixed Analyzer)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -180,7 +180,11 @@
             "banana": { cal: 105, unit: "pc", type: "good", desc: "Instant energy & potassium." },
             "f1 shake": { cal: 242, unit: "glass", type: "good", desc: "Balanced complete nutrition meal." },
             "afresh": { cal: 4, unit: "cup", type: "good", desc: "Zero calorie energy booster." },
-            "almonds": { cal: 7, unit: "pc", type: "good", desc: "Healthy fats & protein." }
+            "almonds": { cal: 7, unit: "pc", type: "good", desc: "Healthy fats & protein." },
+            "samosa": { cal: 260, unit: "pc", type: "bad", desc: "Deep fried, refined flour." },
+            "pizza": { cal: 285, unit: "slice", type: "bad", desc: "High refined carbs and saturated fat." },
+            "burger": { cal: 400, unit: "pc", type: "bad", desc: "High calorie, low nutrient density." },
+            "coke": { cal: 140, unit: "can", type: "bad", desc: "Pure sugar. Empty calories." }
         };
 
         const CONTENT = {
@@ -277,16 +281,24 @@
         }
 
         function selectFood(name) {
-            const item = foodDB[name]; tempFood = { name: name, calPerUnit: item.cal, desc: item.desc || "Healthy choice.", type: item.type };
+            const item = foodDB[name]; 
+            tempFood = { name: name, calPerUnit: item.cal, desc: item.desc || "Standard portion.", type: item.type };
             document.getElementById('foodName').value = ""; document.getElementById('suggestions').classList.add('hide');
             document.getElementById('resName').innerText = name; 
             document.getElementById('resCal').innerText = item.cal + " kcal"; 
             document.getElementById('resDesc').innerText = tempFood.desc;
             
             const badge = document.getElementById('resBadge');
-            if(item.type === 'good') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-600"; badge.innerText = "Good Choice"; }
-            else if(item.type === 'bad') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-600"; badge.innerText = "Limit This"; }
-            else { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-100 text-orange-600"; badge.innerText = "Moderate"; }
+            if(item.type === 'good') { 
+                badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-600"; 
+                badge.innerText = "Good Choice"; 
+            } else if(item.type === 'bad') { 
+                badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-600"; 
+                badge.innerText = "Limit This"; 
+            } else { 
+                badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-100 text-orange-600"; 
+                badge.innerText = "Moderate"; 
+            }
             
             document.getElementById('analysisResult').classList.remove('hide'); 
             document.getElementById('addCustom').classList.add('hide');
