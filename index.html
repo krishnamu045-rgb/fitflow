@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V3</title>
+    <title>FitFlow Pro V3 (Full DB)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -36,7 +36,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 3.0</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 3.0 (Full DB)</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -148,23 +148,109 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_VERSION_3_FINAL";
+        const KEY = "FITFLOW_PRO_VERSION_3_FULL";
         let state = JSON.parse(localStorage.getItem(KEY));
         let tempFood = null; 
         
         let foodDB = {
-            "idli": { cal: 39, unit: "pc", type: "good", effect: "Steamed, fermented, gut-friendly." },
-            "dosa": { cal: 168, unit: "pc", type: "ok", effect: "Good carbs, watch the oil." },
-            "masala dosa": { cal: 350, unit: "pc", type: "bad", effect: "Potato filling + high oil." },
-            "upma": { cal: 250, unit: "cup", type: "ok", effect: "Rava based, can be oily." },
-            "pongal": { cal: 300, unit: "cup", type: "bad", effect: "High ghee & rice." },
-            "chapati": { cal: 104, unit: "pc", type: "good", effect: "Whole wheat complex carb." },
-            "coconut chutney": { cal: 100, unit: "tbsp", type: "bad", effect: "High fat content." },
-            "tomato chutney": { cal: 40, unit: "tbsp", type: "good", effect: "Lighter option." },
-            "sambar": { cal: 100, unit: "bowl", type: "good", effect: "Lentil veggie stew." },
-            "f1 shake": { cal: 242, unit: "glass", type: "good", effect: "Complete nutrition meal." },
-            "afresh": { cal: 4, unit: "cup", type: "good", effect: "Low cal energy drink." },
-            "almonds": { cal: 7, unit: "pc", type: "good", effect: "Healthy fats." }
+            // Breakfast (South Indian)
+            "idli": { cal: 39, unit: "pc", type: "good" },
+            "dosa": { cal: 168, unit: "pc", type: "ok" },
+            "masala dosa": { cal: 350, unit: "pc", type: "bad" },
+            "rava dosa": { cal: 180, unit: "pc", type: "ok" },
+            "poha": { cal: 250, unit: "cup", type: "ok" },
+            "upma": { cal: 250, unit: "cup", type: "ok" },
+            "pongal": { cal: 300, unit: "cup", type: "bad" },
+            "vada": { cal: 170, unit: "pc", type: "bad" },
+            "medu vada": { cal: 170, unit: "pc", type: "bad" },
+            "puri": { cal: 101, unit: "pc", type: "bad" },
+            "chapati": { cal: 104, unit: "pc", type: "good" },
+            "parotta": { cal: 300, unit: "pc", type: "bad" },
+            "aloo paratha": { cal: 290, unit: "pc", type: "bad" },
+            "ragi mudde": { cal: 300, unit: "ball", type: "good" },
+
+            // Rice Varieties
+            "white rice": { cal: 130, unit: "cup", type: "ok" },
+            "brown rice": { cal: 111, unit: "cup", type: "good" },
+            "curd rice": { cal: 200, unit: "cup", type: "good" },
+            "sambar rice": { cal: 220, unit: "cup", type: "ok" },
+            "lemon rice": { cal: 250, unit: "cup", type: "ok" },
+            "tomato rice": { cal: 230, unit: "cup", type: "ok" },
+            "tamarind rice": { cal: 280, unit: "cup", type: "bad" },
+            "veg biryani": { cal: 250, unit: "cup", type: "bad" },
+            "chicken biryani": { cal: 290, unit: "cup", type: "bad" },
+            "mutton biryani": { cal: 350, unit: "cup", type: "bad" },
+            "egg biryani": { cal: 270, unit: "cup", type: "bad" },
+            "ghee rice": { cal: 300, unit: "cup", type: "bad" },
+
+            // Curries & Sides
+            "sambar": { cal: 100, unit: "bowl", type: "good" },
+            "rasam": { cal: 40, unit: "bowl", type: "good" },
+            "dal fry": { cal: 150, unit: "bowl", type: "good" },
+            "chana masala": { cal: 165, unit: "bowl", type: "good" },
+            "rajma": { cal: 200, unit: "bowl", type: "good" },
+            "aloo gobi": { cal: 150, unit: "bowl", type: "ok" },
+            "paneer butter masala": { cal: 350, unit: "bowl", type: "bad" },
+            "palak paneer": { cal: 250, unit: "bowl", type: "good" },
+            "veg kurma": { cal: 220, unit: "bowl", type: "ok" },
+            "chicken curry": { cal: 240, unit: "bowl", type: "ok" },
+            "butter chicken": { cal: 400, unit: "bowl", type: "bad" },
+            "fish curry": { cal: 200, unit: "bowl", type: "good" },
+            "mutton curry": { cal: 350, unit: "bowl", type: "bad" },
+            "egg curry": { cal: 180, unit: "bowl", type: "good" },
+            "pepper chicken": { cal: 280, unit: "bowl", type: "bad" },
+            "coconut chutney": { cal: 100, unit: "tbsp", type: "bad" },
+            "tomato chutney": { cal: 40, unit: "tbsp", type: "good" },
+            "mint chutney": { cal: 20, unit: "tbsp", type: "good" },
+            "peanut chutney": { cal: 120, unit: "tbsp", type: "bad" },
+            "veg poriyal": { cal: 80, unit: "bowl", type: "good" },
+            "avial": { cal: 150, unit: "bowl", type: "good" },
+            "cucumber raita": { cal: 50, unit: "bowl", type: "good" },
+
+            // Fruits
+            "banana": { cal: 105, unit: "pc", type: "good" },
+            "apple": { cal: 95, unit: "pc", type: "good" },
+            "orange": { cal: 62, unit: "pc", type: "good" },
+            "papaya": { cal: 50, unit: "cup", type: "good" },
+            "guava": { cal: 38, unit: "pc", type: "good" },
+            "watermelon": { cal: 30, unit: "cup", type: "good" },
+            "pomegranate": { cal: 83, unit: "cup", type: "good" },
+            "grapes": { cal: 67, unit: "cup", type: "ok" },
+            "mango": { cal: 200, unit: "pc", type: "bad" },
+
+            // Snacks & Junk
+            "samosa": { cal: 260, unit: "pc", type: "bad" },
+            "veg puff": { cal: 250, unit: "pc", type: "bad" },
+            "egg puff": { cal: 300, unit: "pc", type: "bad" },
+            "bajji": { cal: 150, unit: "pc", type: "bad" },
+            "pakoda": { cal: 300, unit: "plate", type: "bad" },
+            "mixture": { cal: 350, unit: "cup", type: "bad" },
+            "murukku": { cal: 150, unit: "pc", type: "bad" },
+            "biscuit": { cal: 50, unit: "pc", type: "bad" },
+            "cake": { cal: 300, unit: "slice", type: "bad" },
+            "pizza": { cal: 285, unit: "slice", type: "bad" },
+            "burger": { cal: 400, unit: "pc", type: "bad" },
+
+            // Beverages
+            "filter coffee": { cal: 40, unit: "cup", type: "ok" },
+            "tea": { cal: 40, unit: "cup", type: "ok" },
+            "green tea": { cal: 2, unit: "cup", type: "good" },
+            "milk": { cal: 150, unit: "cup", type: "ok" },
+            "buttermilk": { cal: 30, unit: "cup", type: "good" },
+            "lassi": { cal: 200, unit: "cup", type: "bad" },
+            "tender coconut": { cal: 40, unit: "cup", type: "good" },
+            "fresh juice": { cal: 120, unit: "glass", type: "ok" },
+            "coke": { cal: 140, unit: "can", type: "bad" },
+            "beer": { cal: 150, unit: "can", type: "bad" },
+
+            // Herbalife & Fitness
+            "f1 shake": { cal: 242, unit: "glass", type: "good" },
+            "pdm": { cal: 120, unit: "scoop", type: "good" },
+            "afresh": { cal: 4, unit: "cup", type: "good" },
+            "boiled egg": { cal: 70, unit: "pc", type: "good" },
+            "omelette": { cal: 140, unit: "pc", type: "ok" },
+            "grilled chicken": { cal: 200, unit: "pc", type: "good" },
+            "almonds": { cal: 7, unit: "pc", type: "good" }
         };
 
         const CONTENT = {
