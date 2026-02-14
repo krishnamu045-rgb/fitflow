@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V3 (Full DB)</title>
+    <title>FitFlow Pro V3 (Smart Analyzer)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -36,7 +36,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 3.0 (Full DB)</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 3.0</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -54,22 +54,8 @@
             <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button>
         </div>
     </div>
-    
-    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
-            <div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety</h2></div>
-            <div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Clear a 6ft safe zone around you to prevent injury.</p><p>2. Wear shoes, keep water handy, and don't push through pain.</p></div>
-            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button>
-        </div>
-    </div>
-    
-    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
-            <div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition</h2></div>
-            <div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Calories are estimates based on standard Indian recipes.</p><p>2. Values vary based on oil use and portion size.</p></div>
-            <button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button>
-        </div>
-    </div>
+    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety</h2></div><div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Clear a 6ft safe zone around you to prevent injury.</p><p>2. Wear shoes, keep water handy, and don't push through pain.</p></div><button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button></div></div>
+    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition</h2></div><div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Calories are estimates based on standard Indian recipes.</p><p>2. Values vary based on oil use and portion size.</p></div><button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button></div></div>
 
     <div id="main-app" class="pb-32 hide">
         <div class="max-w-md mx-auto p-5 pb-0">
@@ -131,7 +117,24 @@
                 <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Scanner</p>
                 <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="e.g., Coconut Chutney..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2"><button onclick="quickAdd('Coffee', 40)" class="whitespace-nowrap bg-orange-50 text-orange-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-orange-100">+ Coffee</button><button onclick="quickAdd('Tea', 40)" class="whitespace-nowrap bg-amber-50 text-amber-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-orange-100">+ Tea</button><button onclick="quickAdd('Water', 0)" class="whitespace-nowrap bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-blue-100">+ Water</button><button onclick="quickAdd('Banana', 105)" class="whitespace-nowrap bg-yellow-50 text-yellow-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-yellow-100">+ Banana</button></div>
-                <div id="analysisResult" class="hide bg-mist p-4 rounded-xl border border-slate-100 animate-slide-up"><div class="flex justify-between items-center mb-2"><h3 id="resName" class="font-black text-marine capitalize text-lg">--</h3><span id="resCal" class="bg-white px-2 py-1 rounded-lg text-xs font-bold text-slate-500 border border-slate-100">-- kcal</span></div><p id="resDesc" class="text-xs text-slate-500 font-medium mb-3">--</p><div class="flex gap-2"><input type="number" id="resQty" value="1" class="w-16 bg-white p-3 rounded-xl font-bold text-center border border-slate-100"><button onclick="confirmAdd()" class="flex-1 bg-marine text-white font-bold rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button></div></div>
+                <div id="analysisResult" class="hide bg-mist p-5 rounded-2xl border border-slate-100 animate-slide-up space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div><h3 id="resName" class="font-black text-marine capitalize text-xl">--</h3><p id="resDesc" class="text-xs text-slate-500 font-bold mt-1">--</p></div>
+                        <div id="resBadge" class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">--</div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex-1 bg-white p-3 rounded-xl border border-slate-100 text-center"><p class="text-[9px] font-bold text-slate-300 uppercase">Calories</p><h4 class="font-black text-marine text-lg" id="resCal">--</h4></div>
+                        <div class="flex-1"><input type="number" id="resQty" value="1" class="w-full bg-white p-3 rounded-xl font-bold text-center border border-slate-100 text-lg outline-none"></div>
+                    </div>
+                    <button onclick="confirmAdd()" class="w-full bg-marine text-white font-bold py-4 rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button>
+                    <button onclick="cancelAdd()" class="w-full text-xs font-bold text-slate-400 uppercase tracking-widest">Cancel</button>
+                </div>
+                <div id="addCustom" class="hide bg-mist p-5 rounded-2xl border border-slate-100 animate-slide-up space-y-3">
+                    <p class="text-xs font-bold text-slate-400 uppercase">Add New Item</p>
+                    <input type="text" id="custName" placeholder="Food Name" class="w-full bg-white p-3 rounded-xl font-bold border border-slate-100">
+                    <input type="number" id="custCal" placeholder="Calories per unit" class="w-full bg-white p-3 rounded-xl font-bold border border-slate-100">
+                    <button onclick="saveCustom()" class="w-full bg-punch text-white font-bold py-3 rounded-xl btn-click">Save & Add</button>
+                </div>
             </div>
             <div class="space-y-4"><p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-1">Today's Meals</p><div id="logContainer" class="space-y-3 pb-10"></div></div>
         </div>
@@ -148,109 +151,36 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_VERSION_3_FULL";
+        const KEY = "FITFLOW_PRO_VERSION_3_FINAL";
         let state = JSON.parse(localStorage.getItem(KEY));
         let tempFood = null; 
         
         let foodDB = {
-            // Breakfast (South Indian)
-            "idli": { cal: 39, unit: "pc", type: "good" },
-            "dosa": { cal: 168, unit: "pc", type: "ok" },
-            "masala dosa": { cal: 350, unit: "pc", type: "bad" },
-            "rava dosa": { cal: 180, unit: "pc", type: "ok" },
-            "poha": { cal: 250, unit: "cup", type: "ok" },
-            "upma": { cal: 250, unit: "cup", type: "ok" },
-            "pongal": { cal: 300, unit: "cup", type: "bad" },
-            "vada": { cal: 170, unit: "pc", type: "bad" },
-            "medu vada": { cal: 170, unit: "pc", type: "bad" },
-            "puri": { cal: 101, unit: "pc", type: "bad" },
-            "chapati": { cal: 104, unit: "pc", type: "good" },
-            "parotta": { cal: 300, unit: "pc", type: "bad" },
-            "aloo paratha": { cal: 290, unit: "pc", type: "bad" },
-            "ragi mudde": { cal: 300, unit: "ball", type: "good" },
-
-            // Rice Varieties
-            "white rice": { cal: 130, unit: "cup", type: "ok" },
-            "brown rice": { cal: 111, unit: "cup", type: "good" },
-            "curd rice": { cal: 200, unit: "cup", type: "good" },
-            "sambar rice": { cal: 220, unit: "cup", type: "ok" },
-            "lemon rice": { cal: 250, unit: "cup", type: "ok" },
-            "tomato rice": { cal: 230, unit: "cup", type: "ok" },
-            "tamarind rice": { cal: 280, unit: "cup", type: "bad" },
-            "veg biryani": { cal: 250, unit: "cup", type: "bad" },
-            "chicken biryani": { cal: 290, unit: "cup", type: "bad" },
-            "mutton biryani": { cal: 350, unit: "cup", type: "bad" },
-            "egg biryani": { cal: 270, unit: "cup", type: "bad" },
-            "ghee rice": { cal: 300, unit: "cup", type: "bad" },
-
-            // Curries & Sides
-            "sambar": { cal: 100, unit: "bowl", type: "good" },
-            "rasam": { cal: 40, unit: "bowl", type: "good" },
-            "dal fry": { cal: 150, unit: "bowl", type: "good" },
-            "chana masala": { cal: 165, unit: "bowl", type: "good" },
-            "rajma": { cal: 200, unit: "bowl", type: "good" },
-            "aloo gobi": { cal: 150, unit: "bowl", type: "ok" },
-            "paneer butter masala": { cal: 350, unit: "bowl", type: "bad" },
-            "palak paneer": { cal: 250, unit: "bowl", type: "good" },
-            "veg kurma": { cal: 220, unit: "bowl", type: "ok" },
-            "chicken curry": { cal: 240, unit: "bowl", type: "ok" },
-            "butter chicken": { cal: 400, unit: "bowl", type: "bad" },
-            "fish curry": { cal: 200, unit: "bowl", type: "good" },
-            "mutton curry": { cal: 350, unit: "bowl", type: "bad" },
-            "egg curry": { cal: 180, unit: "bowl", type: "good" },
-            "pepper chicken": { cal: 280, unit: "bowl", type: "bad" },
-            "coconut chutney": { cal: 100, unit: "tbsp", type: "bad" },
-            "tomato chutney": { cal: 40, unit: "tbsp", type: "good" },
-            "mint chutney": { cal: 20, unit: "tbsp", type: "good" },
-            "peanut chutney": { cal: 120, unit: "tbsp", type: "bad" },
-            "veg poriyal": { cal: 80, unit: "bowl", type: "good" },
-            "avial": { cal: 150, unit: "bowl", type: "good" },
-            "cucumber raita": { cal: 50, unit: "bowl", type: "good" },
-
-            // Fruits
-            "banana": { cal: 105, unit: "pc", type: "good" },
-            "apple": { cal: 95, unit: "pc", type: "good" },
-            "orange": { cal: 62, unit: "pc", type: "good" },
-            "papaya": { cal: 50, unit: "cup", type: "good" },
-            "guava": { cal: 38, unit: "pc", type: "good" },
-            "watermelon": { cal: 30, unit: "cup", type: "good" },
-            "pomegranate": { cal: 83, unit: "cup", type: "good" },
-            "grapes": { cal: 67, unit: "cup", type: "ok" },
-            "mango": { cal: 200, unit: "pc", type: "bad" },
-
-            // Snacks & Junk
-            "samosa": { cal: 260, unit: "pc", type: "bad" },
-            "veg puff": { cal: 250, unit: "pc", type: "bad" },
-            "egg puff": { cal: 300, unit: "pc", type: "bad" },
-            "bajji": { cal: 150, unit: "pc", type: "bad" },
-            "pakoda": { cal: 300, unit: "plate", type: "bad" },
-            "mixture": { cal: 350, unit: "cup", type: "bad" },
-            "murukku": { cal: 150, unit: "pc", type: "bad" },
-            "biscuit": { cal: 50, unit: "pc", type: "bad" },
-            "cake": { cal: 300, unit: "slice", type: "bad" },
-            "pizza": { cal: 285, unit: "slice", type: "bad" },
-            "burger": { cal: 400, unit: "pc", type: "bad" },
-
-            // Beverages
-            "filter coffee": { cal: 40, unit: "cup", type: "ok" },
-            "tea": { cal: 40, unit: "cup", type: "ok" },
-            "green tea": { cal: 2, unit: "cup", type: "good" },
-            "milk": { cal: 150, unit: "cup", type: "ok" },
-            "buttermilk": { cal: 30, unit: "cup", type: "good" },
-            "lassi": { cal: 200, unit: "cup", type: "bad" },
-            "tender coconut": { cal: 40, unit: "cup", type: "good" },
-            "fresh juice": { cal: 120, unit: "glass", type: "ok" },
-            "coke": { cal: 140, unit: "can", type: "bad" },
-            "beer": { cal: 150, unit: "can", type: "bad" },
-
-            // Herbalife & Fitness
-            "f1 shake": { cal: 242, unit: "glass", type: "good" },
-            "pdm": { cal: 120, unit: "scoop", type: "good" },
-            "afresh": { cal: 4, unit: "cup", type: "good" },
-            "boiled egg": { cal: 70, unit: "pc", type: "good" },
-            "omelette": { cal: 140, unit: "pc", type: "ok" },
-            "grilled chicken": { cal: 200, unit: "pc", type: "good" },
-            "almonds": { cal: 7, unit: "pc", type: "good" }
+            "idli": { cal: 39, unit: "pc", type: "good", desc: "Steamed, fermented, great for gut health." },
+            "dosa": { cal: 168, unit: "pc", type: "ok", desc: "Good carbs, but watch the oil." },
+            "masala dosa": { cal: 350, unit: "pc", type: "bad", desc: "High calorie potato filling + oil." },
+            "upma": { cal: 250, unit: "cup", type: "ok", desc: "Rava based, can be high in oil." },
+            "pongal": { cal: 300, unit: "cup", type: "bad", desc: "High ghee & rice content. Sleepy food." },
+            "chapati": { cal: 104, unit: "pc", type: "good", desc: "Whole wheat complex carbohydrates." },
+            "parotta": { cal: 300, unit: "pc", type: "bad", desc: "Refined flour (Maida), hard to digest." },
+            "vada": { cal: 170, unit: "pc", type: "bad", desc: "Deep fried. High fat content." },
+            "coconut chutney": { cal: 100, unit: "tbsp", type: "bad", desc: "Healthy fat, but very calorie dense." },
+            "tomato chutney": { cal: 40, unit: "tbsp", type: "good", desc: "Lighter, tangy option." },
+            "sambar": { cal: 100, unit: "bowl", type: "good", desc: "Protein rich lentil & vegetable stew." },
+            "rasam": { cal: 40, unit: "bowl", type: "good", desc: "Great for digestion and immunity." },
+            "curd rice": { cal: 200, unit: "cup", type: "good", desc: "Probiotic, cooling for the stomach." },
+            "veg biryani": { cal: 250, unit: "cup", type: "bad", desc: "Often oily with moderate veggies." },
+            "chicken biryani": { cal: 290, unit: "cup", type: "bad", desc: "Calorie bomb. High fat & carbs." },
+            "chicken curry": { cal: 240, unit: "bowl", type: "ok", desc: "Good protein, watch the gravy oil." },
+            "fish curry": { cal: 200, unit: "bowl", type: "good", desc: "Omega-3 rich, usually lighter than chicken." },
+            "white rice": { cal: 130, unit: "cup", type: "ok", desc: "Quick energy, high glycemic index." },
+            "brown rice": { cal: 111, unit: "cup", type: "good", desc: "High fiber, slow energy release." },
+            "filter coffee": { cal: 40, unit: "cup", type: "ok", desc: "Caffeine kick. Watch the sugar." },
+            "tea": { cal: 40, unit: "cup", type: "ok", desc: "Comfort drink. Watch the sugar." },
+            "banana": { cal: 105, unit: "pc", type: "good", desc: "Instant energy & potassium." },
+            "f1 shake": { cal: 242, unit: "glass", type: "good", desc: "Balanced complete nutrition meal." },
+            "afresh": { cal: 4, unit: "cup", type: "good", desc: "Zero calorie energy booster." },
+            "almonds": { cal: 7, unit: "pc", type: "good", desc: "Healthy fats & protein." }
         };
 
         const CONTENT = {
@@ -265,7 +195,10 @@
 
         window.onload = () => {
             if (!state) { document.getElementById('setup-screen').classList.remove('hide'); } 
-            else { init(); }
+            else { 
+                if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods };
+                init(); 
+            }
         };
 
         function init() { 
@@ -334,16 +267,50 @@
             val = val.toLowerCase(); const list = document.getElementById('suggestions');
             if(val.length < 1) { list.classList.add('hide'); return; }
             const matches = Object.keys(foodDB).filter(k => k.includes(val));
-            if(matches.length === 0) { list.classList.add('hide'); return; }
+            if(matches.length === 0) { 
+                list.innerHTML = `<div onclick="showAddCustom('${val}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer text-center text-xs font-bold text-punch">+ Add "${val}" to Database</div>`;
+                list.classList.remove('hide'); 
+                return; 
+            }
             list.innerHTML = matches.map(f => `<div onclick="selectFood('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center transition-all"><span class="font-bold text-marine capitalize text-sm">${f}</span><span class="text-xs text-slate-400 font-bold bg-slate-100 px-2 py-1 rounded-full">${foodDB[f].cal} kcal</span></div>`).join('');
             list.classList.remove('hide');
         }
 
         function selectFood(name) {
-            const item = foodDB[name]; tempFood = { name: name, calPerUnit: item.cal, desc: item.effect || "Healthy choice." };
+            const item = foodDB[name]; tempFood = { name: name, calPerUnit: item.cal, desc: item.desc || "Healthy choice.", type: item.type };
             document.getElementById('foodName').value = ""; document.getElementById('suggestions').classList.add('hide');
-            document.getElementById('resName').innerText = name; document.getElementById('resCal').innerText = item.cal + " kcal/unit"; document.getElementById('resDesc').innerText = tempFood.desc;
-            document.getElementById('analysisResult').classList.remove('hide'); document.getElementById('resQty').value = 1;
+            document.getElementById('resName').innerText = name; 
+            document.getElementById('resCal').innerText = item.cal + " kcal"; 
+            document.getElementById('resDesc').innerText = tempFood.desc;
+            
+            const badge = document.getElementById('resBadge');
+            if(item.type === 'good') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-600"; badge.innerText = "Good Choice"; }
+            else if(item.type === 'bad') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-600"; badge.innerText = "Limit This"; }
+            else { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-100 text-orange-600"; badge.innerText = "Moderate"; }
+            
+            document.getElementById('analysisResult').classList.remove('hide'); 
+            document.getElementById('addCustom').classList.add('hide');
+            document.getElementById('resQty').value = 1;
+        }
+
+        function showAddCustom(val) {
+            document.getElementById('suggestions').classList.add('hide');
+            document.getElementById('custName').value = val;
+            document.getElementById('addCustom').classList.remove('hide');
+            document.getElementById('analysisResult').classList.add('hide');
+        }
+
+        function saveCustom() {
+            const n = document.getElementById('custName').value;
+            const c = parseFloat(document.getElementById('custCal').value);
+            if(!n || !c) return alert("Enter valid details");
+            
+            if(!state.customFoods) state.customFoods = {};
+            state.customFoods[n.toLowerCase()] = { cal: c, unit: 'unit', type: 'ok', desc: 'Custom added food' };
+            foodDB[n.toLowerCase()] = { cal: c, unit: 'unit', type: 'ok', desc: 'Custom added food' };
+            save();
+            selectFood(n.toLowerCase());
+            document.getElementById('addCustom').classList.add('hide');
         }
 
         function confirmAdd() {
@@ -353,6 +320,8 @@
             state.consumed.unshift({ name: tempFood.name, cal: totalCal, qty: qty, time: Date.now() });
             save(); updateInfoUI(); document.getElementById('analysisResult').classList.add('hide');
         }
+        
+        function cancelAdd() { document.getElementById('analysisResult').classList.add('hide'); }
 
         function shareWhatsApp() { 
             const total = state.consumed.reduce((sum, item) => sum + item.cal, 0); 
@@ -380,7 +349,7 @@
         function finishSetup() { 
             const n = document.getElementById('setupName').value; const h = parseFloat(document.getElementById('setupH').value); const w = parseFloat(document.getElementById('setupW').value); const g = document.getElementById('setupGender').value;
             let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2);
-            state = { name: n, weight: w, height: h, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0, calGoal: g==='male'?2200:1800, consumed: [], startDate: Date.now(), history: {}, todayTasks: {}, lastLogin: new Date().toISOString().split('T')[0] }; save(); location.reload(); 
+            state = { name: n, weight: w, height: h, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0, calGoal: g==='male'?2200:1800, consumed: [], startDate: Date.now(), history: {}, todayTasks: {}, lastLogin: new Date().toISOString().split('T')[0], customFoods: {} }; save(); location.reload(); 
         }
         function toggleTask(task) { 
             state.todayTasks[task] = !state.todayTasks[task]; 
@@ -410,6 +379,7 @@
         function masterReset() { if(prompt("PIN:") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
         function selectGender(g) { document.getElementById('setupGender').value = g; document.getElementById('btnMale').className = g==='male'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; document.getElementById('btnFemale').className = g==='female'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; }
         function checkNewDay() { const today = new Date().toISOString().split('T')[0]; if (state.lastLogin !== today) { state.lastLogin = today; state.waterC = 0; state.consumed = []; state.todayTasks = {}; save(); } }
+        function enableNotifications() { Notification.requestPermission(); }
     </script>
 </body>
 </html>
