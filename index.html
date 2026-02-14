@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V6</title>
+    <title>FitFlow Pro V6.1 (Final)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -36,7 +36,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.0</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.1</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -173,7 +173,7 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_VERSION_6_FINAL";
+        const KEY = "FITFLOW_PRO_VERSION_6_1_FINAL";
         let state = JSON.parse(localStorage.getItem(KEY));
         let foodDB = {}; 
         let tempFood = null; 
@@ -196,7 +196,6 @@
 
         async function loadFoodData() {
             try {
-                // FETCHING THE EXTERNAL JSON FILE
                 const response = await fetch('food.json');
                 const data = await response.json();
                 data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
@@ -212,7 +211,6 @@
             document.getElementById('main-app').classList.remove('hide'); 
             document.getElementById('userDisp').innerText = state.name; 
             checkNewDay(); 
-            // Check Disclaimer on Load (Home)
             checkHomeDisclaimer();
             updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); 
         }
@@ -288,12 +286,21 @@
             list.classList.remove('hide');
         }
 
+        // --- FIXED SELECT FOOD FUNCTION ---
         function selectFood(name) {
             const item = foodDB[name];
+            
+            // 1. Reset Interface
             document.getElementById('foodName').value = "";
             document.getElementById('suggestions').classList.add('hide');
+            
+            // 2. FORCE CLOSE & CLEAR ALL MODALS
+            document.getElementById('prepModal').classList.add('hide');
+            document.getElementById('analysisResult').classList.add('hide');
+            document.getElementById('prepOptions').innerHTML = ""; // This wipes the previous options!
 
             if (item.variants) {
+                // Populate New Options
                 const prepDiv = document.getElementById('prepOptions');
                 prepDiv.innerHTML = item.variants.map((v, i) => 
                     `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm hover:border-punch transition-all">
@@ -303,6 +310,7 @@
                 ).join('');
                 document.getElementById('prepModal').classList.remove('hide');
             } else {
+                // Direct Add
                 showFinalModal(item.name, item.cal, item.desc || "Standard portion", item.type);
             }
         }
