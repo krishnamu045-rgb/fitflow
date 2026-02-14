@@ -72,15 +72,10 @@
       { "name": "Sweet Pongal", "cal": 400, "unit": "cup", "type": "bad", "desc": "Jaggery & Ghee loaded." }
     ]
   },
-  { "name": "sambar", "cal": 80, "unit": "bowl", "type": "good", "desc": "Lentil & veg stew (Individual)." },
-  { "name": "chutney", "cal": 50, "unit": "tbsp", "type": "bad", "desc": "Coconut based (High calorie)." },
-  { "name": "podi / gunpowder", "cal": 60, "unit": "tbsp", "type": "bad", "desc": "Mixed with oil/ghee." },
-  { "name": "rasam", "cal": 40, "unit": "bowl", "type": "good", "desc": "Great for digestion and immunity." },
-  { "name": "dal fry", "cal": 150, "unit": "bowl", "type": "good", "desc": "Comforting lentil curry. High protein." },
-  { "name": "rajma", "cal": 200, "unit": "bowl", "type": "good", "desc": "Kidney beans, excellent for muscle." },
-  { "name": "chana masala", "cal": 165, "unit": "bowl", "type": "good", "desc": "Chickpeas are high fiber and protein." },
-  { "name": "naan", "cal": 260, "unit": "pc", "type": "bad", "desc": "Refined flour cooked in tandoor." },
-  { "name": "poha", "cal": 250, "unit": "cup", "type": "ok", "desc": "Flattened rice, light and digestible." },
+  {
+    "name": "sambar", "cal": 80, "unit": "bowl", "type": "good", "desc": "Lentil & veg stew (Individual)." },
+    { "name": "chutney", "cal": 50, "unit": "tbsp", "type": "bad", "desc": "Coconut based (High calorie)." },
+    { "name": "podi / gunpowder", "cal": 60, "unit": "tbsp", "type": "bad", "desc": "Mixed with oil/ghee." },
 
   {
     "name": "leftovers / stored food",
