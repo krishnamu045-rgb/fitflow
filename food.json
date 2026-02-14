@@ -1,9 +1,36 @@
 [
-  { "name": "idli", "cal": 39, "unit": "pc", "type": "good", "desc": "Steamed & fermented." },
-  { "name": "dosa", "cal": 168, "unit": "pc", "type": "ok", "desc": "Good carbs, watch oil." },
-  { "name": "sambar", "cal": 100, "unit": "bowl", "type": "good", "desc": "Lentil stew." },
-  
-  { 
+  { "name": "idli", "cal": 39, "unit": "pc", "type": "good", "desc": "Steamed & fermented. Great gut health." },
+  {
+    "name": "dosa",
+    "variants": [
+      { "name": "Plain Dosa", "cal": 130, "unit": "pc", "type": "good", "desc": "Light and crispy." },
+      { "name": "Masala Dosa", "cal": 350, "unit": "pc", "type": "bad", "desc": "Potato filling + extra oil." },
+      { "name": "Rava Dosa", "cal": 180, "unit": "pc", "type": "ok", "desc": "Instant, moderate calories." },
+      { "name": "Ghee Roast", "cal": 220, "unit": "pc", "type": "bad", "desc": "Roasted generously in ghee." }
+    ]
+  },
+  { "name": "vada", "cal": 170, "unit": "pc", "type": "bad", "desc": "Deep fried lentil doughnut. High fat." },
+  { "name": "poha", "cal": 250, "unit": "cup", "type": "ok", "desc": "Flattened rice, light and digestible." },
+  { "name": "upma", "cal": 250, "unit": "cup", "type": "ok", "desc": "Rava based, often high in oil." },
+  { "name": "pongal", "cal": 300, "unit": "cup", "type": "bad", "desc": "High ghee & rice content. Sleepy food." },
+  {
+    "name": "paneer",
+    "variants": [
+      { "name": "Raw / Grilled", "cal": 260, "unit": "100g", "type": "good", "desc": "High protein, healthy fats." },
+      { "name": "Palak Paneer", "cal": 240, "unit": "bowl", "type": "good", "desc": "Spinach base adds fiber." },
+      { "name": "Paneer Butter Masala", "cal": 400, "unit": "bowl", "type": "bad", "desc": "Loaded with cream, butter & sugar." },
+      { "name": "Chilli Paneer / 65", "cal": 350, "unit": "plate", "type": "bad", "desc": "Deep fried + sugary sauces." }
+    ]
+  },
+  {
+    "name": "gobi / cauliflower",
+    "variants": [
+      { "name": "Steamed / Boiled", "cal": 40, "unit": "cup", "type": "good", "desc": "Low calorie, high fiber." },
+      { "name": "Aloo Gobi Curry", "cal": 150, "unit": "bowl", "type": "ok", "desc": "Healthy if low oil is used." },
+      { "name": "Gobi Manchurian", "cal": 290, "unit": "plate", "type": "bad", "desc": "Deep fried flour coating." }
+    ]
+  },
+  {
     "name": "potato", 
     "variants": [
       { "name": "Boiled / Mashed", "cal": 87, "unit": "cup", "type": "good", "desc": "High satiety, good energy." },
@@ -12,7 +39,6 @@
       { "name": "Lays Chips (Small)", "cal": 165, "unit": "pack", "type": "bad", "desc": "Processed carbs & sodium." }
     ]
   },
-  
   {
     "name": "chicken",
     "variants": [
@@ -22,17 +48,66 @@
       { "name": "Butter Chicken", "cal": 450, "unit": "bowl", "type": "bad", "desc": "Heavy cream and butter load." }
     ]
   },
-
+  {
+    "name": "fish",
+    "variants": [
+      { "name": "Fish Curry", "cal": 200, "unit": "bowl", "type": "good", "desc": "Omega-3 rich, tangy gravy." },
+      { "name": "Grilled / Tandoori", "cal": 180, "unit": "pc", "type": "good", "desc": "Low fat preparation." },
+      { "name": "Fish Fry", "cal": 300, "unit": "pc", "type": "bad", "desc": "Deep fried in oil." }
+    ]
+  },
   {
     "name": "egg",
     "variants": [
       { "name": "Boiled Egg", "cal": 70, "unit": "pc", "type": "good", "desc": "Gold standard protein." },
       { "name": "Omelette (1 Egg)", "cal": 110, "unit": "pc", "type": "ok", "desc": "Oil increases calories." },
-      { "name": "Egg Bhurji / Fried", "cal": 160, "unit": "plate", "type": "ok", "desc": "Healthy if less oil used." },
+      { "name": "Egg Bhurji", "cal": 160, "unit": "plate", "type": "ok", "desc": "Healthy if less oil used." },
       { "name": "Egg Puff", "cal": 300, "unit": "pc", "type": "bad", "desc": "Maida and bakery fat." }
     ]
   },
-
+  {
+    "name": "rice",
+    "variants": [
+      { "name": "White Rice", "cal": 130, "unit": "cup", "type": "ok", "desc": "Portion control is key." },
+      { "name": "Brown Rice", "cal": 111, "unit": "cup", "type": "good", "desc": "Fiber rich." },
+      { "name": "Curd Rice", "cal": 200, "unit": "cup", "type": "good", "desc": "Great for digestion." },
+      { "name": "Jeera / Lemon Rice", "cal": 250, "unit": "cup", "type": "ok", "desc": "Oil adds calories." },
+      { "name": "Fried Rice", "cal": 350, "unit": "plate", "type": "bad", "desc": "Oily and high sodium." }
+    ]
+  },
+  {
+    "name": "biryani",
+    "variants": [
+      { "name": "Veg Biryani", "cal": 250, "unit": "cup", "type": "bad", "desc": "Often oily." },
+      { "name": "Chicken Biryani", "cal": 290, "unit": "cup", "type": "bad", "desc": "Calorie dense." },
+      { "name": "Mutton Biryani", "cal": 350, "unit": "cup", "type": "bad", "desc": "Very high fat." }
+    ]
+  },
+  {
+    "name": "corn",
+    "variants": [
+      { "name": "Boiled Corn", "cal": 90, "unit": "cup", "type": "good", "desc": "Fiber rich snack." },
+      { "name": "Sweet Corn (Butter)", "cal": 150, "unit": "cup", "type": "bad", "desc": "Butter adds saturated fat." },
+      { "name": "Popcorn (Plain)", "cal": 100, "unit": "bowl", "type": "good", "desc": "Whole grain snack." },
+      { "name": "Popcorn (Cheese/Butter)", "cal": 300, "unit": "tub", "type": "bad", "desc": "Calorie bomb." }
+    ]
+  },
+  {
+    "name": "maggi / noodles",
+    "variants": [
+      { "name": "Plain Maggi", "cal": 300, "unit": "pack", "type": "bad", "desc": "Refined flour (Maida)." },
+      { "name": "Atta Noodles", "cal": 280, "unit": "pack", "type": "ok", "desc": "Slightly better fiber." },
+      { "name": "Fried Noodles", "cal": 400, "unit": "plate", "type": "bad", "desc": "Deep fried and oily." }
+    ]
+  },
+  {
+    "name": "sandwich",
+    "variants": [
+      { "name": "Veg Sandwich (Plain)", "cal": 150, "unit": "pc", "type": "good", "desc": "Good light meal." },
+      { "name": "Grilled Cheese", "cal": 300, "unit": "pc", "type": "bad", "desc": "Butter and cheese load." },
+      { "name": "Mayo / Club", "cal": 350, "unit": "pc", "type": "bad", "desc": "Mayonnaise is pure fat." }
+    ]
+  },
   {
     "name": "apple",
     "variants": [
@@ -41,7 +116,6 @@
       { "name": "Packaged / Sugar Juice", "cal": 160, "unit": "glass", "type": "bad", "desc": "Basically sugar water." }
     ]
   },
-  
   {
     "name": "orange",
     "variants": [
@@ -50,7 +124,32 @@
       { "name": "Tropicana / Packaged", "cal": 140, "unit": "glass", "type": "bad", "desc": "Added sugar and preservatives." }
     ]
   },
-
+  {
+    "name": "mango",
+    "variants": [
+      { "name": "Whole Fruit", "cal": 200, "unit": "pc", "type": "ok", "desc": "Natural sugar, enjoy in moderation." },
+      { "name": "Mango Shake", "cal": 350, "unit": "glass", "type": "bad", "desc": "Milk + Sugar + Mango = Calories." },
+      { "name": "Maaza / Slice", "cal": 150, "unit": "glass", "type": "bad", "desc": "Mainly sugar syrup." }
+    ]
+  },
+  {
+    "name": "ice cream",
+    "variants": [
+      { "name": "Vanilla Scoop", "cal": 207, "unit": "scoop", "type": "bad", "desc": "High sugar and fat." },
+      { "name": "Chocolate Scoop", "cal": 216, "unit": "scoop", "type": "bad", "desc": "Calorie dense." },
+      { "name": "Kulfi Stick", "cal": 180, "unit": "stick", "type": "bad", "desc": "Condensed milk sugar." },
+      { "name": "Cone Ice Cream", "cal": 300, "unit": "pc", "type": "bad", "desc": "Wafer adds extra calories." }
+    ]
+  },
+  {
+    "name": "soft drink",
+    "variants": [
+      { "name": "Coke / Pepsi", "cal": 140, "unit": "can", "type": "bad", "desc": "Pure liquid sugar." },
+      { "name": "Diet Coke", "cal": 1, "unit": "can", "type": "ok", "desc": "Artificial sweeteners." },
+      { "name": "Maaza / Slice", "cal": 150, "unit": "glass", "type": "bad", "desc": "Mango pulp sugar." },
+      { "name": "Soda (Plain)", "cal": 0, "unit": "glass", "type": "good", "desc": "Just carbonated water." }
+    ]
+  },
   {
     "name": "snacks",
     "variants": [
@@ -63,15 +162,31 @@
       { "name": "Roadside Pani Puri", "cal": 50, "unit": "plate", "type": "ok", "desc": "Low cal, check hygiene." }
     ]
   },
-
+  { "name": "sambar", "cal": 100, "unit": "bowl", "type": "good", "desc": "Protein rich lentil & vegetable stew." },
+  { "name": "rasam", "cal": 40, "unit": "bowl", "type": "good", "desc": "Great for digestion and immunity." },
+  { "name": "dal fry", "cal": 150, "unit": "bowl", "type": "good", "desc": "Comforting lentil curry. High protein." },
+  { "name": "rajma", "cal": 200, "unit": "bowl", "type": "good", "desc": "Kidney beans, excellent for muscle." },
+  { "name": "chana masala", "cal": 165, "unit": "bowl", "type": "good", "desc": "Chickpeas are high fiber and protein." },
+  { "name": "chapati", "cal": 104, "unit": "pc", "type": "good", "desc": "Whole wheat complex carbohydrates." },
+  { "name": "parotta", "cal": 300, "unit": "pc", "type": "bad", "desc": "Refined flour (Maida), hard to digest." },
+  { "name": "naan", "cal": 260, "unit": "pc", "type": "bad", "desc": "Refined flour cooked in tandoor." },
+  { "name": "puri", "cal": 101, "unit": "pc", "type": "bad", "desc": "Deep fried wheat bread." },
   { "name": "banana", "cal": 105, "unit": "pc", "type": "good", "desc": "Instant energy." },
-  { "name": "white rice", "cal": 130, "unit": "cup", "type": "ok", "desc": "Portion control is key." },
-  { "name": "brown rice", "cal": 111, "unit": "cup", "type": "good", "desc": "High fiber." },
-  { "name": "chapati", "cal": 104, "unit": "pc", "type": "good", "desc": "Whole wheat." },
-  { "name": "curd rice", "cal": 200, "unit": "cup", "type": "good", "desc": "Probiotic." },
+  { "name": "papaya", "cal": 50, "unit": "cup", "type": "good", "desc": "Great for digestion." },
   { "name": "tea", "cal": 40, "unit": "cup", "type": "ok", "desc": "Comfort drink." },
   { "name": "coffee", "cal": 40, "unit": "cup", "type": "ok", "desc": "Caffeine kick." },
-  { "name": "coke", "cal": 140, "unit": "can", "type": "bad", "desc": "Liquid sugar." },
+  { "name": "green tea", "cal": 2, "unit": "cup", "type": "good", "desc": "Metabolism booster." },
+  { "name": "milk", "cal": 150, "unit": "cup", "type": "ok", "desc": "Calcium and protein." },
+  { "name": "buttermilk", "cal": 30, "unit": "cup", "type": "good", "desc": "Probiotic and cooling." },
+  { "name": "lassi", "cal": 200, "unit": "cup", "type": "bad", "desc": "Often loaded with sugar." },
+  { "name": "tender coconut", "cal": 40, "unit": "cup", "type": "good", "desc": "Natural electrolytes." },
+  { "name": "beer", "cal": 150, "unit": "can", "type": "bad", "desc": "Empty liquid calories." },
   { "name": "f1 shake", "cal": 242, "unit": "glass", "type": "good", "desc": "Herbalife Meal." },
-  { "name": "afresh", "cal": 4, "unit": "cup", "type": "good", "desc": "Energy." }
+  { "name": "pdm", "cal": 120, "unit": "scoop", "type": "good", "desc": "Protein mix." },
+  { "name": "afresh", "cal": 4, "unit": "cup", "type": "good", "desc": "Energy." },
+  { "name": "protein bar", "cal": 140, "unit": "pc", "type": "good", "desc": "Quick snack." },
+  { "name": "multivitamin", "cal": 0, "unit": "tab", "type": "good", "desc": "Essential micronutrients." },
+  { "name": "cell-u-loss", "cal": 0, "unit": "tab", "type": "good", "desc": "Electrolyte balance." },
+  { "name": "herbal control", "cal": 5, "unit": "tab", "type": "good", "desc": "Metabolism support." },
+  { "name": "aloe concentrate", "cal": 5, "unit": "cap", "type": "good", "desc": "Digestive health." }
 ]
