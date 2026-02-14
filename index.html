@@ -36,7 +36,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 3.0 (Smart)</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 3.0</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -54,8 +54,22 @@
             <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button>
         </div>
     </div>
-    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety</h2></div><div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Clear a 6ft safe zone around you to prevent injury.</p><p>2. Wear shoes, keep water handy, and don't push through pain.</p></div><button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button></div></div>
-    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition</h2></div><div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Calories are estimates based on standard Indian recipes.</p><p>2. Values vary based on oil use and portion size.</p></div><button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button></div></div>
+
+    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety First</h2></div>
+            <div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Clear a 6ft safe zone around you.</p><p>2. Wear shoes and keep water handy.</p><p>3. Stop if you feel pain.</p></div>
+            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button>
+        </div>
+    </div>
+
+    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition</h2></div>
+            <div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Calories are estimates based on standard recipes.</p><p>2. Values vary based on oil & portion size.</p></div>
+            <button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button>
+        </div>
+    </div>
 
     <div id="main-app" class="pb-32 hide">
         <div class="max-w-md mx-auto p-5 pb-0">
@@ -159,7 +173,7 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_VERSION_3_SMART";
+        const KEY = "FITFLOW_PRO_VERSION_3_FINAL";
         let state = JSON.parse(localStorage.getItem(KEY));
         let foodDB = {}; 
         let tempFood = null; 
@@ -193,12 +207,17 @@
             document.getElementById('setup-screen').classList.add('hide'); 
             document.getElementById('main-app').classList.remove('hide'); 
             document.getElementById('userDisp').innerText = state.name; 
-            checkNewDay(); checkHomeDisclaimer(); updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); 
+            checkNewDay(); 
+            // Check Disclaimer on Load (Home)
+            checkHomeDisclaimer();
+            updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); 
         }
 
         function checkHomeDisclaimer() { if (state.lastDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('homeDisclaimerModal').classList.remove('hide'); }
         function acceptHomeDisclaimer() { state.lastDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('homeDisclaimerModal').classList.add('hide'); }
+        function checkWorkoutSafety() { if (state.lastWorkoutSafetyDate !== new Date().toISOString().split('T')[0]) document.getElementById('workoutSafetyModal').classList.remove('hide'); }
         function acceptWorkoutSafety() { state.lastWorkoutSafetyDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('workoutSafetyModal').classList.add('hide'); }
+        function checkFoodDisclaimer() { if (state.lastFoodDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('foodDisclaimerModal').classList.remove('hide'); }
         function acceptFoodDisclaimer() { state.lastFoodDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('foodDisclaimerModal').classList.add('hide'); }
 
         function updateUI() { 
@@ -353,7 +372,10 @@
             ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300'); 
             document.getElementById(`${tab}-section`).classList.remove('hide'); 
             document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active'; 
-            if(tab === 'workout') { renderW(); checkWorkoutSafety(); } if(tab === 'info') checkFoodDisclaimer(); 
+            
+            // CHECK TRIGGERS FOR POPUPS
+            if(tab === 'workout') { renderW(); checkWorkoutSafety(); } 
+            if(tab === 'info') checkFoodDisclaimer(); 
         }
 
         function addW(v) { state.waterC = Math.max(0, state.waterC + v); updateUI(); save(); }
