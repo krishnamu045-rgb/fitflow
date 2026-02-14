@@ -15,19 +15,162 @@
   { "name": "pongal", "cal": 300, "unit": "cup", "type": "bad", "desc": "High ghee & rice content." },
 
   {
+    "name": "leftovers / stored food",
+    "variants": [
+      { "name": "Freshly Cooked Meal", "cal": 0, "unit": "serving", "type": "good", "desc": "Highest nutrition. Best for digestion." },
+      { "name": "Fridge Leftover (1 Day)", "cal": 0, "unit": "serving", "type": "ok", "desc": "Safe, but lower nutrition. Reheat well." },
+      { "name": "Old Stale Food (>3 Days)", "cal": 0, "unit": "serving", "type": "bad", "desc": "High histamine & bacteria. Avoid!" },
+      { "name": "Reheated / Reused Oil", "cal": 120, "unit": "tbsp", "type": "bad", "desc": "Creates trans-fats. Highly toxic." }
+    ]
+  },
+
+  {
+    "name": "milkshake / thick shake",
+    "variants": [
+      { "name": "Oreo / Belgium Thick Shake", "cal": 550, "unit": "glass", "type": "bad", "desc": "Sugar bomb! Ice cream + Cream + Sugar." },
+      { "name": "Falooda (Loaded)", "cal": 450, "unit": "glass", "type": "bad", "desc": "Vermicelli, syrup, and ice cream load." },
+      { "name": "Cold Coffee (with Ice Cream)", "cal": 350, "unit": "glass", "type": "bad", "desc": "Dessert disguised as a drink." },
+      { "name": "Mango / Strawberry Shake", "cal": 300, "unit": "glass", "type": "bad", "desc": "Often made with 50% sugar syrup." },
+      { "name": "Homemade Milkshake (No Sugar)", "cal": 180, "unit": "glass", "type": "ok", "desc": "Calcium & Protein rich if plain." }
+    ]
+  },
+
+  {
+    "name": "noodles / chow mein",
+    "variants": [
+      { "name": "Veg Hakka Noodles", "cal": 350, "unit": "plate", "type": "bad", "desc": "Refined flour loaded with oil." },
+      { "name": "Egg/Chicken Noodles", "cal": 450, "unit": "plate", "type": "bad", "desc": "High protein but very high fat." },
+      { "name": "Schezwan Noodles", "cal": 500, "unit": "plate", "type": "bad", "desc": "Loaded with sugary & oily sauce." },
+      { "name": "Fried Noodles (Chopsuey)", "cal": 550, "unit": "plate", "type": "bad", "desc": "Deep fried crisp noodles." }
+    ]
+  },
+
+  {
+    "name": "fried rice",
+    "variants": [
+      { "name": "Veg Fried Rice", "cal": 350, "unit": "plate", "type": "bad", "desc": "White rice fried in oil & MSG." },
+      { "name": "Egg Fried Rice", "cal": 400, "unit": "plate", "type": "bad", "desc": "Oil soaked eggs & rice." },
+      { "name": "Chicken Fried Rice", "cal": 480, "unit": "plate", "type": "bad", "desc": "Calorie dense roadside meal." },
+      { "name": "Schezwan Fried Rice", "cal": 520, "unit": "plate", "type": "bad", "desc": "Spicy oil & sugar load." }
+    ]
+  },
+
+  {
+    "name": "momos",
+    "variants": [
+      { "name": "Steamed Momos", "cal": 35, "unit": "pc", "type": "ok", "desc": "Better option, but wrapper is maida." },
+      { "name": "Fried Momos", "cal": 85, "unit": "pc", "type": "bad", "desc": "Deep fried refined flour." },
+      { "name": "Tandoori Momos", "cal": 50, "unit": "pc", "type": "ok", "desc": "Roasted, better than fried." },
+      { "name": "Momos with Mayo", "cal": 100, "unit": "pc", "type": "bad", "desc": "Mayo adds pure fat." }
+    ]
+  },
+
+  {
+    "name": "spring roll",
+    "variants": [
+      { "name": "Veg Spring Roll", "cal": 150, "unit": "pc", "type": "bad", "desc": "Deep fried maida roll." },
+      { "name": "Chicken Spring Roll", "cal": 180, "unit": "pc", "type": "bad", "desc": "Deep fried meat roll." }
+    ]
+  },
+
+  {
+    "name": "manchurian",
+    "variants": [
+      { "name": "Veg/Gobi Manchurian (Dry)", "cal": 250, "unit": "plate", "type": "bad", "desc": "Deep fried balls in sauce." },
+      { "name": "Manchurian Gravy", "cal": 350, "unit": "bowl", "type": "bad", "desc": "Thickened with corn flour & sugar." }
+    ]
+  },
+
+  {
+    "name": "soup",
+    "variants": [
+      { "name": "Tomato Soup", "cal": 60, "unit": "bowl", "type": "good", "desc": "Light and vitamin rich." },
+      { "name": "Sweet Corn Veg Soup", "cal": 90, "unit": "bowl", "type": "good", "desc": "Comforting warm starter." },
+      { "name": "Chicken Clear Soup", "cal": 70, "unit": "bowl", "type": "good", "desc": "High protein, low fat." },
+      { "name": "Manchow / Hot & Sour", "cal": 180, "unit": "bowl", "type": "bad", "desc": "Fried noodles and oil load." }
+    ]
+  },
+
+  {
+    "name": "paneer",
+    "variants": [
+      { "name": "Paneer Tikka (Grilled)", "cal": 180, "unit": "plate", "type": "good", "desc": "High protein starter." },
+      { "name": "Palak Paneer", "cal": 240, "unit": "bowl", "type": "good", "desc": "Spinach base adds fiber." },
+      { "name": "Paneer Butter Masala", "cal": 400, "unit": "bowl", "type": "bad", "desc": "Loaded with cream & butter." },
+      { "name": "Chilli Paneer", "cal": 350, "unit": "plate", "type": "bad", "desc": "Deep fried + sugary sauces." }
+    ]
+  },
+
+  {
+    "name": "chicken",
+    "variants": [
+      { "name": "Chicken Tikka / Tandoori", "cal": 180, "unit": "plate", "type": "good", "desc": "Clay oven grilled. Low fat." },
+      { "name": "Grilled Chicken", "cal": 165, "unit": "breast", "type": "good", "desc": "Pure lean protein." },
+      { "name": "Chicken Curry", "cal": 250, "unit": "bowl", "type": "ok", "desc": "Gravy adds fat calories." },
+      { "name": "Chilli Chicken", "cal": 400, "unit": "plate", "type": "bad", "desc": "Battered, fried & sauced." },
+      { "name": "Butter Chicken", "cal": 450, "unit": "bowl", "type": "bad", "desc": "Heavy cream and butter load." }
+    ]
+  },
+
+  {
+    "name": "mushroom",
+    "variants": [
+      { "name": "Mushroom Soup", "cal": 80, "unit": "bowl", "type": "good", "desc": "Creamy but healthy if homemade." },
+      { "name": "Mushroom Tikka", "cal": 140, "unit": "plate", "type": "good", "desc": "Grilled with spices, low oil." },
+      { "name": "Mushroom Manchurian", "cal": 280, "unit": "plate", "type": "bad", "desc": "Deep fried flour coating." }
+    ]
+  },
+
+  {
+    "name": "baby corn",
+    "variants": [
+      { "name": "Baby Corn Stir Fry", "cal": 110, "unit": "plate", "type": "good", "desc": "Crunchy and fiber rich." },
+      { "name": "Baby Corn Manchurian", "cal": 300, "unit": "plate", "type": "bad", "desc": "Deep fried batter." },
+      { "name": "Chilli Baby Corn", "cal": 280, "unit": "plate", "type": "bad", "desc": "Oily spicy starter." }
+    ]
+  },
+
+  {
+    "name": "fish",
+    "variants": [
+      { "name": "Grilled / Tandoori Fish", "cal": 180, "unit": "pc", "type": "good", "desc": "Best way to eat fish." },
+      { "name": "Fish Curry", "cal": 200, "unit": "bowl", "type": "good", "desc": "Omega-3 rich, tangy gravy." },
+      { "name": "Fish Fry / Apollo Fish", "cal": 300, "unit": "pc", "type": "bad", "desc": "Deep fried in oil." }
+    ]
+  },
+
+  {
+    "name": "prawns",
+    "variants": [
+      { "name": "Grilled Prawns", "cal": 150, "unit": "plate", "type": "good", "desc": "Pure protein." },
+      { "name": "Prawn Curry", "cal": 220, "unit": "bowl", "type": "ok", "desc": "Coconut milk adds calories." },
+      { "name": "Prawn Fry / 65", "cal": 320, "unit": "plate", "type": "bad", "desc": "Deep fried." }
+    ]
+  },
+
+  {
+    "name": "mutton",
+    "variants": [
+      { "name": "Mutton Curry", "cal": 300, "unit": "bowl", "type": "bad", "desc": "Red meat is high in saturated fat." },
+      { "name": "Mutton Chukka / Fry", "cal": 400, "unit": "plate", "type": "bad", "desc": "Cooked in heavy oil." },
+      { "name": "Keema Balls", "cal": 350, "unit": "plate", "type": "bad", "desc": "Deep fried meat balls." }
+    ]
+  },
+
+  {
     "name": "spinach / palak",
     "variants": [
       { "name": "Palak Soup / Juice", "cal": 30, "unit": "glass", "type": "good", "desc": "Iron rich, low calorie powerhouse." },
       { "name": "Palak Dal / Kootu", "cal": 140, "unit": "bowl", "type": "good", "desc": "High protein and fiber mix." },
-      { "name": "Palak Paneer", "cal": 240, "unit": "bowl", "type": "good", "desc": "Healthy fats and iron (if low cream)." }
+      { "name": "Palak Paneer", "cal": 240, "unit": "bowl", "type": "good", "desc": "Healthy fats and iron." }
     ]
   },
 
   {
     "name": "methi / fenugreek",
     "variants": [
-      { "name": "Methi Dal", "cal": 150, "unit": "bowl", "type": "good", "desc": "Great for digestion and diabetes." },
-      { "name": "Aloo Methi", "cal": 180, "unit": "bowl", "type": "ok", "desc": "Healthy greens, but watch the oil." },
+      { "name": "Methi Dal", "cal": 150, "unit": "bowl", "type": "good", "desc": "Great for digestion." },
+      { "name": "Aloo Methi", "cal": 180, "unit": "bowl", "type": "ok", "desc": "Healthy greens, watch the oil." },
       { "name": "Methi Paratha", "cal": 210, "unit": "pc", "type": "good", "desc": "Whole wheat enriched with greens." }
     ]
   },
@@ -59,6 +202,17 @@
   },
 
   {
+    "name": "snacks",
+    "variants": [
+      { "name": "Samosa", "cal": 260, "unit": "pc", "type": "bad", "desc": "Deep fried maida." },
+      { "name": "Mirchi Bajji", "cal": 200, "unit": "pc", "type": "bad", "desc": "Deep fried oil sponge." },
+      { "name": "Pani Puri", "cal": 50, "unit": "plate", "type": "ok", "desc": "Low cal, check hygiene." },
+      { "name": "Biscuits (Marie)", "cal": 45, "unit": "pc", "type": "ok", "desc": "Okay with tea." },
+      { "name": "Lays / Chips", "cal": 170, "unit": "small pack", "type": "bad", "desc": "Empty calories." }
+    ]
+  },
+
+  {
     "name": "curry leaves",
     "variants": [
       { "name": "Raw Leaves", "cal": 0, "unit": "sprig", "type": "good", "desc": "Chew for hair growth & digestion." },
@@ -85,29 +239,10 @@
   },
 
   {
-    "name": "gobi / cauliflower",
-    "variants": [
-      { "name": "Steamed / Boiled", "cal": 40, "unit": "cup", "type": "good", "desc": "Low calorie, high fiber." },
-      { "name": "Aloo Gobi Curry", "cal": 150, "unit": "bowl", "type": "ok", "desc": "Healthy if low oil is used." },
-      { "name": "Gobi Manchurian", "cal": 290, "unit": "plate", "type": "bad", "desc": "Deep fried flour coating." }
-    ]
-  },
-
-  {
     "name": "bitter gourd / karela",
     "variants": [
       { "name": "Karela Juice", "cal": 20, "unit": "glass", "type": "good", "desc": "Great for blood sugar." },
       { "name": "Karela Fry", "cal": 200, "unit": "plate", "type": "bad", "desc": "Deep fried to remove bitterness." }
-    ]
-  },
-
-  {
-    "name": "paneer",
-    "variants": [
-      { "name": "Raw / Grilled", "cal": 260, "unit": "100g", "type": "good", "desc": "High protein, healthy fats." },
-      { "name": "Palak Paneer", "cal": 240, "unit": "bowl", "type": "good", "desc": "Spinach base adds fiber." },
-      { "name": "Paneer Butter Masala", "cal": 400, "unit": "bowl", "type": "bad", "desc": "Loaded with cream, butter & sugar." },
-      { "name": "Chilli Paneer / 65", "cal": 350, "unit": "plate", "type": "bad", "desc": "Deep fried + sugary sauces." }
     ]
   },
 
@@ -118,25 +253,6 @@
       { "name": "Aloo Fry / Curry", "cal": 160, "unit": "cup", "type": "ok", "desc": "Oil adds significant calories." },
       { "name": "French Fries", "cal": 312, "unit": "serving", "type": "bad", "desc": "Deep fried saturated fat." },
       { "name": "Lays Chips (Small)", "cal": 165, "unit": "pack", "type": "bad", "desc": "Processed carbs & sodium." }
-    ]
-  },
-
-  {
-    "name": "chicken",
-    "variants": [
-      { "name": "Grilled / Boiled", "cal": 165, "unit": "100g", "type": "good", "desc": "Pure lean protein." },
-      { "name": "Chicken Curry", "cal": 250, "unit": "bowl", "type": "ok", "desc": "Gravy adds fat calories." },
-      { "name": "Chicken 65 / Fried", "cal": 400, "unit": "plate", "type": "bad", "desc": "Deep fried. High trans-fat." },
-      { "name": "Butter Chicken", "cal": 450, "unit": "bowl", "type": "bad", "desc": "Heavy cream and butter load." }
-    ]
-  },
-
-  {
-    "name": "fish",
-    "variants": [
-      { "name": "Fish Curry", "cal": 200, "unit": "bowl", "type": "good", "desc": "Omega-3 rich, tangy gravy." },
-      { "name": "Grilled / Tandoori", "cal": 180, "unit": "pc", "type": "good", "desc": "Low fat preparation." },
-      { "name": "Fish Fry", "cal": 300, "unit": "pc", "type": "bad", "desc": "Deep fried in oil." }
     ]
   },
 
