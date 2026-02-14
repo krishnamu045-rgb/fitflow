@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V4</title>
+    <title>FitFlow Pro V6</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -36,7 +36,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 4.0</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase">FITFLOW<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-xs">Version 6.0</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -129,7 +129,7 @@
             </div>
             <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-3">
                 <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Scanner</p>
-                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search (e.g., Bhindi, Curry Leaves)..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
+                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search (e.g., Momos, Shake)..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2"><button onclick="quickAdd('Coffee', 40)" class="whitespace-nowrap bg-orange-50 text-orange-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-orange-100">+ Coffee</button><button onclick="quickAdd('Tea', 40)" class="whitespace-nowrap bg-amber-50 text-amber-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-orange-100">+ Tea</button><button onclick="quickAdd('Water', 0)" class="whitespace-nowrap bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-blue-100">+ Water</button><button onclick="quickAdd('Banana', 105)" class="whitespace-nowrap bg-yellow-50 text-yellow-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-yellow-100">+ Banana</button></div>
                 
                 <div id="prepModal" class="hide bg-mist p-5 rounded-2xl border border-slate-100 animate-slide-up space-y-4">
@@ -173,7 +173,7 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-        const KEY = "FITFLOW_PRO_VERSION_4_FINAL";
+        const KEY = "FITFLOW_PRO_VERSION_6_FINAL";
         let state = JSON.parse(localStorage.getItem(KEY));
         let foodDB = {}; 
         let tempFood = null; 
