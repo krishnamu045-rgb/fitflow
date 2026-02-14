@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FitFlow Pro V3</title>
+    <title>FitFlow Pro V3 (Final)</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -185,7 +185,7 @@
             "Thursday": { veg: "2 Jowar Rotis + Veg Fry", non: "2 Jowar Rotis + Grill Chicken", vCal: 320, nCal: 380, vid: "rmmWuI5Jinc", t: "Lower Body" },
             "Friday": { veg: "Brown Rice + Dal", non: "Brown Rice + Fish Fry", vCal: 350, nCal: 410, vid: "8r4Z-ghDI4k", t: "Cardio Kick" },
             "Saturday": { veg: "Veg Biryani + Raita", non: "Chicken Biryani + Egg", vCal: 450, nCal: 550, vid: "uKXcLBjWqas", t: "Stability" },
-            "Sunday": { veg: "Millet Curd Rice + Salad", non: "Pepper Soup + 1 Roti", vCal: 280, nCal: 320, vid: "rest", t: "Recovery" }
+            "Sunday": { veg: "Millet Curd Rice + Salad", non: "Pepper Soup + 1 Roti", vCal: 280, nCal: 320, vid: "inpok4MKVLM", t: "Mindfulness" }
         };
 
         window.onload = async () => {
@@ -241,8 +241,9 @@
         }
 
         function renderMeals() { 
-            const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); 
-            const p = CONTENT[d] || CONTENT["Monday"]; 
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const d = days[new Date().getDay()];
+            const p = CONTENT[d]; 
             document.getElementById('menuTotal').innerText = 522 + p.vCal;
             document.getElementById('mealContainer').innerHTML = `
                 ${mealItem("fa-blender","Morning Shake (F1+PDM)","text-punch","Breakfast", 242)}
@@ -289,7 +290,6 @@
             document.getElementById('suggestions').classList.add('hide');
 
             if (item.variants) {
-                // Show Prep Modal
                 const prepDiv = document.getElementById('prepOptions');
                 prepDiv.innerHTML = item.variants.map((v, i) => 
                     `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm hover:border-punch transition-all">
@@ -299,7 +299,6 @@
                 ).join('');
                 document.getElementById('prepModal').classList.remove('hide');
             } else {
-                // Show Standard Modal
                 showFinalModal(item.name, item.cal, item.desc || "Standard portion", item.type);
             }
         }
@@ -406,11 +405,20 @@
             container.innerHTML = html;
         }
         function renderW() { 
-            const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = CONTENT[d]; 
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const d = days[new Date().getDay()];
+            const p = CONTENT[d]; 
             document.getElementById('wTitle').innerText = p.t;
-            document.getElementById('wThumb').src = p.vid === 'rest' ? "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" : `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
+            // Now fetches thumbnail for meditation too
+            document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
         }
-        function launchWorkout() { const d = new Date().toLocaleDateString('en-US', { weekday: 'long' }); const p = CONTENT[d]; if(p.vid !== 'rest') window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank'); }
+        function launchWorkout() { 
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const d = days[new Date().getDay()];
+            const p = CONTENT[d]; 
+            // Simplified: Just open the video!
+            window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank'); 
+        }
         function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
         function masterReset() { if(prompt("PIN:") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
         function selectGender(g) { document.getElementById('setupGender').value = g; document.getElementById('btnMale').className = g==='male'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; document.getElementById('btnFemale').className = g==='female'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; }
