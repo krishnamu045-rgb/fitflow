@@ -15,6 +15,40 @@
   { "name": "pongal", "cal": 300, "unit": "cup", "type": "bad", "desc": "High ghee & rice content." },
 
   {
+    "name": "spinach / palak",
+    "variants": [
+      { "name": "Palak Soup / Juice", "cal": 30, "unit": "glass", "type": "good", "desc": "Iron rich, low calorie powerhouse." },
+      { "name": "Palak Dal / Kootu", "cal": 140, "unit": "bowl", "type": "good", "desc": "High protein and fiber mix." },
+      { "name": "Palak Paneer", "cal": 240, "unit": "bowl", "type": "good", "desc": "Healthy fats and iron (if low cream)." }
+    ]
+  },
+
+  {
+    "name": "methi / fenugreek",
+    "variants": [
+      { "name": "Methi Dal", "cal": 150, "unit": "bowl", "type": "good", "desc": "Great for digestion and diabetes." },
+      { "name": "Aloo Methi", "cal": 180, "unit": "bowl", "type": "ok", "desc": "Healthy greens, but watch the oil." },
+      { "name": "Methi Paratha", "cal": 210, "unit": "pc", "type": "good", "desc": "Whole wheat enriched with greens." }
+    ]
+  },
+
+  {
+    "name": "amaranth / thotakura",
+    "variants": [
+      { "name": "Thotakura Dal", "cal": 160, "unit": "bowl", "type": "good", "desc": "Excellent source of calcium & iron." },
+      { "name": "Leafy Stir Fry", "cal": 150, "unit": "bowl", "type": "ok", "desc": "Tasty, but often cooked with extra oil." }
+    ]
+  },
+
+  {
+    "name": "moringa / drumstick leaves",
+    "variants": [
+      { "name": "Moringa Dal", "cal": 150, "unit": "bowl", "type": "good", "desc": "Superfood! High Vitamin A & C." },
+      { "name": "Moringa Soup", "cal": 40, "unit": "bowl", "type": "good", "desc": "Immunity booster." }
+    ]
+  },
+
+  {
     "name": "dosa",
     "variants": [
       { "name": "Plain Dosa", "cal": 130, "unit": "pc", "type": "good", "desc": "Light and crispy." },
