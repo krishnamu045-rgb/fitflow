@@ -1,18 +1,81 @@
 [
-  { "name": "idli", "cal": 39, "unit": "pc", "type": "good", "desc": "Steamed & fermented. Great gut health." },
-  { "name": "sambar", "cal": 100, "unit": "bowl", "type": "good", "desc": "Protein rich lentil & vegetable stew." },
-  { "name": "rasam", "cal": 40, "unit": "bowl", "type": "good", "desc": "Great for digestion and immunity." },
-  { "name": "dal fry", "cal": 150, "unit": "bowl", "type": "good", "desc": "Comforting lentil curry. High protein." },
-  { "name": "rajma", "cal": 200, "unit": "bowl", "type": "good", "desc": "Kidney beans, excellent for muscle." },
-  { "name": "chana masala", "cal": 165, "unit": "bowl", "type": "good", "desc": "Chickpeas are high fiber and protein." },
-  { "name": "chapati", "cal": 104, "unit": "pc", "type": "good", "desc": "Whole wheat complex carbohydrates." },
-  { "name": "parotta", "cal": 300, "unit": "pc", "type": "bad", "desc": "Refined flour (Maida), hard to digest." },
-  { "name": "naan", "cal": 260, "unit": "pc", "type": "bad", "desc": "Refined flour cooked in tandoor." },
-  { "name": "puri", "cal": 101, "unit": "pc", "type": "bad", "desc": "Deep fried wheat bread." },
-  { "name": "vada", "cal": 170, "unit": "pc", "type": "bad", "desc": "Deep fried lentil doughnut." },
-  { "name": "poha", "cal": 250, "unit": "cup", "type": "ok", "desc": "Flattened rice, light and digestible." },
-  { "name": "upma", "cal": 250, "unit": "cup", "type": "ok", "desc": "Rava based, often high in oil." },
-  { "name": "pongal", "cal": 300, "unit": "cup", "type": "bad", "desc": "High ghee & rice content." },
+  {
+    "name": "idli",
+    "variants": [
+      { "name": "Single Idli (Plain)", "cal": 39, "unit": "pc", "type": "good", "desc": "Just one steamed cake." },
+      { "name": "Plate Idli (2 pcs + Sambar + Chutney)", "cal": 220, "unit": "plate", "type": "good", "desc": "Standard breakfast plate." },
+      { "name": "Idli-Vada Combo (2 Idli + 1 Vada)", "cal": 380, "unit": "plate", "type": "bad", "desc": "Vada adds oil calories." },
+      { "name": "Podi Idli (Ghee Fried)", "cal": 280, "unit": "plate", "type": "bad", "desc": "Tossed in Ghee and Gunpowder." },
+      { "name": "Thatte Idli (1 Big)", "cal": 150, "unit": "pc", "type": "good", "desc": "Large plate idli." }
+    ]
+  },
+  {
+    "name": "vada",
+    "variants": [
+      { "name": "Single Vada (Medu Vada)", "cal": 150, "unit": "pc", "type": "bad", "desc": "Deep fried lentil donut." },
+      { "name": "Sambar Vada (Dip)", "cal": 200, "unit": "plate", "type": "bad", "desc": "Vada soaked in Sambar." },
+      { "name": "Masala Vada / Ambode", "cal": 160, "unit": "pc", "type": "bad", "desc": "Crunchy chana dal vada." }
+    ]
+  },
+  {
+    "name": "dosa",
+    "variants": [
+      { "name": "Plain Dosa + Sambar/Chutney", "cal": 200, "unit": "set", "type": "good", "desc": "Light breakfast meal." },
+      { "name": "Masala Dosa (with Aloo)", "cal": 380, "unit": "pc", "type": "bad", "desc": "Potato filling + extra oil." },
+      { "name": "Set Dosa (2 pcs + Sagu)", "cal": 400, "unit": "plate", "type": "ok", "desc": "Thick spongy dosas." },
+      { "name": "Ghee Roast Dosa", "cal": 300, "unit": "pc", "type": "bad", "desc": "Roasted generously in ghee." },
+      { "name": "Rava Dosa", "cal": 180, "unit": "pc", "type": "ok", "desc": "Instant, moderate calories." }
+    ]
+  },
+  {
+    "name": "puri",
+    "variants": [
+      { "name": "Single Puri", "cal": 101, "unit": "pc", "type": "bad", "desc": "Deep fried wheat bread." },
+      { "name": "Puri Bhaji (2 Puris + Aloo)", "cal": 350, "unit": "plate", "type": "bad", "desc": "High carb & fat breakfast." },
+      { "name": "Puri Sagu (3 Puris + Curry)", "cal": 450, "unit": "plate", "type": "bad", "desc": "Heavy Sunday breakfast." }
+    ]
+  },
+  {
+    "name": "chapati / roti",
+    "variants": [
+      { "name": "Single Chapati (Dry)", "cal": 104, "unit": "pc", "type": "good", "desc": "Whole wheat, no oil." },
+      { "name": "Butter Roti / Chapati", "cal": 140, "unit": "pc", "type": "ok", "desc": "With ghee/butter applied." },
+      { "name": "Chapati Meal (2 pcs + Dal/Veg)", "cal": 350, "unit": "plate", "type": "good", "desc": "Balanced lunch/dinner." }
+    ]
+  },
+  {
+    "name": "rice meal",
+    "variants": [
+      { "name": "South Indian Meal (Full)", "cal": 750, "unit": "plate", "type": "bad", "desc": "Rice, Sambar, Rasam, Poriyal, Curd, Sweet." },
+      { "name": "Mini Meal (Rice + Sambar)", "cal": 450, "unit": "plate", "type": "ok", "desc": "Standard lunch portion." },
+      { "name": "Curd Rice + Pickle", "cal": 250, "unit": "bowl", "type": "good", "desc": "Great for digestion." }
+    ]
+  },
+  {
+    "name": "parotta",
+    "variants": [
+      { "name": "Single Parotta", "cal": 300, "unit": "pc", "type": "bad", "desc": "Layered maida bread." },
+      { "name": "Kothu Parotta (Veg/Egg)", "cal": 600, "unit": "plate", "type": "bad", "desc": "Chopped and fried with oil." }
+    ]
+  },
+  {
+    "name": "upma / khara bath",
+    "variants": [
+      { "name": "Rava Upma", "cal": 250, "unit": "cup", "type": "ok", "desc": "Basic semolina breakfast." },
+      { "name": "Chow Chow Bath", "cal": 550, "unit": "plate", "type": "bad", "desc": "Upma + Kesari Bath (Sweet & Savory)." }
+    ]
+  },
+  {
+    "name": "pongal",
+    "variants": [
+      { "name": "Ven Pongal", "cal": 300, "unit": "cup", "type": "bad", "desc": "Rice & Dal cooked in Ghee." },
+      { "name": "Sweet Pongal", "cal": 400, "unit": "cup", "type": "bad", "desc": "Jaggery & Ghee loaded." }
+    ]
+  },
+  {
+    "name": "sambar", "cal": 80, "unit": "bowl", "type": "good", "desc": "Lentil & veg stew (Individual)." },
+    { "name": "chutney", "cal": 50, "unit": "tbsp", "type": "bad", "desc": "Coconut based (High calorie)." },
+    { "name": "podi / gunpowder", "cal": 60, "unit": "tbsp", "type": "bad", "desc": "Mixed with oil/ghee." },
 
   {
     "name": "leftovers / stored food",
@@ -188,16 +251,6 @@
     "variants": [
       { "name": "Moringa Dal", "cal": 150, "unit": "bowl", "type": "good", "desc": "Superfood! High Vitamin A & C." },
       { "name": "Moringa Soup", "cal": 40, "unit": "bowl", "type": "good", "desc": "Immunity booster." }
-    ]
-  },
-
-  {
-    "name": "dosa",
-    "variants": [
-      { "name": "Plain Dosa", "cal": 130, "unit": "pc", "type": "good", "desc": "Light and crispy." },
-      { "name": "Masala Dosa", "cal": 350, "unit": "pc", "type": "bad", "desc": "Potato filling + extra oil." },
-      { "name": "Rava Dosa", "cal": 180, "unit": "pc", "type": "ok", "desc": "Instant, moderate calories." },
-      { "name": "Ghee Roast", "cal": 220, "unit": "pc", "type": "bad", "desc": "Roasted generously in ghee." }
     ]
   },
 
