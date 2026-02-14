@@ -72,11 +72,15 @@
       { "name": "Sweet Pongal", "cal": 400, "unit": "cup", "type": "bad", "desc": "Jaggery & Ghee loaded." }
     ]
   },
-  {
-    "name": "sambar", "cal": 80, "unit": "bowl", "type": "good", "desc": "Lentil & veg stew (Individual)." },
-    { "name": "chutney", "cal": 50, "unit": "tbsp", "type": "bad", "desc": "Coconut based (High calorie)." },
-    { "name": "podi / gunpowder", "cal": 60, "unit": "tbsp", "type": "bad", "desc": "Mixed with oil/ghee." },
-
+  { "name": "sambar", "cal": 80, "unit": "bowl", "type": "good", "desc": "Lentil & veg stew (Individual)." },
+  { "name": "chutney", "cal": 50, "unit": "tbsp", "type": "bad", "desc": "Coconut based (High calorie)." },
+  { "name": "podi / gunpowder", "cal": 60, "unit": "tbsp", "type": "bad", "desc": "Mixed with oil/ghee." },
+  { "name": "rasam", "cal": 40, "unit": "bowl", "type": "good", "desc": "Great for digestion and immunity." },
+  { "name": "dal fry", "cal": 150, "unit": "bowl", "type": "good", "desc": "Comforting lentil curry. High protein." },
+  { "name": "rajma", "cal": 200, "unit": "bowl", "type": "good", "desc": "Kidney beans, excellent for muscle." },
+  { "name": "chana masala", "cal": 165, "unit": "bowl", "type": "good", "desc": "Chickpeas are high fiber and protein." },
+  { "name": "naan", "cal": 260, "unit": "pc", "type": "bad", "desc": "Refined flour cooked in tandoor." },
+  { "name": "poha", "cal": 250, "unit": "cup", "type": "ok", "desc": "Flattened rice, light and digestible." },
   {
     "name": "leftovers / stored food",
     "variants": [
@@ -86,7 +90,6 @@
       { "name": "Reheated / Reused Oil", "cal": 120, "unit": "tbsp", "type": "bad", "desc": "Creates trans-fats. Highly toxic." }
     ]
   },
-
   {
     "name": "milkshake / thick shake",
     "variants": [
@@ -97,7 +100,6 @@
       { "name": "Homemade Milkshake (No Sugar)", "cal": 180, "unit": "glass", "type": "ok", "desc": "Calcium & Protein rich if plain." }
     ]
   },
-
   {
     "name": "noodles / chow mein",
     "variants": [
@@ -107,7 +109,6 @@
       { "name": "Fried Noodles (Chopsuey)", "cal": 550, "unit": "plate", "type": "bad", "desc": "Deep fried crisp noodles." }
     ]
   },
-
   {
     "name": "fried rice",
     "variants": [
@@ -117,7 +118,6 @@
       { "name": "Schezwan Fried Rice", "cal": 520, "unit": "plate", "type": "bad", "desc": "Spicy oil & sugar load." }
     ]
   },
-
   {
     "name": "momos",
     "variants": [
@@ -127,7 +127,6 @@
       { "name": "Momos with Mayo", "cal": 100, "unit": "pc", "type": "bad", "desc": "Mayo adds pure fat." }
     ]
   },
-
   {
     "name": "spring roll",
     "variants": [
@@ -135,7 +134,6 @@
       { "name": "Chicken Spring Roll", "cal": 180, "unit": "pc", "type": "bad", "desc": "Deep fried meat roll." }
     ]
   },
-
   {
     "name": "manchurian",
     "variants": [
@@ -143,7 +141,6 @@
       { "name": "Manchurian Gravy", "cal": 350, "unit": "bowl", "type": "bad", "desc": "Thickened with corn flour & sugar." }
     ]
   },
-
   {
     "name": "soup",
     "variants": [
@@ -153,7 +150,6 @@
       { "name": "Manchow / Hot & Sour", "cal": 180, "unit": "bowl", "type": "bad", "desc": "Fried noodles and oil load." }
     ]
   },
-
   {
     "name": "paneer",
     "variants": [
@@ -163,7 +159,6 @@
       { "name": "Chilli Paneer", "cal": 350, "unit": "plate", "type": "bad", "desc": "Deep fried + sugary sauces." }
     ]
   },
-
   {
     "name": "chicken",
     "variants": [
@@ -174,7 +169,6 @@
       { "name": "Butter Chicken", "cal": 450, "unit": "bowl", "type": "bad", "desc": "Heavy cream and butter load." }
     ]
   },
-
   {
     "name": "mushroom",
     "variants": [
@@ -183,7 +177,6 @@
       { "name": "Mushroom Manchurian", "cal": 280, "unit": "plate", "type": "bad", "desc": "Deep fried flour coating." }
     ]
   },
-
   {
     "name": "baby corn",
     "variants": [
@@ -192,7 +185,6 @@
       { "name": "Chilli Baby Corn", "cal": 280, "unit": "plate", "type": "bad", "desc": "Oily spicy starter." }
     ]
   },
-
   {
     "name": "fish",
     "variants": [
@@ -201,7 +193,6 @@
       { "name": "Fish Fry / Apollo Fish", "cal": 300, "unit": "pc", "type": "bad", "desc": "Deep fried in oil." }
     ]
   },
-
   {
     "name": "prawns",
     "variants": [
@@ -210,7 +201,6 @@
       { "name": "Prawn Fry / 65", "cal": 320, "unit": "plate", "type": "bad", "desc": "Deep fried." }
     ]
   },
-
   {
     "name": "mutton",
     "variants": [
@@ -219,7 +209,6 @@
       { "name": "Keema Balls", "cal": 350, "unit": "plate", "type": "bad", "desc": "Deep fried meat balls." }
     ]
   },
-
   {
     "name": "spinach / palak",
     "variants": [
@@ -228,7 +217,6 @@
       { "name": "Palak Paneer", "cal": 240, "unit": "bowl", "type": "good", "desc": "Healthy fats and iron." }
     ]
   },
-
   {
     "name": "methi / fenugreek",
     "variants": [
@@ -237,7 +225,6 @@
       { "name": "Methi Paratha", "cal": 210, "unit": "pc", "type": "good", "desc": "Whole wheat enriched with greens." }
     ]
   },
-
   {
     "name": "amaranth / thotakura",
     "variants": [
@@ -245,7 +232,6 @@
       { "name": "Leafy Stir Fry", "cal": 150, "unit": "bowl", "type": "ok", "desc": "Tasty, but often cooked with extra oil." }
     ]
   },
-
   {
     "name": "moringa / drumstick leaves",
     "variants": [
@@ -253,7 +239,6 @@
       { "name": "Moringa Soup", "cal": 40, "unit": "bowl", "type": "good", "desc": "Immunity booster." }
     ]
   },
-
   {
     "name": "snacks",
     "variants": [
@@ -264,7 +249,6 @@
       { "name": "Lays / Chips", "cal": 170, "unit": "small pack", "type": "bad", "desc": "Empty calories." }
     ]
   },
-
   {
     "name": "curry leaves",
     "variants": [
@@ -272,7 +256,6 @@
       { "name": "Curry Leaf Powder (Podi)", "cal": 35, "unit": "tbsp", "type": "good", "desc": "Iron rich condiment with rice." }
     ]
   },
-
   {
     "name": "bhindi / okra",
     "variants": [
@@ -281,7 +264,6 @@
       { "name": "Kurkuri Bhindi", "cal": 300, "unit": "plate", "type": "bad", "desc": "Deep fried crispy snack." }
     ]
   },
-
   {
     "name": "brinjal / eggplant",
     "variants": [
@@ -290,7 +272,6 @@
       { "name": "Ennai Kathirikai", "cal": 250, "unit": "bowl", "type": "bad", "desc": "Stuffed & cooked in lots of oil." }
     ]
   },
-
   {
     "name": "bitter gourd / karela",
     "variants": [
@@ -298,7 +279,6 @@
       { "name": "Karela Fry", "cal": 200, "unit": "plate", "type": "bad", "desc": "Deep fried to remove bitterness." }
     ]
   },
-
   {
     "name": "potato", 
     "variants": [
@@ -308,7 +288,6 @@
       { "name": "Lays Chips (Small)", "cal": 165, "unit": "pack", "type": "bad", "desc": "Processed carbs & sodium." }
     ]
   },
-
   {
     "name": "egg",
     "variants": [
@@ -318,7 +297,6 @@
       { "name": "Egg Puff", "cal": 300, "unit": "pc", "type": "bad", "desc": "Maida and bakery fat." }
     ]
   },
-
   {
     "name": "rice",
     "variants": [
@@ -329,7 +307,6 @@
       { "name": "Fried Rice", "cal": 350, "unit": "plate", "type": "bad", "desc": "Oily and high sodium." }
     ]
   },
-
   {
     "name": "biryani",
     "variants": [
@@ -338,7 +315,6 @@
       { "name": "Mutton Biryani", "cal": 350, "unit": "cup", "type": "bad", "desc": "Very high fat." }
     ]
   },
-
   {
     "name": "mango",
     "variants": [
@@ -347,7 +323,6 @@
       { "name": "Maaza / Slice", "cal": 150, "unit": "glass", "type": "bad", "desc": "Mainly sugar syrup." }
     ]
   },
-
   {
     "name": "apple",
     "variants": [
@@ -356,7 +331,6 @@
       { "name": "Packaged / Sugar Juice", "cal": 160, "unit": "glass", "type": "bad", "desc": "Basically sugar water." }
     ]
   },
-
   {
     "name": "corn",
     "variants": [
@@ -366,7 +340,6 @@
       { "name": "Popcorn (Cheese/Butter)", "cal": 300, "unit": "tub", "type": "bad", "desc": "Calorie bomb." }
     ]
   },
-
   {
     "name": "maggi / noodles",
     "variants": [
@@ -375,7 +348,6 @@
       { "name": "Fried Noodles", "cal": 400, "unit": "plate", "type": "bad", "desc": "Deep fried and oily." }
     ]
   },
-
   {
     "name": "ice cream",
     "variants": [
@@ -385,7 +357,6 @@
       { "name": "Cone Ice Cream", "cal": 300, "unit": "pc", "type": "bad", "desc": "Wafer adds extra calories." }
     ]
   },
-  
   { "name": "carrot", "cal": 30, "unit": "pc", "type": "good", "desc": "Great for eyes, low calorie snack." },
   { "name": "cucumber", "cal": 16, "unit": "cup", "type": "good", "desc": "95% water, very hydrating." },
   { "name": "beetroot", "cal": 43, "unit": "cup", "type": "good", "desc": "Good for blood pressure." },
