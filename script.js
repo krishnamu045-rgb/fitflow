@@ -1,9 +1,8 @@
-const KEY = "ZESTUP_PRO_V13";
+const KEY = "ZESTUP_PRO_V13_1";
 let state = JSON.parse(localStorage.getItem(KEY));
 let foodDB = {}; 
 let tempFood = null; 
 
-// MENU MAPPINGS (Which category shows which foods)
 const CATEGORIES = {
     'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'chapati', 'parotta', 'poha', 'oats'],
     'meals': ['rice', 'biryani', 'curry', 'dal', 'sambar', 'rasam', 'chicken', 'fish', 'mutton', 'paneer', 'mushroom', 'roti', 'naan', 'egg'],
@@ -108,23 +107,43 @@ function renderLog() {
     list.innerHTML = state.consumed.map((item, i) => `<div class="bg-white p-4 rounded-2xl border flex justify-between items-center"><div><h4 class="font-bold text-marine text-sm">${item.name}</h4><p class="text-[10px] text-slate-400 font-bold">${item.cal} kcal</p></div><button onclick="deleteItem(${i})" class="text-slate-300 p-2"><i class="fas fa-trash-alt"></i></button></div>`).join('');
 }
 
-// BROWSE CATEGORY FUNCTION
+// --- NEW VISUAL NAVIGATION LOGIC ---
 function browseCategory(cat) {
-    const list = document.getElementById('suggestions');
+    if(Object.keys(foodDB).length === 0) return alert("Database loading...");
+
     const items = CATEGORIES[cat];
+    const listContainer = document.getElementById('catListContent');
     
-    // Clear previous and show list
-    list.innerHTML = `<div class="p-3 bg-mist border-b border-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400">Browsing: ${cat}</div>`;
+    // 1. Hide Grid, Show View
+    document.getElementById('catGrid').classList.add('hide');
+    document.getElementById('catView').classList.remove('hide');
     
+    // 2. Populate List
+    let html = '';
     items.forEach(keyword => {
-        // Find in DB
-        const match = Object.keys(foodDB).find(k => k.includes(keyword));
-        if(match) {
-            list.innerHTML += `<div onclick="selectFood('${match}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center transition-all"><span class="font-bold text-marine capitalize text-sm">${match}</span><i class="fas fa-plus-circle text-punch text-xs"></i></div>`;
+        // Find match in DB
+        const matchKey = Object.keys(foodDB).find(k => k.includes(keyword));
+        if(matchKey) {
+            const food = foodDB[matchKey];
+            // Different color for good/bad items
+            let badgeColor = food.variants && food.variants[0].type === 'bad' ? 'text-red-500 bg-red-50' : 'text-green-500 bg-green-50';
+            
+            html += `<div onclick="selectFood('${matchKey}')" class="bg-white p-4 rounded-2xl border border-slate-50 shadow-sm flex justify-between items-center cursor-pointer mb-2">
+                        <div>
+                            <p class="font-bold text-marine capitalize text-sm">${matchKey}</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tap to add</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full ${badgeColor} flex items-center justify-center"><i class="fas fa-plus"></i></div>
+                     </div>`;
         }
     });
     
-    list.classList.remove('hide');
+    listContainer.innerHTML = html;
+}
+
+function closeCategory() {
+    document.getElementById('catView').classList.add('hide');
+    document.getElementById('catGrid').classList.remove('hide');
 }
 
 function showSuggestions(val) {
@@ -146,6 +165,8 @@ function selectFood(name) {
     document.getElementById('suggestions').classList.add('hide');
     document.getElementById('prepModal').classList.add('hide');
     document.getElementById('analysisResult').classList.add('hide');
+    document.getElementById('catView').classList.add('hide'); // Close category view if open
+    document.getElementById('catGrid').classList.remove('hide'); // Restore grid
     document.getElementById('prepOptions').innerHTML = ""; 
 
     if (item.variants) {
@@ -247,7 +268,7 @@ function finishSetup() {
     const g = document.getElementById('setupGender').value;
     const dob = document.getElementById('setupDOB').value;
 
-    let age = 30; // Default
+    let age = 30; 
     if (dob) {
         const birthDate = new Date(dob);
         const today = new Date();
