@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZestUp Pro V9.2</title>
+    <title>ZestUp Pro V13.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,7 +23,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 9.2</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Visual Edition v13</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -43,7 +43,6 @@
             <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button>
         </div>
     </div>
-
     <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
         <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
             <div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety First</h2></div>
@@ -51,7 +50,6 @@
             <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button>
         </div>
     </div>
-
     <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
         <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
             <div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition</h2></div>
@@ -116,15 +114,37 @@
                 <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Calories Remaining</p><h2 class="text-5xl font-black text-marine tracking-tighter" id="dispRemaining">--</h2><p class="text-xs font-bold text-cal mt-1">Goal: <span id="dispGoal">--</span></p></div>
                 <div class="relative w-24 h-24"><svg class="w-full h-full" viewBox="0 0 100 100"><circle class="text-mist stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="calRing" class="text-cal progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0"></circle></svg><div class="absolute inset-0 flex items-center justify-center text-marine font-bold text-xs"><i class="fas fa-fire"></i></div></div>
             </div>
-            <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-3">
-                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Scanner</p>
-                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search (e.g., Idli, KFC, Shake)..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
+            
+            <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-4">
+                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Menu</p>
                 
-                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-                    <button onclick="quickAdd('Coffee', 40)" class="whitespace-nowrap bg-orange-50 text-orange-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-orange-100">+ Coffee</button>
-                    <button onclick="quickAdd('Tea', 40)" class="whitespace-nowrap bg-amber-50 text-amber-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-orange-100">+ Tea</button>
-                    <button onclick="quickAdd('Soft Drink', 140)" class="whitespace-nowrap bg-red-50 text-red-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-red-100">+ Soft Drink</button>
-                    <button onclick="quickAdd('Banana', 105)" class="whitespace-nowrap bg-yellow-50 text-yellow-600 px-4 py-2 rounded-xl text-xs font-bold btn-click border border-yellow-100">+ Banana</button>
+                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search specific item..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="browseCategory('tiffin')" class="bg-orange-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-orange-100 hover:bg-orange-100 transition-all btn-click">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-orange-500 text-lg"><i class="fas fa-sun"></i></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-marine">Tiffin</span>
+                    </button>
+                    <button onclick="browseCategory('meals')" class="bg-blue-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-blue-100 hover:bg-blue-100 transition-all btn-click">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-blue-500 text-lg"><i class="fas fa-bowl-rice"></i></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-marine">Meals</span>
+                    </button>
+                    <button onclick="browseCategory('junk')" class="bg-red-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-red-100 hover:bg-red-100 transition-all btn-click">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-red-500 text-lg"><i class="fas fa-pizza-slice"></i></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-marine">Cheat</span>
+                    </button>
+                    <button onclick="browseCategory('fresh')" class="bg-green-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-green-100 hover:bg-green-100 transition-all btn-click">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-green-500 text-lg"><i class="fas fa-carrot"></i></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-marine">Fresh</span>
+                    </button>
+                    <button onclick="browseCategory('sips')" class="bg-amber-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-amber-100 hover:bg-amber-100 transition-all btn-click">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-amber-500 text-lg"><i class="fas fa-mug-hot"></i></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-marine">Sips</span>
+                    </button>
+                    <button onclick="browseCategory('herbalife')" class="bg-purple-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-purple-100 hover:bg-purple-100 transition-all btn-click">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-purple-500 text-lg"><i class="fas fa-leaf"></i></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-marine">Herbal</span>
+                    </button>
                 </div>
                 
                 <div id="prepModal" class="hide bg-mist p-5 rounded-2xl border border-slate-100 animate-slide-up space-y-4">
