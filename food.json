@@ -1,5 +1,147 @@
 [
   {
+    "name": "oats",
+    "variants": [
+      { "name": "Masala Oats (Saffola style)", "cal": 150, "unit": "bowl", "type": "ok", "desc": "Savory, but check sodium levels." },
+      { "name": "Oatmeal (Milk + Fruits)", "cal": 220, "unit": "bowl", "type": "good", "desc": "High fiber breakfast." },
+      { "name": "Overnight Oats (Chia + Curd)", "cal": 250, "unit": "jar", "type": "good", "desc": "Excellent probiotics and fiber." },
+      { "name": "Oats Upma", "cal": 180, "unit": "plate", "type": "good", "desc": "Healthy veggie loaded breakfast." }
+    ]
+  },
+  {
+    "name": "cereal / muesli",
+    "variants": [
+      { "name": "Muesli (No Sugar)", "cal": 200, "unit": "bowl", "type": "good", "desc": "Raw grains and dried fruits." },
+      { "name": "Cornflakes (Milk)", "cal": 250, "unit": "bowl", "type": "bad", "desc": "Low fiber, high sugar spike." },
+      { "name": "Chocos / Fruit Loops", "cal": 300, "unit": "bowl", "type": "bad", "desc": "Basically candy for breakfast." },
+      { "name": "Granola Bar", "cal": 150, "unit": "bar", "type": "bad", "desc": "Often held together by sugar syrup." }
+    ]
+  },
+  {
+    "name": "millets / siridhanya",
+    "variants": [
+      { "name": "Millet Rice (Foxtail/Barnyard)", "cal": 180, "unit": "cup", "type": "good", "desc": "Low GI substitute for white rice." },
+      { "name": "Ragi Mudde / Ball", "cal": 300, "unit": "pc", "type": "good", "desc": "Calcium rich superfood." },
+      { "name": "Ragi Malt / Porridge", "cal": 120, "unit": "glass", "type": "good", "desc": "Cooling and filling." },
+      { "name": "Millet Khichdi", "cal": 250, "unit": "bowl", "type": "good", "desc": "Balanced protein and carb meal." }
+    ]
+  },
+  {
+    "name": "quinoa",
+    "variants": [
+      { "name": "Quinoa Salad", "cal": 220, "unit": "bowl", "type": "good", "desc": "Complete protein source." },
+      { "name": "Quinoa Upma / Pulao", "cal": 250, "unit": "bowl", "type": "good", "desc": "Healthy Indian adaptation." }
+    ]
+  },
+  {
+    "name": "pasta",
+    "variants": [
+      { "name": "Red Sauce Pasta (Arrabbiata)", "cal": 300, "unit": "bowl", "type": "ok", "desc": "Tomato base is lighter." },
+      { "name": "White Sauce Pasta (Alfredo)", "cal": 550, "unit": "bowl", "type": "bad", "desc": "Heavy cream, cheese and butter." },
+      { "name": "Macaroni & Cheese", "cal": 450, "unit": "bowl", "type": "bad", "desc": "Loaded with processed cheese." },
+      { "name": "Whole Wheat Pasta (Veg)", "cal": 280, "unit": "bowl", "type": "good", "desc": "Better fiber content." }
+    ]
+  },
+  {
+    "name": "bread",
+    "variants": [
+      { "name": "White Bread", "cal": 70, "unit": "slice", "type": "bad", "desc": "Refined maida, instant sugar spike." },
+      { "name": "Brown / Whole Wheat Bread", "cal": 75, "unit": "slice", "type": "ok", "desc": "Check label for 'Whole Wheat'." },
+      { "name": "Multigrain Bread", "cal": 80, "unit": "slice", "type": "good", "desc": "Better nutrient profile." },
+      { "name": "Garlic Bread (Cheese)", "cal": 200, "unit": "slice", "type": "bad", "desc": "Butter and cheese load." }
+    ]
+  },
+  {
+    "name": "tandoori breads",
+    "variants": [
+      { "name": "Tandoori Roti (Plain)", "cal": 110, "unit": "pc", "type": "good", "desc": "Roasted whole wheat." },
+      { "name": "Butter Naan", "cal": 300, "unit": "pc", "type": "bad", "desc": "Maida + Butter. Hard to digest." },
+      { "name": "Kulcha (Plain)", "cal": 150, "unit": "pc", "type": "ok", "desc": "Maida based bread." },
+      { "name": "Stuffed Kulcha (Paneer/Aloo)", "cal": 350, "unit": "pc", "type": "bad", "desc": "Calorie dense filling." },
+      { "name": "Roomali Roti", "cal": 200, "unit": "pc", "type": "bad", "desc": "Paper thin refined flour." }
+    ]
+  },
+  {
+    "name": "wraps / frankie",
+    "variants": [
+      { "name": "Veg Frankie (Cheese/Mayo)", "cal": 400, "unit": "roll", "type": "bad", "desc": "Maida roti + oily filling." },
+      { "name": "Chicken Tikka Wrap", "cal": 350, "unit": "roll", "type": "ok", "desc": "Protein rich if less mayo." },
+      { "name": "Paneer Roll", "cal": 450, "unit": "roll", "type": "bad", "desc": "Dense calories." }
+    ]
+  },
+  {
+    "name": "salad",
+    "variants": [
+      { "name": "Green Salad (No dressing)", "cal": 50, "unit": "plate", "type": "good", "desc": "Pure fiber and vitamins." },
+      { "name": "Caesar Salad", "cal": 400, "unit": "bowl", "type": "bad", "desc": "Croutons and mayo dressing." },
+      { "name": "Subway Salad (with sauces)", "cal": 350, "unit": "bowl", "type": "ok", "desc": "Watch the Sweet Onion sauce." },
+      { "name": "Sprouts Salad", "cal": 150, "unit": "bowl", "type": "good", "desc": "Live protein power." }
+    ]
+  },
+  {
+    "name": "peanut butter",
+    "variants": [
+      { "name": "1 Tablespoon", "cal": 95, "unit": "tbsp", "type": "good", "desc": "Healthy fats and protein." },
+      { "name": "PB & Jelly Sandwich", "cal": 350, "unit": "pc", "type": "bad", "desc": "Sugar jam ruins the protein." }
+    ]
+  },
+  {
+    "name": "donut",
+    "variants": [
+      { "name": "Glazed Donut", "cal": 260, "unit": "pc", "type": "bad", "desc": "Deep fried sugar ring." },
+      { "name": "Chocolate Filled Donut", "cal": 350, "unit": "pc", "type": "bad", "desc": "Sugar and fat bomb." }
+    ]
+  },
+  {
+    "name": "nachos",
+    "variants": [
+      { "name": "Nachos with Salsa", "cal": 300, "unit": "plate", "type": "ok", "desc": "Corn chips." },
+      { "name": "Loaded Nachos (Cheese)", "cal": 600, "unit": "plate", "type": "bad", "desc": "Liquid cheese adds massive calories." }
+    ]
+  },
+  {
+    "name": "taco",
+    "variants": [
+      { "name": "Veg Taco (Crispy)", "cal": 250, "unit": "pc", "type": "bad", "desc": "Fried shell." },
+      { "name": "Soft Shell Taco", "cal": 200, "unit": "pc", "type": "ok", "desc": "Better option than crispy." }
+    ]
+  },
+  {
+    "name": "puff",
+    "variants": [
+      { "name": "Veg Puff", "cal": 250, "unit": "pc", "type": "bad", "desc": "Flaky pastry loaded with margarine." },
+      { "name": "Egg Puff", "cal": 300, "unit": "pc", "type": "bad", "desc": "One egg wrapped in fat-dough." },
+      { "name": "Chicken Puff", "cal": 380, "unit": "pc", "type": "bad", "desc": "Minced meat with oily gravy." },
+      { "name": "Paneer Puff", "cal": 350, "unit": "pc", "type": "bad", "desc": "High fat filling." }
+    ]
+  },
+  {
+    "name": "cake / pastry",
+    "variants": [
+      { "name": "Cool Cake / Pastry (Black Forest)", "cal": 400, "unit": "slice", "type": "bad", "desc": "Sugar syrup + Whipped Cream." },
+      { "name": "Honey Cake", "cal": 350, "unit": "slice", "type": "bad", "desc": "Soaked in sugar syrup & jam." },
+      { "name": "Plum Cake / Tea Cake", "cal": 280, "unit": "slice", "type": "bad", "desc": "Dense flour and sugar." },
+      { "name": "Cupcake", "cal": 250, "unit": "pc", "type": "bad", "desc": "Small but calorie dense." }
+    ]
+  },
+  {
+    "name": "bakery snacks",
+    "variants": [
+      { "name": "Dilpasand / Dilkush", "cal": 550, "unit": "slice", "type": "bad", "desc": "Coconut & Tutti-frutti sugar bomb." },
+      { "name": "Cream Bun", "cal": 300, "unit": "pc", "type": "bad", "desc": "Sweet bun with sugary cream." },
+      { "name": "Bun Butter Jam", "cal": 250, "unit": "pc", "type": "bad", "desc": "Classic comfort, high sugar." },
+      { "name": "Osmania Biscuit", "cal": 70, "unit": "pc", "type": "bad", "desc": "Salted sweet butter cookie." }
+    ]
+  },
+  {
+    "name": "roll",
+    "variants": [
+      { "name": "Veg Roll (Bakery)", "cal": 250, "unit": "pc", "type": "bad", "desc": "Deep fried outer layer." },
+      { "name": "Chicken Roll (Bakery)", "cal": 320, "unit": "pc", "type": "bad", "desc": "Oily stuffing." },
+      { "name": "Kolkata Kathi Roll (Chicken)", "cal": 450, "unit": "pc", "type": "bad", "desc": "Paratha fried in oil with egg." }
+    ]
+  },
+  {
     "name": "idli",
     "variants": [
       { "name": "Single Idli (Plain)", "cal": 39, "unit": "pc", "type": "good", "desc": "Just one steamed cake." },
@@ -106,7 +248,8 @@
       { "name": "Veg Hakka Noodles", "cal": 350, "unit": "plate", "type": "bad", "desc": "Refined flour loaded with oil." },
       { "name": "Egg/Chicken Noodles", "cal": 450, "unit": "plate", "type": "bad", "desc": "High protein but very high fat." },
       { "name": "Schezwan Noodles", "cal": 500, "unit": "plate", "type": "bad", "desc": "Loaded with sugary & oily sauce." },
-      { "name": "Fried Noodles (Chopsuey)", "cal": 550, "unit": "plate", "type": "bad", "desc": "Deep fried crisp noodles." }
+      { "name": "Fried Noodles (Chopsuey)", "cal": 550, "unit": "plate", "type": "bad", "desc": "Deep fried crisp noodles." },
+      { "name": "Maggi / Instant Noodles", "cal": 310, "unit": "pack", "type": "bad", "desc": "Maida and high sodium." }
     ]
   },
   {
@@ -316,6 +459,41 @@
     ]
   },
   {
+    "name": "burger",
+    "variants": [
+      { "name": "Veg Burger (Standard)", "cal": 310, "unit": "pc", "type": "ok", "desc": "Bun, patty, and basic veggies." },
+      { "name": "Chicken Zinger Burger", "cal": 480, "unit": "pc", "type": "bad", "desc": "Deep fried breaded fillet." },
+      { "name": "Cheese Burger (Double)", "cal": 550, "unit": "pc", "type": "bad", "desc": "High saturated fat." },
+      { "name": "Burger Combo (Burger + Fries + Coke)", "cal": 850, "unit": "meal", "type": "bad", "desc": "The ultimate calorie trap." }
+    ]
+  },
+  {
+    "name": "pizza",
+    "variants": [
+      { "name": "Personal Pan Pizza (Veg)", "cal": 600, "unit": "pc", "type": "bad", "desc": "Full small pizza." },
+      { "name": "Medium Pizza Slice (1 Slice)", "cal": 250, "unit": "slice", "type": "bad", "desc": "Calculated per slice." },
+      { "name": "Cheese Burst Add-on", "cal": 150, "unit": "pc", "type": "bad", "desc": "Liquid cheese adds huge calories." },
+      { "name": "Thin Crust Veg (Medium)", "cal": 800, "unit": "pizza", "type": "ok", "desc": "Better crust choice." }
+    ]
+  },
+  {
+    "name": "kfc / fried chicken",
+    "variants": [
+      { "name": "Hot & Crispy (1 Piece)", "cal": 300, "unit": "pc", "type": "bad", "desc": "Deep fried skin and meat." },
+      { "name": "Chicken Wings (2 pcs)", "cal": 180, "unit": "set", "type": "bad", "desc": "Small but oily." },
+      { "name": "Chicken Popcorn (Large)", "cal": 450, "unit": "tub", "type": "bad", "desc": "Easy to overeat." },
+      { "name": "KFC Rice Bowl (Veg/Non-Veg)", "cal": 550, "unit": "bowl", "type": "bad", "desc": "Fried strips over flavored rice." }
+    ]
+  },
+  {
+    "name": "sandwich",
+    "variants": [
+      { "name": "Veg Grilled Sandwich", "cal": 250, "unit": "pc", "type": "good", "desc": "Healthy if brown bread." },
+      { "name": "Club Sandwich (Oily/Mayo)", "cal": 450, "unit": "pc", "type": "bad", "desc": "Layers of fat and bread." },
+      { "name": "Subway 6-inch (Veg)", "cal": 300, "unit": "pc", "type": "good", "desc": "Loaded with fresh veggies." }
+    ]
+  },
+  {
     "name": "mango",
     "variants": [
       { "name": "Whole Fruit", "cal": 200, "unit": "pc", "type": "ok", "desc": "Natural sugar, enjoy in moderation." },
@@ -341,14 +519,6 @@
     ]
   },
   {
-    "name": "maggi / noodles",
-    "variants": [
-      { "name": "Plain Maggi", "cal": 300, "unit": "pack", "type": "bad", "desc": "Refined flour (Maida)." },
-      { "name": "Atta Noodles", "cal": 280, "unit": "pack", "type": "ok", "desc": "Slightly better fiber." },
-      { "name": "Fried Noodles", "cal": 400, "unit": "plate", "type": "bad", "desc": "Deep fried and oily." }
-    ]
-  },
-  {
     "name": "ice cream",
     "variants": [
       { "name": "Vanilla Scoop", "cal": 207, "unit": "scoop", "type": "bad", "desc": "High sugar and fat." },
@@ -357,6 +527,12 @@
       { "name": "Cone Ice Cream", "cal": 300, "unit": "pc", "type": "bad", "desc": "Wafer adds extra calories." }
     ]
   },
+  
+  { "name": "avocado", "cal": 160, "unit": "half", "type": "good", "desc": "Healthy fats." },
+  { "name": "broccoli", "cal": 45, "unit": "cup", "type": "good", "desc": "Superfood." },
+  { "name": "zucchini", "cal": 20, "unit": "cup", "type": "good", "desc": "Low calorie filler." },
+  { "name": "dragon fruit", "cal": 60, "unit": "pc", "type": "good", "desc": "Exotic and low cal." },
+  { "name": "kiwi", "cal": 42, "unit": "pc", "type": "good", "desc": "Vitamin C bomb." },
   { "name": "carrot", "cal": 30, "unit": "pc", "type": "good", "desc": "Great for eyes, low calorie snack." },
   { "name": "cucumber", "cal": 16, "unit": "cup", "type": "good", "desc": "95% water, very hydrating." },
   { "name": "beetroot", "cal": 43, "unit": "cup", "type": "good", "desc": "Good for blood pressure." },
@@ -367,6 +543,7 @@
   { "name": "pomegranate", "cal": 83, "unit": "cup", "type": "good", "desc": "Antioxidant rich." },
   { "name": "watermelon", "cal": 30, "unit": "cup", "type": "good", "desc": "Hydrating and low calorie." },
   { "name": "grapes", "cal": 67, "unit": "cup", "type": "ok", "desc": "High sugar content." },
+  
   { "name": "tea", "cal": 40, "unit": "cup", "type": "ok", "desc": "Comfort drink." },
   { "name": "coffee", "cal": 40, "unit": "cup", "type": "ok", "desc": "Caffeine kick." },
   { "name": "green tea", "cal": 2, "unit": "cup", "type": "good", "desc": "Metabolism booster." },
@@ -376,6 +553,8 @@
   { "name": "tender coconut", "cal": 40, "unit": "cup", "type": "good", "desc": "Natural electrolytes." },
   { "name": "beer", "cal": 150, "unit": "can", "type": "bad", "desc": "Empty liquid calories." },
   { "name": "coke", "cal": 140, "unit": "can", "type": "bad", "desc": "Liquid sugar." },
+  { "name": "soft drink", "cal": 140, "unit": "can", "type": "bad", "desc": "High sugar carbonated drink." },
+  
   { "name": "f1 shake", "cal": 242, "unit": "glass", "type": "good", "desc": "Herbalife Meal." },
   { "name": "pdm", "cal": 120, "unit": "scoop", "type": "good", "desc": "Protein mix." },
   { "name": "afresh", "cal": 4, "unit": "cup", "type": "good", "desc": "Energy." },
