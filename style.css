@@ -1,0 +1,12 @@
+body { -webkit-tap-highlight-color: transparent; background-color: #ffffff; overflow-x: hidden; }
+.pro-shadow { box-shadow: 0 10px 30px -5px rgba(255, 107, 0, 0.08); }
+.btn-click:active { transform: scale(0.97); transition: 0.1s; }
+.nav-active { color: #FF6B00 !important; }
+.hide { display: none !important; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.animate-slide-up { animation: slideUp 0.3s ease-out; }
+@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.progress-ring__circle { transition: stroke-dashoffset 0.5s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
+.check-active { background-color: #FF6B00 !important; color: white !important; border-color: #FF6B00 !important; }
+.thumbnail-gradient { background: linear-gradient(to top, rgba(10, 38, 71, 0.9) 0%, transparent 70%); }
