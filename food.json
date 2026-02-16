@@ -13,8 +13,72 @@
     "variants": [
       { "name": "Muesli (No Sugar)", "cal": 200, "unit": "bowl", "type": "good", "desc": "Raw grains and dried fruits." },
       { "name": "Cornflakes (Milk)", "cal": 250, "unit": "bowl", "type": "bad", "desc": "Low fiber, high sugar spike." },
-      { "name": "Chocos / Fruit Loops", "cal": 300, "unit": "bowl", "type": "bad", "desc": "Basically candy for breakfast." },
+      { "name": "Chocos / Fruit Loops", "cal": 300, "unit": "bowl", "type": "bad", "desc": "Candy for breakfast." },
       { "name": "Granola Bar", "cal": 150, "unit": "bar", "type": "bad", "desc": "Often held together by sugar syrup." }
+    ]
+  },
+  {
+    "name": "idli",
+    "variants": [
+      { "name": "Single Idli (Plain)", "cal": 39, "unit": "pc", "type": "good", "desc": "Just one steamed cake." },
+      { "name": "Plate Idli (2 pcs + Sambar + Chutney)", "cal": 220, "unit": "plate", "type": "good", "desc": "Standard breakfast plate." },
+      { "name": "Idli-Vada Combo (2 Idli + 1 Vada)", "cal": 380, "unit": "plate", "type": "bad", "desc": "Vada adds oil calories." },
+      { "name": "Podi Idli (Ghee Fried)", "cal": 280, "unit": "plate", "type": "bad", "desc": "Tossed in Ghee and Gunpowder." },
+      { "name": "Thatte Idli (1 Big)", "cal": 150, "unit": "pc", "type": "good", "desc": "Large plate idli." }
+    ]
+  },
+  {
+    "name": "dosa",
+    "variants": [
+      { "name": "Plain Dosa + Sambar/Chutney", "cal": 200, "unit": "set", "type": "good", "desc": "Light breakfast meal." },
+      { "name": "Masala Dosa (with Aloo)", "cal": 380, "unit": "pc", "type": "bad", "desc": "Potato filling + extra oil." },
+      { "name": "Set Dosa (2 pcs + Sagu)", "cal": 400, "unit": "plate", "type": "ok", "desc": "Thick spongy dosas." },
+      { "name": "Ghee Roast Dosa", "cal": 300, "unit": "pc", "type": "bad", "desc": "Roasted generously in ghee." },
+      { "name": "Rava Dosa", "cal": 180, "unit": "pc", "type": "ok", "desc": "Instant, moderate calories." }
+    ]
+  },
+  {
+    "name": "vada",
+    "variants": [
+      { "name": "Single Vada (Medu Vada)", "cal": 150, "unit": "pc", "type": "bad", "desc": "Deep fried lentil donut." },
+      { "name": "Sambar Vada (Dip)", "cal": 200, "unit": "plate", "type": "bad", "desc": "Vada soaked in Sambar." },
+      { "name": "Masala Vada / Ambode", "cal": 160, "unit": "pc", "type": "bad", "desc": "Crunchy chana dal vada." }
+    ]
+  },
+  {
+    "name": "pizza",
+    "variants": [
+      { "name": "Personal Pan Pizza (Veg)", "cal": 600, "unit": "pc", "type": "bad", "desc": "Full small pizza." },
+      { "name": "Medium Pizza Slice (1 Slice)", "cal": 250, "unit": "slice", "type": "bad", "desc": "Calculated per slice." },
+      { "name": "Cheese Burst Add-on", "cal": 150, "unit": "pc", "type": "bad", "desc": "Liquid cheese adds huge calories." },
+      { "name": "Thin Crust Veg (Medium)", "cal": 800, "unit": "pizza", "type": "ok", "desc": "Better crust choice." }
+    ]
+  },
+  {
+    "name": "kfc / fried chicken",
+    "variants": [
+      { "name": "Hot & Crispy (1 Piece)", "cal": 300, "unit": "pc", "type": "bad", "desc": "Deep fried skin and meat." },
+      { "name": "Chicken Wings (2 pcs)", "cal": 180, "unit": "set", "type": "bad", "desc": "Small but oily." },
+      { "name": "Chicken Popcorn (Large)", "cal": 450, "unit": "tub", "type": "bad", "desc": "Easy to overeat." },
+      { "name": "KFC Rice Bowl (Veg/Non-Veg)", "cal": 550, "unit": "bowl", "type": "bad", "desc": "Fried strips over flavored rice." }
+    ]
+  },
+  {
+    "name": "burger",
+    "variants": [
+      { "name": "Veg Burger (Standard)", "cal": 310, "unit": "pc", "type": "ok", "desc": "Bun, patty, and basic veggies." },
+      { "name": "Chicken Zinger Burger", "cal": 480, "unit": "pc", "type": "bad", "desc": "Deep fried breaded fillet." },
+      { "name": "Cheese Burger (Double)", "cal": 550, "unit": "pc", "type": "bad", "desc": "High saturated fat." },
+      { "name": "Burger Combo (Burger + Fries + Coke)", "cal": 850, "unit": "meal", "type": "bad", "desc": "The ultimate calorie trap." }
+    ]
+  },
+  {
+    "name": "pasta",
+    "variants": [
+      { "name": "Red Sauce Pasta (Arrabbiata)", "cal": 300, "unit": "bowl", "type": "ok", "desc": "Tomato base is lighter." },
+      { "name": "White Sauce Pasta (Alfredo)", "cal": 550, "unit": "bowl", "type": "bad", "desc": "Heavy cream, cheese and butter." },
+      { "name": "Macaroni & Cheese", "cal": 450, "unit": "bowl", "type": "bad", "desc": "Loaded with processed cheese." },
+      { "name": "Whole Wheat Pasta (Veg)", "cal": 280, "unit": "bowl", "type": "good", "desc": "Better fiber content." }
     ]
   },
   {
@@ -31,15 +95,6 @@
     "variants": [
       { "name": "Quinoa Salad", "cal": 220, "unit": "bowl", "type": "good", "desc": "Complete protein source." },
       { "name": "Quinoa Upma / Pulao", "cal": 250, "unit": "bowl", "type": "good", "desc": "Healthy Indian adaptation." }
-    ]
-  },
-  {
-    "name": "pasta",
-    "variants": [
-      { "name": "Red Sauce Pasta (Arrabbiata)", "cal": 300, "unit": "bowl", "type": "ok", "desc": "Tomato base is lighter." },
-      { "name": "White Sauce Pasta (Alfredo)", "cal": 550, "unit": "bowl", "type": "bad", "desc": "Heavy cream, cheese and butter." },
-      { "name": "Macaroni & Cheese", "cal": 450, "unit": "bowl", "type": "bad", "desc": "Loaded with processed cheese." },
-      { "name": "Whole Wheat Pasta (Veg)", "cal": 280, "unit": "bowl", "type": "good", "desc": "Better fiber content." }
     ]
   },
   {
@@ -142,34 +197,6 @@
     ]
   },
   {
-    "name": "idli",
-    "variants": [
-      { "name": "Single Idli (Plain)", "cal": 39, "unit": "pc", "type": "good", "desc": "Just one steamed cake." },
-      { "name": "Plate Idli (2 pcs + Sambar + Chutney)", "cal": 220, "unit": "plate", "type": "good", "desc": "Standard breakfast plate." },
-      { "name": "Idli-Vada Combo (2 Idli + 1 Vada)", "cal": 380, "unit": "plate", "type": "bad", "desc": "Vada adds oil calories." },
-      { "name": "Podi Idli (Ghee Fried)", "cal": 280, "unit": "plate", "type": "bad", "desc": "Tossed in Ghee and Gunpowder." },
-      { "name": "Thatte Idli (1 Big)", "cal": 150, "unit": "pc", "type": "good", "desc": "Large plate idli." }
-    ]
-  },
-  {
-    "name": "vada",
-    "variants": [
-      { "name": "Single Vada (Medu Vada)", "cal": 150, "unit": "pc", "type": "bad", "desc": "Deep fried lentil donut." },
-      { "name": "Sambar Vada (Dip)", "cal": 200, "unit": "plate", "type": "bad", "desc": "Vada soaked in Sambar." },
-      { "name": "Masala Vada / Ambode", "cal": 160, "unit": "pc", "type": "bad", "desc": "Crunchy chana dal vada." }
-    ]
-  },
-  {
-    "name": "dosa",
-    "variants": [
-      { "name": "Plain Dosa + Sambar/Chutney", "cal": 200, "unit": "set", "type": "good", "desc": "Light breakfast meal." },
-      { "name": "Masala Dosa (with Aloo)", "cal": 380, "unit": "pc", "type": "bad", "desc": "Potato filling + extra oil." },
-      { "name": "Set Dosa (2 pcs + Sagu)", "cal": 400, "unit": "plate", "type": "ok", "desc": "Thick spongy dosas." },
-      { "name": "Ghee Roast Dosa", "cal": 300, "unit": "pc", "type": "bad", "desc": "Roasted generously in ghee." },
-      { "name": "Rava Dosa", "cal": 180, "unit": "pc", "type": "ok", "desc": "Instant, moderate calories." }
-    ]
-  },
-  {
     "name": "puri",
     "variants": [
       { "name": "Single Puri", "cal": 101, "unit": "pc", "type": "bad", "desc": "Deep fried wheat bread." },
@@ -214,15 +241,6 @@
       { "name": "Sweet Pongal", "cal": 400, "unit": "cup", "type": "bad", "desc": "Jaggery & Ghee loaded." }
     ]
   },
-  { "name": "sambar", "cal": 80, "unit": "bowl", "type": "good", "desc": "Lentil & veg stew (Individual)." },
-  { "name": "chutney", "cal": 50, "unit": "tbsp", "type": "bad", "desc": "Coconut based (High calorie)." },
-  { "name": "podi / gunpowder", "cal": 60, "unit": "tbsp", "type": "bad", "desc": "Mixed with oil/ghee." },
-  { "name": "rasam", "cal": 40, "unit": "bowl", "type": "good", "desc": "Great for digestion and immunity." },
-  { "name": "dal fry", "cal": 150, "unit": "bowl", "type": "good", "desc": "Comforting lentil curry. High protein." },
-  { "name": "rajma", "cal": 200, "unit": "bowl", "type": "good", "desc": "Kidney beans, excellent for muscle." },
-  { "name": "chana masala", "cal": 165, "unit": "bowl", "type": "good", "desc": "Chickpeas are high fiber and protein." },
-  { "name": "naan", "cal": 260, "unit": "pc", "type": "bad", "desc": "Refined flour cooked in tandoor." },
-  { "name": "poha", "cal": 250, "unit": "cup", "type": "ok", "desc": "Flattened rice, light and digestible." },
   {
     "name": "leftovers / stored food",
     "variants": [
@@ -382,151 +400,15 @@
       { "name": "Moringa Soup", "cal": 40, "unit": "bowl", "type": "good", "desc": "Immunity booster." }
     ]
   },
-  {
-    "name": "snacks",
-    "variants": [
-      { "name": "Samosa", "cal": 260, "unit": "pc", "type": "bad", "desc": "Deep fried maida." },
-      { "name": "Mirchi Bajji", "cal": 200, "unit": "pc", "type": "bad", "desc": "Deep fried oil sponge." },
-      { "name": "Pani Puri", "cal": 50, "unit": "plate", "type": "ok", "desc": "Low cal, check hygiene." },
-      { "name": "Biscuits (Marie)", "cal": 45, "unit": "pc", "type": "ok", "desc": "Okay with tea." },
-      { "name": "Lays / Chips", "cal": 170, "unit": "small pack", "type": "bad", "desc": "Empty calories." }
-    ]
-  },
-  {
-    "name": "curry leaves",
-    "variants": [
-      { "name": "Raw Leaves", "cal": 0, "unit": "sprig", "type": "good", "desc": "Chew for hair growth & digestion." },
-      { "name": "Curry Leaf Powder (Podi)", "cal": 35, "unit": "tbsp", "type": "good", "desc": "Iron rich condiment with rice." }
-    ]
-  },
-  {
-    "name": "bhindi / okra",
-    "variants": [
-      { "name": "Bhindi Stir Fry", "cal": 120, "unit": "bowl", "type": "good", "desc": "Low oil, high fiber." },
-      { "name": "Bhindi Masala", "cal": 180, "unit": "bowl", "type": "ok", "desc": "Spicy curry, moderate oil." },
-      { "name": "Kurkuri Bhindi", "cal": 300, "unit": "plate", "type": "bad", "desc": "Deep fried crispy snack." }
-    ]
-  },
-  {
-    "name": "brinjal / eggplant",
-    "variants": [
-      { "name": "Roasted / Bharta", "cal": 90, "unit": "bowl", "type": "good", "desc": "Smoky flavor, low cal." },
-      { "name": "Brinjal Curry", "cal": 160, "unit": "bowl", "type": "ok", "desc": "Absorbs oil like a sponge." },
-      { "name": "Ennai Kathirikai", "cal": 250, "unit": "bowl", "type": "bad", "desc": "Stuffed & cooked in lots of oil." }
-    ]
-  },
-  {
-    "name": "bitter gourd / karela",
-    "variants": [
-      { "name": "Karela Juice", "cal": 20, "unit": "glass", "type": "good", "desc": "Great for blood sugar." },
-      { "name": "Karela Fry", "cal": 200, "unit": "plate", "type": "bad", "desc": "Deep fried to remove bitterness." }
-    ]
-  },
-  {
-    "name": "potato", 
-    "variants": [
-      { "name": "Boiled / Mashed", "cal": 87, "unit": "cup", "type": "good", "desc": "High satiety, good energy." },
-      { "name": "Aloo Fry / Curry", "cal": 160, "unit": "cup", "type": "ok", "desc": "Oil adds significant calories." },
-      { "name": "French Fries", "cal": 312, "unit": "serving", "type": "bad", "desc": "Deep fried saturated fat." },
-      { "name": "Lays Chips (Small)", "cal": 165, "unit": "pack", "type": "bad", "desc": "Processed carbs & sodium." }
-    ]
-  },
-  {
-    "name": "egg",
-    "variants": [
-      { "name": "Boiled Egg", "cal": 70, "unit": "pc", "type": "good", "desc": "Gold standard protein." },
-      { "name": "Omelette (1 Egg)", "cal": 110, "unit": "pc", "type": "ok", "desc": "Oil increases calories." },
-      { "name": "Egg Bhurji", "cal": 160, "unit": "plate", "type": "ok", "desc": "Healthy if less oil used." },
-      { "name": "Egg Puff", "cal": 300, "unit": "pc", "type": "bad", "desc": "Maida and bakery fat." }
-    ]
-  },
-  {
-    "name": "rice",
-    "variants": [
-      { "name": "White Rice", "cal": 130, "unit": "cup", "type": "ok", "desc": "Portion control is key." },
-      { "name": "Brown Rice", "cal": 111, "unit": "cup", "type": "good", "desc": "Fiber rich." },
-      { "name": "Curd Rice", "cal": 200, "unit": "cup", "type": "good", "desc": "Great for digestion." },
-      { "name": "Jeera / Lemon Rice", "cal": 250, "unit": "cup", "type": "ok", "desc": "Oil adds calories." },
-      { "name": "Fried Rice", "cal": 350, "unit": "plate", "type": "bad", "desc": "Oily and high sodium." }
-    ]
-  },
-  {
-    "name": "biryani",
-    "variants": [
-      { "name": "Veg Biryani", "cal": 250, "unit": "cup", "type": "bad", "desc": "Often oily." },
-      { "name": "Chicken Biryani", "cal": 290, "unit": "cup", "type": "bad", "desc": "Calorie dense." },
-      { "name": "Mutton Biryani", "cal": 350, "unit": "cup", "type": "bad", "desc": "Very high fat." }
-    ]
-  },
-  {
-    "name": "burger",
-    "variants": [
-      { "name": "Veg Burger (Standard)", "cal": 310, "unit": "pc", "type": "ok", "desc": "Bun, patty, and basic veggies." },
-      { "name": "Chicken Zinger Burger", "cal": 480, "unit": "pc", "type": "bad", "desc": "Deep fried breaded fillet." },
-      { "name": "Cheese Burger (Double)", "cal": 550, "unit": "pc", "type": "bad", "desc": "High saturated fat." },
-      { "name": "Burger Combo (Burger + Fries + Coke)", "cal": 850, "unit": "meal", "type": "bad", "desc": "The ultimate calorie trap." }
-    ]
-  },
-  {
-    "name": "pizza",
-    "variants": [
-      { "name": "Personal Pan Pizza (Veg)", "cal": 600, "unit": "pc", "type": "bad", "desc": "Full small pizza." },
-      { "name": "Medium Pizza Slice (1 Slice)", "cal": 250, "unit": "slice", "type": "bad", "desc": "Calculated per slice." },
-      { "name": "Cheese Burst Add-on", "cal": 150, "unit": "pc", "type": "bad", "desc": "Liquid cheese adds huge calories." },
-      { "name": "Thin Crust Veg (Medium)", "cal": 800, "unit": "pizza", "type": "ok", "desc": "Better crust choice." }
-    ]
-  },
-  {
-    "name": "kfc / fried chicken",
-    "variants": [
-      { "name": "Hot & Crispy (1 Piece)", "cal": 300, "unit": "pc", "type": "bad", "desc": "Deep fried skin and meat." },
-      { "name": "Chicken Wings (2 pcs)", "cal": 180, "unit": "set", "type": "bad", "desc": "Small but oily." },
-      { "name": "Chicken Popcorn (Large)", "cal": 450, "unit": "tub", "type": "bad", "desc": "Easy to overeat." },
-      { "name": "KFC Rice Bowl (Veg/Non-Veg)", "cal": 550, "unit": "bowl", "type": "bad", "desc": "Fried strips over flavored rice." }
-    ]
-  },
-  {
-    "name": "sandwich",
-    "variants": [
-      { "name": "Veg Grilled Sandwich", "cal": 250, "unit": "pc", "type": "good", "desc": "Healthy if brown bread." },
-      { "name": "Club Sandwich (Oily/Mayo)", "cal": 450, "unit": "pc", "type": "bad", "desc": "Layers of fat and bread." },
-      { "name": "Subway 6-inch (Veg)", "cal": 300, "unit": "pc", "type": "good", "desc": "Loaded with fresh veggies." }
-    ]
-  },
-  {
-    "name": "mango",
-    "variants": [
-      { "name": "Whole Fruit", "cal": 200, "unit": "pc", "type": "ok", "desc": "Natural sugar, enjoy in moderation." },
-      { "name": "Mango Shake", "cal": 350, "unit": "glass", "type": "bad", "desc": "Milk + Sugar + Mango = Calories." },
-      { "name": "Maaza / Slice", "cal": 150, "unit": "glass", "type": "bad", "desc": "Mainly sugar syrup." }
-    ]
-  },
-  {
-    "name": "apple",
-    "variants": [
-      { "name": "Whole Fruit", "cal": 52, "unit": "pc", "type": "good", "desc": "Best choice. Full fiber." },
-      { "name": "Fresh Juice (No Sugar)", "cal": 110, "unit": "glass", "type": "ok", "desc": "Good vitamins, but zero fiber." },
-      { "name": "Packaged / Sugar Juice", "cal": 160, "unit": "glass", "type": "bad", "desc": "Basically sugar water." }
-    ]
-  },
-  {
-    "name": "corn",
-    "variants": [
-      { "name": "Boiled Corn", "cal": 90, "unit": "cup", "type": "good", "desc": "Fiber rich snack." },
-      { "name": "Sweet Corn (Butter)", "cal": 150, "unit": "cup", "type": "bad", "desc": "Butter adds saturated fat." },
-      { "name": "Popcorn (Plain)", "cal": 100, "unit": "bowl", "type": "good", "desc": "Whole grain snack." },
-      { "name": "Popcorn (Cheese/Butter)", "cal": 300, "unit": "tub", "type": "bad", "desc": "Calorie bomb." }
-    ]
-  },
-  {
-    "name": "ice cream",
-    "variants": [
-      { "name": "Vanilla Scoop", "cal": 207, "unit": "scoop", "type": "bad", "desc": "High sugar and fat." },
-      { "name": "Chocolate Scoop", "cal": 216, "unit": "scoop", "type": "bad", "desc": "Calorie dense." },
-      { "name": "Kulfi Stick", "cal": 180, "unit": "stick", "type": "bad", "desc": "Condensed milk sugar." },
-      { "name": "Cone Ice Cream", "cal": 300, "unit": "pc", "type": "bad", "desc": "Wafer adds extra calories." }
-    ]
-  },
+  { "name": "sambar", "cal": 80, "unit": "bowl", "type": "good", "desc": "Lentil & veg stew (Individual)." },
+  { "name": "chutney", "cal": 50, "unit": "tbsp", "type": "bad", "desc": "Coconut based (High calorie)." },
+  { "name": "podi / gunpowder", "cal": 60, "unit": "tbsp", "type": "bad", "desc": "Mixed with oil/ghee." },
+  { "name": "rasam", "cal": 40, "unit": "bowl", "type": "good", "desc": "Great for digestion and immunity." },
+  { "name": "dal fry", "cal": 150, "unit": "bowl", "type": "good", "desc": "Comforting lentil curry." },
+  { "name": "rajma", "cal": 200, "unit": "bowl", "type": "good", "desc": "Kidney beans, excellent for muscle." },
+  { "name": "chana masala", "cal": 165, "unit": "bowl", "type": "good", "desc": "Chickpeas are high fiber and protein." },
+  { "name": "naan", "cal": 260, "unit": "pc", "type": "bad", "desc": "Refined flour cooked in tandoor." },
+  { "name": "poha", "cal": 250, "unit": "cup", "type": "ok", "desc": "Flattened rice, light and digestible." },
   
   { "name": "avocado", "cal": 160, "unit": "half", "type": "good", "desc": "Healthy fats." },
   { "name": "broccoli", "cal": 45, "unit": "cup", "type": "good", "desc": "Superfood." },
@@ -543,7 +425,19 @@
   { "name": "pomegranate", "cal": 83, "unit": "cup", "type": "good", "desc": "Antioxidant rich." },
   { "name": "watermelon", "cal": 30, "unit": "cup", "type": "good", "desc": "Hydrating and low calorie." },
   { "name": "grapes", "cal": 67, "unit": "cup", "type": "ok", "desc": "High sugar content." },
-  
+  { "name": "curry leaves", "cal": 0, "unit": "sprig", "type": "good", "desc": "Chew for hair growth & digestion." },
+  { "name": "bhindi / okra", "cal": 120, "unit": "bowl", "type": "good", "desc": "Low oil, high fiber." },
+  { "name": "brinjal / eggplant", "cal": 160, "unit": "bowl", "type": "ok", "desc": "Absorbs oil like a sponge." },
+  { "name": "bitter gourd / karela", "cal": 200, "unit": "plate", "type": "bad", "desc": "Deep fried." },
+  { "name": "potato", "cal": 87, "unit": "cup", "type": "good", "desc": "Boiled." },
+  { "name": "egg", "cal": 70, "unit": "pc", "type": "good", "desc": "Boiled." },
+  { "name": "rice", "cal": 130, "unit": "cup", "type": "ok", "desc": "White rice." },
+  { "name": "biryani", "cal": 300, "unit": "cup", "type": "bad", "desc": "Oily rice." },
+  { "name": "sandwich", "cal": 250, "unit": "pc", "type": "good", "desc": "Veg grilled." },
+  { "name": "mango", "cal": 200, "unit": "pc", "type": "ok", "desc": "Whole fruit." },
+  { "name": "apple", "cal": 52, "unit": "pc", "type": "good", "desc": "Whole fruit." },
+  { "name": "corn", "cal": 90, "unit": "cup", "type": "good", "desc": "Boiled." },
+  { "name": "ice cream", "cal": 207, "unit": "scoop", "type": "bad", "desc": "Sugar and fat." },
   { "name": "tea", "cal": 40, "unit": "cup", "type": "ok", "desc": "Comfort drink." },
   { "name": "coffee", "cal": 40, "unit": "cup", "type": "ok", "desc": "Caffeine kick." },
   { "name": "green tea", "cal": 2, "unit": "cup", "type": "good", "desc": "Metabolism booster." },
