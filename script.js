@@ -1,7 +1,17 @@
-const KEY = "ZESTUP_PRO_V9_FINAL";
+const KEY = "ZESTUP_PRO_V13";
 let state = JSON.parse(localStorage.getItem(KEY));
 let foodDB = {}; 
 let tempFood = null; 
+
+// MENU MAPPINGS (Which category shows which foods)
+const CATEGORIES = {
+    'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'chapati', 'parotta', 'poha', 'oats'],
+    'meals': ['rice', 'biryani', 'curry', 'dal', 'sambar', 'rasam', 'chicken', 'fish', 'mutton', 'paneer', 'mushroom', 'roti', 'naan', 'egg'],
+    'junk': ['pizza', 'burger', 'kfc', 'noodles', 'fried rice', 'momos', 'roll', 'puff', 'cake', 'samosa', 'chips', 'nachos', 'taco', 'donut', 'ice cream'],
+    'fresh': ['apple', 'banana', 'mango', 'grapes', 'papaya', 'watermelon', 'pomegranate', 'salad', 'corn', 'cucumber', 'carrot', 'sprouts', 'avocado'],
+    'sips': ['tea', 'coffee', 'milk', 'buttermilk', 'coke', 'soft drink', 'milkshake', 'tender coconut', 'beer'],
+    'herbalife': ['f1 shake', 'pdm', 'afresh', 'protein bar', 'multivitamin', 'cell-u-loss', 'herbal control', 'aloe concentrate']
+};
 
 const CONTENT = {
     "Monday": { veg: "Brown Rice + Sambhar", non: "Brown Rice + Fish Curry", vCal: 360, nCal: 420, vid: "b9ztxh-cTHI", t: "Body Basics" },
@@ -98,6 +108,25 @@ function renderLog() {
     list.innerHTML = state.consumed.map((item, i) => `<div class="bg-white p-4 rounded-2xl border flex justify-between items-center"><div><h4 class="font-bold text-marine text-sm">${item.name}</h4><p class="text-[10px] text-slate-400 font-bold">${item.cal} kcal</p></div><button onclick="deleteItem(${i})" class="text-slate-300 p-2"><i class="fas fa-trash-alt"></i></button></div>`).join('');
 }
 
+// BROWSE CATEGORY FUNCTION
+function browseCategory(cat) {
+    const list = document.getElementById('suggestions');
+    const items = CATEGORIES[cat];
+    
+    // Clear previous and show list
+    list.innerHTML = `<div class="p-3 bg-mist border-b border-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400">Browsing: ${cat}</div>`;
+    
+    items.forEach(keyword => {
+        // Find in DB
+        const match = Object.keys(foodDB).find(k => k.includes(keyword));
+        if(match) {
+            list.innerHTML += `<div onclick="selectFood('${match}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center transition-all"><span class="font-bold text-marine capitalize text-sm">${match}</span><i class="fas fa-plus-circle text-punch text-xs"></i></div>`;
+        }
+    });
+    
+    list.classList.remove('hide');
+}
+
 function showSuggestions(val) {
     val = val.toLowerCase(); const list = document.getElementById('suggestions');
     if(val.length < 1) { list.classList.add('hide'); return; }
@@ -115,8 +144,6 @@ function selectFood(name) {
     const item = foodDB[name];
     document.getElementById('foodName').value = "";
     document.getElementById('suggestions').classList.add('hide');
-    
-    // CLEANING GHOST OPTIONS
     document.getElementById('prepModal').classList.add('hide');
     document.getElementById('analysisResult').classList.add('hide');
     document.getElementById('prepOptions').innerHTML = ""; 
@@ -220,7 +247,6 @@ function finishSetup() {
     const g = document.getElementById('setupGender').value;
     const dob = document.getElementById('setupDOB').value;
 
-    // --- AGE CALCULATION ---
     let age = 30; // Default
     if (dob) {
         const birthDate = new Date(dob);
@@ -230,18 +256,11 @@ function finishSetup() {
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
     }
 
-    // --- BMR CALCULATION (Mifflin-St Jeor) ---
-    // Men: (10 × weight in kg) + (6.25 × height in cm) - (5 × age in years) + 5
-    // Women: (10 × weight in kg) + (6.25 × height in cm) - (5 × age in years) - 161
     let bmr = (10 * w) + (6.25 * h) - (5 * age);
     bmr += (g === 'male' ? 5 : -161);
 
-    // --- TDEE & GOAL ---
-    // Activity Factor 1.2 (Sedentary/Light) - 300 kcal deficit
     let tdee = bmr * 1.2;
     let dailyGoal = Math.round(tdee - 300);
-
-    // Safety limit: Don't go below 1200
     if (dailyGoal < 1200) dailyGoal = 1200;
 
     let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2);
