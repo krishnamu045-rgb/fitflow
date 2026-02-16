@@ -1,8 +1,8 @@
-const KEY = "ZESTUP_PRO_V13_8";
+const KEY = "ZESTUP_PRO_V14_0";
 let state = JSON.parse(localStorage.getItem(KEY));
 let foodDB = {}; 
 let tempFood = null; 
-let currentMenuMode = 'user'; // 'user' or 'coach'
+let currentMenuMode = 'user'; 
 
 const CATEGORIES = {
     'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'poha', 'parotta', 'oats', 'chapati'],
@@ -13,15 +13,22 @@ const CATEGORIES = {
     'fresh': ['apple', 'banana', 'mango', 'grapes', 'papaya', 'watermelon', 'pomegranate', 'salad', 'corn', 'cucumber', 'carrot', 'sprouts', 'avocado', 'coconut', 'juice']
 };
 
-// COACH SUGGESTIONS (Rotating Weekly Plan)
+// SMART CONTEXT MAPPING
+const QUICK_PICKS = {
+    'Breakfast': ['idli', 'dosa', 'oats', 'upma', 'poha', 'puri', 'chapati', 'egg', 'tea', 'coffee'],
+    'Lunch': ['rice', 'roti', 'dal', 'chicken', 'curry', 'biryani', 'curd rice', 'salad'],
+    'Dinner': ['roti', 'dal', 'soup', 'salad', 'milk', 'fruit', 'f1 shake'],
+    'Snack': ['apple', 'banana', 'tea', 'coffee', 'biscuit', 'sandwich', 'puff', 'corn']
+};
+
 const COACH_PLAN = {
-    "Monday": { sn1: "5 Soaked Almonds", lun: "Brown Rice + Dal + Salad", sn2: "Green Tea + Roasted Chana", vCal: 340, nCal: 380, vid: "b9ztxh-cTHI", t: "Body Basics" },
-    "Tuesday": { sn1: "Apple Slices", lun: "Ragi Mudde + Veg Saaru", sn2: "Buttermilk", vCal: 320, nCal: 360, vid: "ELpVLwrDR_g", t: "Core Strength" },
-    "Wednesday": { sn1: "Boiled Egg / Sprouts", lun: "Millet Rice + Rasam + Veg", sn2: "Papaya Bowl", vCal: 310, nCal: 360, vid: "VsAXZ34AJ-k", t: "Metabolism" },
-    "Thursday": { sn1: "Cucumber Sticks", lun: "2 Jowar Roti + Palak Paneer", sn2: "Black Coffee (No Sugar)", vCal: 330, nCal: 380, vid: "rmmWuI5Jinc", t: "Lower Body" },
-    "Friday": { sn1: "Guava with Salt", lun: "Curd Rice + Pomegranate", sn2: "Protein Bar", vCal: 300, nCal: 300, vid: "8r4Z-ghDI4k", t: "Cardio Kick" },
-    "Saturday": { sn1: "Coconut Water", lun: "Veg Biryani (Less Oil)", sn2: "Roasted Makhana", vCal: 400, nCal: 450, vid: "uKXcLBjWqas", t: "Stability" },
-    "Sunday": { sn1: "Watermelon Bowl", lun: "Grilled Chicken + Salad", sn2: "Tea + 2 Marie Biscuits", vCal: 280, nCal: 320, vid: "inpok4MKVLM", t: "Mindfulness" }
+    "Monday": { sn1: "5 Soaked Almonds", lun: "Brown Rice + Dal + Salad", sn2: "Green Tea + Roasted Chana", vCal: 340, t: "Body Basics", vid: "b9ztxh-cTHI" },
+    "Tuesday": { sn1: "Apple Slices", lun: "Ragi Mudde + Veg Saaru", sn2: "Buttermilk", vCal: 320, t: "Core Strength", vid: "ELpVLwrDR_g" },
+    "Wednesday": { sn1: "Boiled Egg / Sprouts", lun: "Millet Rice + Rasam + Veg", sn2: "Papaya Bowl", vCal: 310, t: "Metabolism", vid: "VsAXZ34AJ-k" },
+    "Thursday": { sn1: "Cucumber Sticks", lun: "2 Jowar Roti + Palak Paneer", sn2: "Black Coffee (No Sugar)", vCal: 330, t: "Lower Body", vid: "rmmWuI5Jinc" },
+    "Friday": { sn1: "Guava with Salt", lun: "Curd Rice + Pomegranate", sn2: "Protein Bar", vCal: 300, t: "Cardio Kick", vid: "8r4Z-ghDI4k" },
+    "Saturday": { sn1: "Coconut Water", lun: "Veg Biryani (Less Oil)", sn2: "Roasted Makhana", vCal: 400, t: "Stability", vid: "uKXcLBjWqas" },
+    "Sunday": { sn1: "Watermelon Bowl", lun: "Grilled Chicken + Salad", sn2: "Tea + 2 Marie Biscuits", vCal: 280, t: "Mindfulness", vid: "inpok4MKVLM" }
 };
 
 window.onload = async () => {
@@ -32,7 +39,7 @@ window.onload = async () => {
 
 async function loadFoodData() {
     try {
-        const response = await fetch('food.json?v=13.8');
+        const response = await fetch('food.json?v=14.0');
         const data = await response.json();
         data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
         console.log("External Food DB Loaded");
@@ -50,11 +57,8 @@ function init() {
     checkNewDay(); checkHomeDisclaimer(); updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); 
 }
 
-// --- MENU SWITCHING LOGIC ---
 function switchMenu(mode) {
     currentMenuMode = mode;
-    
-    // UI Button Toggling
     const userBtn = document.getElementById('tab-user');
     const coachBtn = document.getElementById('tab-coach');
     
@@ -65,7 +69,7 @@ function switchMenu(mode) {
         coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-punch text-white shadow-sm transition-all";
         userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all";
     }
-    renderMeals();
+    renderMeals(); 
 }
 
 function renderMeals() {
@@ -73,32 +77,23 @@ function renderMeals() {
     const d = days[new Date().getDay()];
     const p = COACH_PLAN[d];
     
-    // Update Workout Info regardless of tab
     document.getElementById('wTitle').innerText = p.t; 
     document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
 
     if (currentMenuMode === 'user') {
-        // --- USER MODE (5 Search Slots) ---
-        document.getElementById('menuTotal').innerText = "--"; 
         document.getElementById('mealContainer').innerHTML = `
-            ${renderSearchSlot('Breakfast', 'Tap to add...')}
-            ${renderSearchSlot('Mid-Snack', 'Tap to add...')}
-            ${renderSearchSlot('Lunch', 'Tap to add...')}
-            ${renderSearchSlot('Eve-Snack', 'Tap to add...')}
-            ${renderSearchSlot('Dinner', 'Tap to add...')}
+            ${renderSearchSlot('Breakfast', 'Tap to select...')}
+            ${renderSearchSlot('Mid-Snack', 'Tap to select...')}
+            ${renderSearchSlot('Lunch', 'Tap to select...')}
+            ${renderSearchSlot('Eve-Snack', 'Tap to select...')}
+            ${renderSearchSlot('Dinner', 'Tap to select...')}
         `;
     } else {
-        // --- COACH MODE (Fixed Shakes + Healthy Suggestions) ---
-        document.getElementById('menuTotal').innerText = 500 + p.vCal; 
         document.getElementById('mealContainer').innerHTML = `
             <div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-leaf"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Breakfast (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake + Afresh</p></div><button onclick="quickLog('Coach Breakfast', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div>
-            
             <div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-orange-400 text-xl w-8 text-center"><i class="fas fa-apple-alt"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Mid-Snack Idea</p><p class="font-extrabold text-sm text-marine">${p.sn1}</p></div></div>
-            
             <div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-blue-400 text-xl w-8 text-center"><i class="fas fa-utensils"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Lunch Suggestion</p><p class="font-extrabold text-sm text-marine">${p.lun}</p></div></div>
-            
             <div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-purple-400 text-xl w-8 text-center"><i class="fas fa-mug-hot"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Evening Snack</p><p class="font-extrabold text-sm text-marine">${p.sn2}</p></div></div>
-            
             <div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-moon"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Dinner (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake</p></div><button onclick="quickLog('Coach Dinner', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div>
         `;
     }
@@ -109,9 +104,10 @@ function renderSearchSlot(title, ph) {
     if (title === 'Breakfast' || title === 'Dinner') {
         swapBtn = `<button onclick="triggerHerbalifeUpsell('${title}')" class="text-[9px] font-black bg-white border border-green-100 text-green-500 px-3 py-2 rounded-xl shadow-sm hover:bg-green-50 animate-pulse"><i class="fas fa-sync-alt mr-1"></i>Swap</button>`;
     }
+    // Updated onclick to open the SMART SELECTOR
     return `
     <div class="bg-mist p-4 rounded-[2rem] flex justify-between items-center border border-slate-50 shadow-sm relative overflow-hidden group">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="focusSearch()">
+        <div class="flex items-center gap-4 cursor-pointer" onclick="openSmartSelector('${title}')">
             <div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-plus"></i></div>
             <div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${ph}</p></div>
         </div>
@@ -119,9 +115,106 @@ function renderSearchSlot(title, ph) {
     </div>`;
 }
 
-function focusSearch() { document.getElementById('foodName').focus(); document.getElementById('info-section').scrollIntoView({ behavior: 'smooth' }); }
+// --- NEW SMART SELECTOR MODAL ---
+function openSmartSelector(mealType) {
+    // Determine context (Snack is shared)
+    let contextKey = mealType;
+    if (mealType.includes('Snack')) contextKey = 'Snack';
+    
+    const quickItems = QUICK_PICKS[contextKey] || QUICK_PICKS['Lunch']; // Fallback
+    
+    // Generate Grid HTML
+    const gridHTML = quickItems.map(itemKey => {
+        // Find item in DB to check for bad/good type (for color)
+        const dbItem = foodDB[itemKey] || { variants: [{ type: 'ok' }] }; 
+        const isBad = (dbItem.variants && dbItem.variants[0].type === 'bad') || dbItem.type === 'bad';
+        const colorClass = isBad ? 'text-orange-500 bg-orange-50' : 'text-green-500 bg-green-50';
+        
+        return `
+        <div onclick="selectFood('${itemKey}'); closeSmartSelector()" class="flex flex-col items-center gap-2 p-3 rounded-xl border border-slate-50 hover:border-punch transition-all cursor-pointer bg-white">
+            <div class="w-8 h-8 rounded-full ${colorClass} flex items-center justify-center text-xs"><i class="fas fa-utensils"></i></div>
+            <span class="text-[10px] font-bold text-marine capitalize">${itemKey}</span>
+        </div>`;
+    }).join('');
 
-// --- CORE FUNCTIONS (Compressed) ---
+    const modalHTML = `
+        <div id="smartSelectorModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 animate-fade-in">
+            <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative h-[80vh] flex flex-col">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-black uppercase tracking-tight text-marine">Select ${mealType}</h3>
+                    <button onclick="closeSmartSelector()" class="w-8 h-8 bg-mist rounded-full flex items-center justify-center text-slate-400"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <div class="relative">
+                    <input type="text" id="smartSearch" onkeyup="showSmartSuggestions(this.value)" placeholder="Type to search..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100">
+                    <i class="fas fa-search absolute left-5 top-5 text-slate-300"></i>
+                </div>
+                
+                <div id="smartSearchResults" class="hidden space-y-2 overflow-y-auto max-h-40"></div>
+
+                <div id="smartContextGrid">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Quick Picks</p>
+                    <div class="grid grid-cols-3 gap-2 overflow-y-auto pb-4">
+                        ${gridHTML}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    setTimeout(() => document.getElementById('smartSearch').focus(), 100);
+}
+
+function closeSmartSelector() { const m = document.getElementById('smartSelectorModal'); if(m) m.remove(); }
+
+function showSmartSuggestions(val) {
+    const list = document.getElementById('smartSearchResults');
+    const grid = document.getElementById('smartContextGrid');
+    
+    if (val.length < 1) {
+        list.classList.add('hidden');
+        grid.classList.remove('hidden');
+        return;
+    }
+    
+    grid.classList.add('hidden');
+    list.classList.remove('hidden');
+    
+    const matches = Object.keys(foodDB).filter(k => k.includes(val.toLowerCase()));
+    
+    if (matches.length === 0) {
+        list.innerHTML = `<div onclick="saveCustomFromSmart('${val}')" class="p-3 border-b border-slate-50 text-center text-xs font-bold text-punch cursor-pointer">+ Add "${val}" to DB</div>`;
+    } else {
+        list.innerHTML = matches.map(f => `<div onclick="selectFood('${f}'); closeSmartSelector()" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center"><span class="font-bold text-marine capitalize text-sm">${f}</span></div>`).join('');
+    }
+}
+
+function saveCustomFromSmart(val) {
+    closeSmartSelector();
+    showAddCustom(val);
+}
+
+// --- STANDARD FUNCTIONS (Existing) ---
+function triggerHerbalifeUpsell(mealType) {
+    const modalHTML = `
+        <div id="upsellModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 animate-fade-in">
+            <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative">
+                <button onclick="closeUpsell()" class="absolute top-4 right-4 text-slate-300 hover:text-punch"><i class="fas fa-times text-xl"></i></button>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-3 text-green-500 text-2xl shadow-sm"><i class="fas fa-leaf"></i></div>
+                    <h3 class="text-xl font-black uppercase tracking-tight text-marine">Smart Swap</h3>
+                    <p class="text-xs font-bold text-slate-400 mt-1">Upgrade your ${mealType} with Nutrition.</p>
+                </div>
+                <div class="space-y-2">
+                    <button onclick="confirmShake(242, 'Formula 1 Shake')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Standard (F1)</span><span class="text-[10px] font-black text-slate-400">242 kcal</span></button>
+                    <button onclick="confirmShake(360, 'Shake + Protein (PDM)')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Shake + Protein (PDM)</span><span class="text-[10px] font-black text-slate-400">360 kcal</span></button>
+                    <button onclick="confirmShake(260, 'Power Combo (F1+F2+PPP)')" class="w-full p-3 rounded-xl border-2 border-green-200 bg-green-50 flex justify-between items-center relative overflow-hidden"><div class="absolute top-0 left-0 bg-green-500 text-white text-[8px] font-black px-2 py-0.5 rounded-br-lg">BEST</div><div class="flex flex-col text-left ml-1"><span class="font-black text-marine text-xs">Power Combo</span><span class="text-[9px] font-bold text-slate-500">F1 + Multivit + PPP</span></div><span class="text-[10px] font-black text-green-600">~260 kcal</span></button>
+                </div>
+            </div>
+        </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+function closeUpsell() { const m = document.getElementById('upsellModal'); if(m) m.remove(); }
+function confirmShake(cal, name) { quickLog(name, cal); closeUpsell(); }
 function checkHomeDisclaimer() { if (state.lastDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('homeDisclaimerModal').classList.remove('hide'); }
 function acceptHomeDisclaimer() { state.lastDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('homeDisclaimerModal').classList.add('hide'); }
 function checkWorkoutSafety() { if (state.lastWorkoutSafetyDate !== new Date().toISOString().split('T')[0]) document.getElementById('workoutSafetyModal').classList.remove('hide'); }
@@ -145,29 +238,6 @@ function quickLog(name, cal) { state.consumed.unshift({ name: name, cal: cal, qt
 function quickAdd(name, cal) { state.consumed.unshift({ name: name, cal: cal, qty: 1, time: Date.now() }); save(); updateInfoUI(); }
 function deleteItem(index) { state.consumed.splice(index, 1); save(); updateInfoUI(); }
 function renderLog() { const list = document.getElementById('logContainer'); if(state.consumed.length === 0) { list.innerHTML = `<div class="text-center py-8 text-slate-300 text-xs font-bold">No meals logged yet.</div>`; return; } list.innerHTML = state.consumed.map((item, i) => `<div class="bg-white p-4 rounded-2xl border flex justify-between items-center"><div><h4 class="font-bold text-marine text-sm">${item.name}</h4><p class="text-[10px] text-slate-400 font-bold">${item.cal} kcal</p></div><button onclick="deleteItem(${i})" class="text-slate-300 p-2"><i class="fas fa-trash-alt"></i></button></div>`).join(''); }
-
-// --- UPSELL LOGIC (V13.8) ---
-function triggerHerbalifeUpsell(mealType) {
-    const modalHTML = `
-        <div id="upsellModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 animate-fade-in">
-            <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative">
-                <button onclick="closeUpsell()" class="absolute top-4 right-4 text-slate-300 hover:text-punch"><i class="fas fa-times text-xl"></i></button>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-3 text-green-500 text-2xl shadow-sm"><i class="fas fa-leaf"></i></div>
-                    <h3 class="text-xl font-black uppercase tracking-tight text-marine">The Perfect Shake</h3>
-                    <p class="text-xs font-bold text-slate-400 mt-1">Replace your meal with complete nutrition.</p>
-                </div>
-                <div class="space-y-2">
-                    <button onclick="confirmShake(242, 'Formula 1 Shake')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Standard Shake (F1)</span><span class="text-[10px] font-black text-slate-400">242 kcal</span></button>
-                    <button onclick="confirmShake(360, 'Shake + Protein (PDM)')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Shake + Protein (PDM)</span><span class="text-[10px] font-black text-slate-400">360 kcal</span></button>
-                    <button onclick="confirmShake(260, 'Power Combo (F1+F2+PPP)')" class="w-full p-3 rounded-xl border-2 border-green-200 bg-green-50 flex justify-between items-center relative overflow-hidden"><div class="absolute top-0 left-0 bg-green-500 text-white text-[8px] font-black px-2 py-0.5 rounded-br-lg">RECOMMENDED</div><div class="flex flex-col text-left ml-1"><span class="font-black text-marine text-xs">Power Combo</span><span class="text-[9px] font-bold text-slate-500">F1 + F2 (Multi) + PPP</span></div><span class="text-[10px] font-black text-green-600">~260 kcal</span></button>
-                </div>
-            </div>
-        </div>`;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
-function closeUpsell() { const m = document.getElementById('upsellModal'); if(m) m.remove(); }
-function confirmShake(cal, name) { quickLog(name, cal); closeUpsell(); }
 function shareWhatsApp() { const total = state.consumed.reduce((sum, item) => sum + item.cal, 0); const remainingWeight = (state.weight - state.goal).toFixed(1); const daysPassed = Math.max(1, Math.floor((Date.now() - state.startDate) / 86400000)); const rate = (state.startW - state.weight) > 0 ? (state.startW - state.weight) / daysPassed : 0.071; let estDays = Math.ceil(remainingWeight / rate); let timeStr = remainingWeight <= 0 ? "Goal Reached! 🎉" : (estDays > 30 ? (estDays / 30).toFixed(1) + " Months" : estDays + " Days"); const text = `*ZestUp Pro Update* 🚀%0a%0a*Status:*%0a🔥 Calories: ${total}/${state.calGoal}%0a⚖️ Current: ${state.weight}kg%0a🎯 Target Weight: ${state.goal}kg%0a⏳ Est. Time: ${timeStr}%0a%0a🔗 *Open App:* https://krishnamu045-rgb.github.io/fitflow/`; window.open(`https://wa.me/?text=${text}`, '_blank'); }
 function showT(tab) { ['home','workout','info'].forEach(t => document.getElementById(`${t}-section`).classList.add('hide')); ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300'); document.getElementById(`${tab}-section`).classList.remove('hide'); document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active'; if(tab === 'workout') { renderW(); checkWorkoutSafety(); } if(tab === 'info') checkFoodDisclaimer(); }
 function addW(v) { state.waterC = Math.max(0, state.waterC + v); updateUI(); save(); }
