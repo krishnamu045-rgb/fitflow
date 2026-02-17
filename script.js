@@ -1,9 +1,11 @@
-const KEY = "ZESTUP_PRO_V16_1";
-let state = JSON.parse(localStorage.getItem(KEY));
+const KEY = "ZESTUP_PRO_V16_2";
+let state = null;
+try { state = JSON.parse(localStorage.getItem(KEY)); } catch(e) { console.error("Data Reset"); localStorage.removeItem(KEY); }
+
 let foodDB = {}; 
 let tempFood = null; 
 let currentMenuMode = 'user'; 
-let currentSlot = ''; // Tracks which slot (Breakfast/Lunch) was clicked
+let currentSlot = ''; 
 
 const CATEGORIES = {
     'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'poha', 'parotta', 'oats', 'chapati'],
@@ -28,15 +30,15 @@ const COACH_PLAN = {
 let surveySelections = []; 
 
 window.onload = async () => {
-    setTimeout(() => { const loader = document.getElementById('loading-screen'); if(loader) loader.classList.add('hide'); }, 2000);
+    // Note: The HTML script kills the loader safely, this is backup
     await loadFoodData();
-    if (!state) { document.getElementById('setup-screen').classList.remove('hide'); document.getElementById('loading-screen').classList.add('hide'); } 
-    else { if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; init(); document.getElementById('loading-screen').classList.add('hide'); }
+    if (!state) { document.getElementById('setup-screen').classList.remove('hide'); } 
+    else { if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; init(); }
 };
 
 async function loadFoodData() {
     try {
-        const response = await fetch('food.json?v=16.0');
+        const response = await fetch('./food.json?v=16.0'); // Added ./ for safety
         if (!response.ok) throw new Error("DB Error");
         const data = await response.json();
         data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
@@ -87,7 +89,7 @@ function finishSetup() {
 
 // --- HOME & MENU LOGIC ---
 function openMyMenuDropdown(slotName) {
-    currentSlot = slotName; // Track where we are adding food
+    currentSlot = slotName; 
     const grid = document.getElementById('myMenuGrid');
     const myItems = state.myMenu || []; 
     if(myItems.length === 0) { grid.innerHTML = `<div class="col-span-2 text-center text-slate-400 text-xs font-bold py-4">No items in your menu.<br>Use "Search Database" below.</div>`; } 
@@ -113,7 +115,7 @@ function selectFood(name) {
 }
 function selectVariant(parentName, index) { const item = foodDB[parentName].variants[index]; document.getElementById('prepModal').classList.add('hide'); showFinalModal(item.name, item.cal, item.desc, item.type); }
 function showFinalModal(name, cal, desc, type) { 
-    tempFood = { name: name, calPerUnit: cal, desc: desc, type: type, slot: currentSlot }; // Save Slot Info
+    tempFood = { name: name, calPerUnit: cal, desc: desc, type: type, slot: currentSlot }; 
     document.getElementById('resName').innerText = name; document.getElementById('resCal').innerText = cal + " kcal"; document.getElementById('resDesc').innerText = desc; 
     const badge = document.getElementById('resBadge'); 
     if(type === 'good') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-600"; badge.innerText = "Good Choice"; } 
@@ -125,9 +127,8 @@ function confirmAdd() {
     if(!tempFood) return; 
     const qty = parseFloat(document.getElementById('resQty').value); 
     const totalCal = Math.round(tempFood.calPerUnit * qty); 
-    // Add slot info to the log
     state.consumed.unshift({ name: tempFood.name, cal: totalCal, qty: qty, time: Date.now(), slot: tempFood.slot }); 
-    save(); updateInfoUI(); renderMeals(); // Re-render meals to update slot UI
+    save(); updateInfoUI(); renderMeals(); 
     document.getElementById('analysisResult').classList.add('hide'); 
     currentSlot = ''; 
 }
@@ -136,10 +137,11 @@ function confirmAdd() {
 function init() { document.getElementById('setup-screen').classList.add('hide'); document.getElementById('survey-screen').classList.add('hide'); document.getElementById('main-app').classList.remove('hide'); document.getElementById('userDisp').innerText = state.name; checkNewDay(); checkHomeDisclaimer(); updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); }
 function switchMenu(mode) { currentMenuMode = mode; const userBtn = document.getElementById('tab-user'); const coachBtn = document.getElementById('tab-coach'); if(mode === 'user') { userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all"; coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; } else { coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-punch text-white shadow-sm transition-all"; userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; } renderMeals(); }
 
-// FIXED: renderMeals now looks for logged items in slots
 function renderMeals() {
     const d = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date().getDay()];
-    const p = COACH_PLAN[d];
+    // Safety check for COACH_PLAN
+    const p = COACH_PLAN[d] || COACH_PLAN["Monday"];
+    
     document.getElementById('wTitle').innerText = p.t; document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
 
     if (currentMenuMode === 'user') {
@@ -155,14 +157,10 @@ function renderMeals() {
 }
 
 function renderSearchSlot(title, ph) {
-    // Check if user already logged something for this slot today
     const found = state.consumed.find(i => i.slot === title);
-    
     if (found) {
-        // Show the Logged Item (Green Box)
         return `<div class="bg-green-50 p-4 rounded-[2rem] flex justify-between items-center border border-green-100 shadow-sm"><div class="flex items-center gap-4"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-green-500 shadow-sm"><i class="fas fa-check"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${found.name}</p></div></div><span class="text-xs font-black text-green-600">${found.cal} kcal</span></div>`;
     } else {
-        // Show the Empty Search Slot (Grey Box)
         let swapBtn = (title === 'Breakfast' || title === 'Dinner') ? `<button onclick="triggerHerbalifeUpsell('${title}')" class="text-[9px] font-black bg-white border border-green-100 text-green-500 px-3 py-2 rounded-xl shadow-sm hover:bg-green-50 animate-pulse"><i class="fas fa-sync-alt mr-1"></i>Swap</button>` : '';
         return `<div class="bg-mist p-4 rounded-[2rem] flex justify-between items-center border border-slate-50 shadow-sm relative overflow-hidden group"><div class="flex items-center gap-4 cursor-pointer" onclick="openMyMenuDropdown('${title}')"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-plus"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${ph}</p></div></div>${swapBtn}</div>`;
     }
