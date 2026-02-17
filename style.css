@@ -1,0 +1,17 @@
+body { -webkit-tap-highlight-color: transparent; }
+.hide { display: none !important; }
+.animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* Cards with Gradients */
+.card-weight { background: linear-gradient(135deg, #FFF0E6 0%, #FFFFFF 100%); border: 1px solid #FFD8BE; box-shadow: 0 10px 30px -10px rgba(255, 107, 0, 0.15); }
+.card-water { background: linear-gradient(135deg, #E6F6FF 0%, #FFFFFF 100%); border: 1px solid #BEE3FF; box-shadow: 0 10px 30px -10px rgba(0, 163, 255, 0.15); }
+.card-cal { background: linear-gradient(135deg, #F5F3FF 0%, #FFFFFF 100%); border: 1px solid #DDD6FE; box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15); }
+
+/* Navigation */
+.glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #f1f5f9; }
+.nav-active { color: #0A2647; transform: scale(1.1); }
+.btn-click:active { transform: scale(0.96); }
+
+/* Checklist Logic (Visuals only, JS handles logic) */
+.check-active { background-color: #ecfdf5; border-color: #bbf7d0; }
