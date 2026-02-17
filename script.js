@@ -1,9 +1,8 @@
-/* --- ZESTUP PRO V19.0 LOGIC --- */
-const KEY = "ZESTUP_PRO_V19_0";
+const KEY = "ZESTUP_PRO_V19_5";
 let state = null;
 try { state = JSON.parse(localStorage.getItem(KEY)); } catch(e) { localStorage.removeItem(KEY); }
 
-// --- 1. EMBEDDED DATABASE (Crucial to prevent loading errors) ---
+// EMBEDDED DATABASE (No External Fetch = No Delay)
 const MEGA_DB = [
     { "name": "idli", "variants": [ { "name": "Single Idli", "cal": 39, "unit": "pc", "type": "good", "desc": "Steamed" }, { "name": "Plate Idli (2+Sambar)", "cal": 220, "unit": "plate", "type": "good", "desc": "Standard" } ] },
     { "name": "dosa", "variants": [ { "name": "Plain Dosa", "cal": 180, "unit": "pc", "type": "good", "desc": "Less Oil" }, { "name": "Masala Dosa", "cal": 380, "unit": "pc", "type": "bad", "desc": "Potato" } ] },
@@ -41,18 +40,14 @@ const COACH_PLAN = {
     "Sunday": { sn1: "Watermelon", lun: "Grilled Chicken", sn2: "Tea", vCal: 280, t: "Mindfulness", vid: "inpok4MKVLM" }
 };
 
-// --- INITIALIZATION (Auto-Start) ---
-window.onload = function() {
-    // Kill the loader
-    setTimeout(() => {
-        document.getElementById('loading-screen').classList.add('hide');
-        if (!state) { 
-            document.getElementById('setup-screen').classList.remove('hide'); 
-        } else { 
-            init(); 
-        }
-    }, 1000); // 1s visual delay
-};
+// --- INSTANT INIT LOGIC ---
+// We check state immediately. No timers.
+if (!state) { 
+    document.getElementById('setup-screen').classList.remove('hide'); 
+} else { 
+    if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; 
+    init(); 
+}
 
 function goToLifestyle() {
     const n = document.getElementById('setupName').value;
@@ -68,7 +63,6 @@ function finishSetup(style) {
     const w = parseFloat(document.getElementById('setupW').value);
     const g = document.getElementById('setupGender').value;
     
-    // Default BMR Calc
     let bmr = (10 * w) + (6.25 * h) - (5 * 30) + (g === 'male' ? 5 : -161);
     let dailyGoal = Math.max(1200, Math.round(bmr * 1.2 - 300));
     let idealW = g === 'male' ? (h - 100) * 0.9 : (h - 100) * 0.85;
@@ -92,7 +86,6 @@ function init() {
 }
 
 function updateUI() {
-    // Weight & Progress
     document.getElementById('curW').innerText = state.weight;
     document.getElementById('targetW').innerText = state.goal;
     let lost = state.startW - state.weight;
@@ -100,7 +93,6 @@ function updateUI() {
     document.getElementById('wBar').style.width = Math.max(0, Math.min(100, (lost/total)*100)) + '%';
     document.getElementById('lossText').innerText = lost > 0 ? `${lost.toFixed(1)} kg lost` : "Let's Go!";
     
-    // Days Prediction
     let diff = state.weight - state.goal;
     if(diff <= 0) document.getElementById('daysToGoal').innerText = "Done!";
     else {
@@ -109,7 +101,6 @@ function updateUI() {
          document.getElementById('daysToGoal').innerText = d > 365 ? ">1 Yr" : d + " Days";
     }
 
-    // Water
     document.getElementById('watV').innerText = state.waterC;
     document.getElementById('watGoal').innerText = state.waterG;
     document.getElementById('watBar').style.width = Math.min(100, (state.waterC/state.waterG)*100) + '%';
@@ -188,7 +179,6 @@ function showFinalModal(n, c, d, t) {
     };
 }
 
-// Checklist Logic
 function toggleTask(task) {
     state.todayTasks[task] = !state.todayTasks[task];
     renderTasks();
@@ -199,7 +189,6 @@ function renderTasks() {
     ['mShake','nShake','water','workout'].forEach(task => {
         const btn = document.getElementById('task-' + task);
         if(!btn) return;
-        
         if(state.todayTasks[task]) {
             btn.classList.add('border-green-200', 'bg-green-50');
             btn.querySelector('div').classList.replace('border-slate-200', 'bg-green-500');
