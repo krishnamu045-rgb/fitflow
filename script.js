@@ -1,187 +1,305 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZestUp Pro V15.3</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { punch: '#FF6B00', marine: '#0A2647', water: '#00A3FF', mist: '#F8FAFC', leaf: '#10B981', danger: '#EF4444', cal: '#8B5CF6' },
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="font-sans text-marine select-none bg-white">
+const KEY = "ZESTUP_PRO_V15_4";
+let state = JSON.parse(localStorage.getItem(KEY));
+let foodDB = {}; 
+let tempFood = null; 
+let currentMenuMode = 'user'; 
 
-    <div id="loading-screen" class="fixed inset-0 z-[500] bg-white flex flex-col items-center justify-center">
-        <div class="w-12 h-12 border-4 border-slate-100 border-t-punch rounded-full animate-spin"></div>
-        <p class="text-[10px] font-black text-slate-300 mt-4 uppercase tracking-[0.2em] animate-pulse">Loading Your App...</p>
-    </div>
+// --- EMERGENCY FALLBACK DB (Prevents Stuck Screen) ---
+const FALLBACK_DB = [
+    { "name": "rice", "variants": [{ "name": "White Rice", "cal": 150, "desc": "Boiled", "type": "ok" }] },
+    { "name": "dal", "variants": [{ "name": "Dal Fry", "cal": 160, "desc": "Standard", "type": "good" }] },
+    { "name": "tea", "cal": 60, "desc": "Milk Sugar", "type": "ok" },
+    { "name": "coffee", "cal": 80, "desc": "Milk Sugar", "type": "ok" },
+    { "name": "f1 shake", "cal": 242, "desc": "Herbalife Meal", "type": "good" }
+];
 
-    <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
-        <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 15.3</p></div>
-            <div class="space-y-3">
-                <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
-                <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
-                <input type="hidden" id="setupGender" value="">
-                <input type="date" id="setupDOB" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg text-marine">
-                <div class="grid grid-cols-2 gap-3"><input type="number" id="setupH" placeholder="Ht (cm)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg"><input type="number" id="setupW" placeholder="Wt (kg)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg"></div>
-                <button onclick="goToSurvey()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4 text-lg">Next Step <i class="fas fa-arrow-right ml-2"></i></button>
-            </div>
-        </div>
-    </div>
+// --- CATEGORIES ---
+const CATEGORIES = {
+    'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'poha', 'parotta', 'oats', 'chapati'],
+    'indian': ['rice', 'biryani', 'curry', 'dal', 'sambar', 'rasam', 'chicken', 'fish', 'mutton', 'paneer', 'mushroom', 'roti', 'naan', 'egg', 'rajma', 'chana'],
+    'chinese': ['noodles', 'fried rice', 'momos', 'manchurian', 'spring roll', 'soup', 'schezwan'],
+    'western': ['pizza', 'burger', 'kfc', 'pasta', 'taco', 'nachos', 'sandwich', 'fries', 'subway'],
+    'bakery': ['puff', 'roll', 'cake', 'samosa', 'chips', 'donut', 'biscuit', 'bun', 'dilpasand', 'tea', 'coffee', 'milkshake', 'coke', 'soft drink', 'ice cream'],
+    'fresh': ['apple', 'banana', 'mango', 'grapes', 'papaya', 'watermelon', 'pomegranate', 'salad', 'corn', 'cucumber', 'carrot', 'sprouts', 'avocado', 'coconut', 'juice']
+};
 
-    <div id="survey-screen" class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center p-8 hide">
-        <div class="w-full max-w-sm space-y-4 text-center animate-slide-up h-full flex flex-col">
-            <div class="mt-8">
-                <h2 class="text-2xl font-black text-marine uppercase tracking-tight">Build Your Menu 🥘</h2>
-                <p class="text-xs font-bold text-slate-400 mt-2">Add foods you eat regularly. These will appear in your daily list.</p>
-            </div>
-            
-            <div class="relative z-20">
-                <input type="text" id="surveySearch" onkeyup="showSurveySuggestions(this.value)" placeholder="Search (e.g. Idli, Rice)..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100">
-                <i class="fas fa-search absolute left-5 top-5 text-slate-300"></i>
-                <div id="surveySuggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-30 top-full mt-1 hide"></div>
-            </div>
+const COACH_PLAN = {
+    "Monday": { sn1: "5 Soaked Almonds", lun: "Brown Rice + Dal + Salad", sn2: "Green Tea + Roasted Chana", vCal: 340, t: "Body Basics", vid: "b9ztxh-cTHI" },
+    "Tuesday": { sn1: "Apple Slices", lun: "Ragi Mudde + Veg Saaru", sn2: "Buttermilk", vCal: 320, t: "Core Strength", vid: "ELpVLwrDR_g" },
+    "Wednesday": { sn1: "Boiled Egg / Sprouts", lun: "Millet Rice + Rasam + Veg", sn2: "Papaya Bowl", vCal: 310, t: "Metabolism", vid: "VsAXZ34AJ-k" },
+    "Thursday": { sn1: "Cucumber Sticks", lun: "2 Jowar Roti + Palak Paneer", sn2: "Black Coffee (No Sugar)", vCal: 330, t: "Lower Body", vid: "rmmWuI5Jinc" },
+    "Friday": { sn1: "Guava with Salt", lun: "Curd Rice + Pomegranate", sn2: "Protein Bar", vCal: 300, t: "Cardio Kick", vid: "8r4Z-ghDI4k" },
+    "Saturday": { sn1: "Coconut Water", lun: "Veg Biryani (Less Oil)", sn2: "Roasted Makhana", vCal: 400, t: "Stability", vid: "uKXcLBjWqas" },
+    "Sunday": { sn1: "Watermelon Bowl", lun: "Grilled Chicken + Salad", sn2: "Tea + 2 Marie Biscuits", vCal: 280, t: "Mindfulness", vid: "inpok4MKVLM" }
+};
 
-            <div class="flex-1 overflow-y-auto bg-mist rounded-2xl p-4 border border-slate-50 relative">
-                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-2 text-left sticky top-0 bg-mist pb-2">Your Personal Menu</p>
-                <div id="myMenuList" class="space-y-2">
-                    <div class="text-center mt-10 text-slate-300 text-xs font-bold">Search above to add items...</div>
-                </div>
-            </div>
+let surveySelections = []; 
 
-            <button onclick="finishSetup()" class="w-full bg-marine text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 uppercase tracking-widest btn-click text-lg">Finish & Start</button>
-        </div>
-    </div>
+// --- ROBUST STARTUP LOGIC ---
+window.onload = async () => {
+    // 1. Force Spinner OFF after 2 seconds no matter what
+    setTimeout(() => { 
+        const loader = document.getElementById('loading-screen');
+        if(loader) loader.classList.add('hide'); 
+    }, 2000);
 
-    <div id="main-app" class="pb-32 hide">
-        <div class="max-w-md mx-auto p-5 pb-0">
-            <header class="flex justify-between items-center py-4">
-                <div><h1 class="text-2xl font-black italic tracking-tighter text-slate-900 leading-none">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-[12px] font-bold text-slate-400 mt-1 uppercase tracking-wider">Namaste, <span id="userDisp">User</span></p></div>
-                <div class="flex gap-2 items-center">
-                    <div class="bg-purple-50 px-3 py-2 rounded-xl text-right border border-purple-100 cursor-pointer" onclick="showT('info')">
-                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Calories</p>
-                        <p class="text-xs font-black text-cal leading-tight"><span id="headerCal">0</span>/<span id="headerGoal">--</span></p>
-                    </div>
-                    <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center btn-click border border-green-100 shadow-sm animate-pulse"><i class="fab fa-whatsapp text-xl"></i></button>
-                </div>
-            </header>
-        </div>
+    // 2. Load Data
+    await loadFoodData();
 
-        <div id="home-section" class="max-w-md mx-auto p-5 space-y-8">
-            <div class="bg-white rounded-[2.5rem] p-7 pro-shadow border border-slate-50 space-y-6">
-                <div class="space-y-3">
-                    <div class="flex justify-between items-end"><div><p class="text-[9px] font-bold text-slate-300 uppercase">Weight</p><h2 class="text-4xl font-extrabold tracking-tighter text-marine"><span id="curW">--</span><small class="text-xs opacity-20 ml-1 font-medium">kg</small></h2></div><button onclick="openW()" class="bg-orange-50 text-punch px-4 py-2 rounded-xl text-[10px] font-black uppercase btn-click shadow-sm shadow-orange-100">Update</button></div>
-                    <div class="w-full bg-mist h-2 rounded-full overflow-hidden p-0.5"><div id="wBar" class="h-full bg-punch rounded-full transition-all duration-1000"></div></div>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-end"><div><p class="text-[9px] font-bold text-slate-300 uppercase text-water">Intake (ml)</p><h2 class="text-4xl font-extrabold tracking-tighter text-water"><span id="watV">0</span><small class="text-xs opacity-20 ml-1 font-medium">ml</small></h2></div><div class="flex gap-2"><button onclick="addW(250)" class="bg-blue-50 text-water w-11 h-11 rounded-xl flex items-center justify-center btn-click border border-blue-100 shadow-sm"><i class="fas fa-plus"></i></button></div></div>
-                    <div class="w-full bg-mist h-2 rounded-full overflow-hidden p-0.5"><div id="watBar" class="h-full bg-water rounded-full transition-all duration-500"></div></div>
-                </div>
-            </div>
+    // 3. Routing
+    if (!state) { 
+        document.getElementById('setup-screen').classList.remove('hide'); 
+        document.getElementById('loading-screen').classList.add('hide'); 
+    } else { 
+        if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; 
+        init(); 
+        // Double ensure loader is gone
+        document.getElementById('loading-screen').classList.add('hide');
+    }
+};
 
-            <div class="space-y-4">
-                <div class="flex justify-between items-center px-1">
-                    <h3 class="font-extrabold text-xl uppercase tracking-tight italic">Daily Menu</h3>
-                    <div class="bg-mist p-1 rounded-xl flex border border-slate-100">
-                        <button onclick="switchMenu('user')" id="tab-user" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all">My Menu</button>
-                        <button onclick="switchMenu('coach')" id="tab-coach" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all">Coach Plan</button>
-                    </div>
-                </div>
-                <div id="mealContainer" class="space-y-3"></div>
-            </div>
-        </div>
+async function loadFoodData() {
+    try {
+        const response = await fetch('food.json?v=15.4');
+        if (!response.ok) throw new Error("File not found");
+        const data = await response.json();
+        data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
+        console.log("DB Loaded Successfully");
+    } catch (error) { 
+        console.warn("External DB failed, using fallback.");
+        FALLBACK_DB.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
+    }
+}
 
-        <div id="workout-section" class="max-w-md mx-auto p-5 space-y-8 hide text-center">
-            <div class="relative group cursor-pointer" onclick="launchWorkout()">
-                <div class="bg-white rounded-[2.5rem] overflow-hidden pro-shadow border border-slate-50 relative aspect-video">
-                    <img id="wThumb" src="" alt="Workout" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 thumbnail-gradient flex flex-col justify-end p-8 text-left">
-                        <p id="wStatus" class="text-punch font-black text-[10px] uppercase tracking-[0.2em] mb-1">Today's Session</p>
-                        <h3 id="wTitle" class="text-3xl font-black text-white italic leading-none uppercase tracking-tight">--</h3>
-                    </div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-play ml-1"></i></div>
-                </div>
-            </div>
-            <div class="space-y-4 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Checklist</h3><div id="tracker-list" class="grid grid-cols-2 gap-3"><button id="task-mShake" onclick="toggleTask('mShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Morning Shake</span></button><button id="task-nShake" onclick="toggleTask('nShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Night Shake</span></button><button id="task-water" onclick="toggleTask('water')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight text-water">Water Goal</span></button><button id="task-workout" onclick="toggleTask('workout')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Workout Done</span></button></div></div>
-        </div>
+// --- NEW SURVEY LOGIC ---
+function goToSurvey() {
+    const n = document.getElementById('setupName').value;
+    const h = parseFloat(document.getElementById('setupH').value);
+    const w = parseFloat(document.getElementById('setupW').value);
+    if(!n || !h || !w) return alert("Please fill all details");
+    document.getElementById('setup-screen').classList.add('hide');
+    document.getElementById('survey-screen').classList.remove('hide');
+}
 
-        <div id="info-section" class="max-w-md mx-auto p-5 space-y-6 hide">
-            <div class="bg-white rounded-[2.5rem] p-6 pro-shadow border border-slate-50 relative overflow-hidden flex items-center justify-between">
-                <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Calories Remaining</p><h2 class="text-5xl font-black text-marine tracking-tighter" id="dispRemaining">--</h2><p class="text-xs font-bold text-cal mt-1">Goal: <span id="dispGoal">--</span></p></div>
-                <div class="relative w-24 h-24"><svg class="w-full h-full" viewBox="0 0 100 100"><circle class="text-mist stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="calRing" class="text-cal progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0"></circle></svg><div class="absolute inset-0 flex items-center justify-center text-marine font-bold text-xs"><i class="fas fa-fire"></i></div></div>
-            </div>
-            
-            <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-4">
-                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Global Food Database</p>
-                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search anything..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
-
-                <div id="catGrid" class="grid grid-cols-3 gap-3">
-                    <button onclick="browseCategory('tiffin')" class="bg-orange-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-orange-100 hover:bg-orange-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-orange-500 text-lg"><i class="fas fa-sun"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Tiffin</span></button>
-                    <button onclick="browseCategory('indian')" class="bg-amber-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-amber-100 hover:bg-amber-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-amber-600 text-lg"><i class="fas fa-utensils"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Indian</span></button>
-                    <button onclick="browseCategory('chinese')" class="bg-red-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-red-100 hover:bg-red-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-red-500 text-lg"><i class="fas fa-bowl-rice"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Chinese</span></button>
-                    <button onclick="browseCategory('western')" class="bg-blue-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-blue-100 hover:bg-blue-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-blue-500 text-lg"><i class="fas fa-burger"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Western</span></button>
-                    <button onclick="browseCategory('bakery')" class="bg-yellow-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-yellow-100 hover:bg-yellow-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-yellow-600 text-lg"><i class="fas fa-bread-slice"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Bakery</span></button>
-                    <button onclick="browseCategory('fresh')" class="bg-green-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-green-100 hover:bg-green-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-green-500 text-lg"><i class="fas fa-leaf"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Fresh</span></button>
-                </div>
-                <div id="catView" class="hide animate-slide-up space-y-3"><button onclick="closeCategory()" class="w-full bg-mist p-3 rounded-2xl font-bold text-slate-400 text-xs border border-slate-100 mb-2"><i class="fas fa-chevron-left mr-2"></i>Back to Categories</button><div id="catListContent" class="space-y-2"></div></div>
-            </div>
-            <div class="space-y-4"><p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-1">Today's Meals</p><div id="logContainer" class="space-y-3 pb-10"></div></div>
-        </div>
-
-        <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-100 pb-10 pt-4 px-8 z-50">
-            <div class="max-w-md mx-auto flex justify-between items-center px-4">
-                <button onclick="showT('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active transition-all"><i class="fas fa-bolt-lightning text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Dash</span></button>
-                <button onclick="showT('workout')" id="nav-workout" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-dumbbell text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Workout</span></button>
-                <button onclick="showT('info')" id="nav-info" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-leaf text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Fuel</span></button>
-            </div>
-        </nav>
-    </div>
-
-    <div id="myMenuModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative h-[60vh] flex flex-col">
-            <div class="flex justify-between items-center"><h3 class="text-xl font-black uppercase tracking-tight text-marine">Select Item</h3><button onclick="document.getElementById('myMenuModal').classList.add('hide')" class="w-8 h-8 bg-mist rounded-full flex items-center justify-center text-slate-400"><i class="fas fa-times"></i></button></div>
-            <div id="myMenuGrid" class="grid grid-cols-2 gap-3 overflow-y-auto pb-4"></div>
-            <button onclick="showT('info'); document.getElementById('myMenuModal').classList.add('hide')" class="w-full bg-mist text-slate-400 font-bold py-3 rounded-xl text-xs uppercase tracking-widest mt-auto">Search Database Instead</button>
-        </div>
-    </div>
-
-    <div id="prepModal" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up">
-            <div class="flex justify-between items-center">
-                <h3 class="font-black text-marine capitalize text-xl">Select Variant</h3>
-                <button onclick="closePrep()" class="w-8 h-8 bg-mist rounded-full text-slate-400"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="prepOptions" class="space-y-2 max-h-60 overflow-y-auto"></div>
-        </div>
-    </div>
-
-    <div id="analysisResult" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up">
-            <div class="flex justify-between items-start">
-                <div><h3 id="resName" class="font-black text-marine capitalize text-xl">--</h3><p id="resDesc" class="text-xs text-slate-500 font-bold mt-1">--</p></div>
-                <div id="resBadge" class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">--</div>
-            </div>
-            <div class="flex items-center gap-3">
-                <div class="flex-1 bg-white p-3 rounded-xl border border-slate-100 text-center"><p class="text-[9px] font-bold text-slate-300 uppercase">Calories</p><h4 class="font-black text-marine text-lg" id="resCal">--</h4></div>
-                <div class="flex-1"><input type="number" id="resQty" value="1" class="w-full bg-white p-3 rounded-xl font-bold text-center border border-slate-100 text-lg outline-none"></div>
-            </div>
-            <button onclick="confirmAdd()" class="w-full bg-marine text-white font-bold py-4 rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button>
-        </div>
-    </div>
+function showSurveySuggestions(val) {
+    const list = document.getElementById('surveySuggestions');
+    if (val.length < 1) { list.classList.add('hide'); return; }
+    list.classList.remove('hide');
     
-    <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
-    <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-shield-heart text-5xl text-punch mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Health Check</h2></div><div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. This app is a tracker, not a doctor.</p><p>2. Listen to your body—stop immediately if you feel pain.</p></div><button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button></div></div>
-    <script src="script.js"></script>
-</body>
-</html>
+    const matches = Object.keys(foodDB).filter(k => k.includes(val.toLowerCase()));
+    if (matches.length === 0) { list.innerHTML = `<div class="p-3 text-center text-xs text-slate-400">No match found</div>`; } 
+    else { 
+        list.innerHTML = matches.map(f => `
+            <div onclick="addToSurvey('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center">
+                <span class="font-bold text-marine capitalize text-sm">${f}</span>
+                <i class="fas fa-plus text-slate-300"></i>
+            </div>`).join(''); 
+    }
+}
+
+function addToSurvey(name) {
+    if(!surveySelections.includes(name)) {
+        surveySelections.push(name);
+        renderSurveyList();
+    }
+    document.getElementById('surveySearch').value = "";
+    document.getElementById('surveySuggestions').classList.add('hide');
+}
+
+function renderSurveyList() {
+    const list = document.getElementById('myMenuList');
+    if(surveySelections.length === 0) {
+        list.innerHTML = `<div class="text-center mt-10 text-slate-300 text-xs font-bold">Search above to add items...</div>`;
+        return;
+    }
+    list.innerHTML = surveySelections.map((item, i) => `
+        <div class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center animate-fade-in">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-xs"><i class="fas fa-utensils"></i></div>
+                <span class="font-bold text-marine capitalize text-sm">${item}</span>
+            </div>
+            <button onclick="removeFromSurvey(${i})" class="text-red-400 p-2"><i class="fas fa-times"></i></button>
+        </div>`).join('');
+}
+
+function removeFromSurvey(i) {
+    surveySelections.splice(i, 1);
+    renderSurveyList();
+}
+
+function finishSetup() {
+    if(surveySelections.length < 1) {
+        // Add defaults if they picked nothing
+        surveySelections = ['rice', 'dal', 'f1 shake', 'tea'];
+    }
+
+    const n = document.getElementById('setupName').value;
+    const h = parseFloat(document.getElementById('setupH').value);
+    const w = parseFloat(document.getElementById('setupW').value);
+    const g = document.getElementById('setupGender').value;
+    const dob = document.getElementById('setupDOB').value;
+
+    let age = 30; 
+    if (dob) { const birthDate = new Date(dob); const today = new Date(); age = today.getFullYear() - birthDate.getFullYear(); }
+    let bmr = (10 * w) + (6.25 * h) - (5 * age) + (g === 'male' ? 5 : -161);
+    let dailyGoal = Math.max(1200, Math.round(bmr * 1.2 - 300));
+    let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2);
+
+    state = { 
+        name: n, weight: w, height: h, age: age, startW: w, goal: idealW.toFixed(1), 
+        waterG: Math.round(w * 35), waterC: 0, calGoal: dailyGoal, consumed: [], 
+        startDate: Date.now(), history: {}, todayTasks: {}, 
+        lastLogin: new Date().toISOString().split('T')[0], customFoods: {},
+        myMenu: surveySelections // SAVE THE MENU
+    };
+    save();
+    location.reload();
+}
+
+// --- HOME MENU LOGIC ---
+function openMyMenuDropdown() {
+    const grid = document.getElementById('myMenuGrid');
+    const myItems = state.myMenu || ['rice', 'dal', 'f1 shake']; // Fallback
+    
+    grid.innerHTML = myItems.map(itemKey => {
+        const dbItem = foodDB[itemKey] || { variants: [{ type: 'ok' }] }; 
+        const isBad = (dbItem.variants && dbItem.variants[0].type === 'bad') || dbItem.type === 'bad';
+        const colorClass = isBad ? 'text-orange-500 bg-orange-50' : 'text-green-500 bg-green-50';
+        return `
+        <div onclick="selectFood('${itemKey}'); document.getElementById('myMenuModal').classList.add('hide')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-50 hover:border-punch transition-all cursor-pointer bg-mist">
+            <div class="w-10 h-10 rounded-full ${colorClass} flex items-center justify-center text-lg"><i class="fas fa-utensils"></i></div>
+            <span class="text-xs font-bold text-marine capitalize">${itemKey}</span>
+        </div>`;
+    }).join('');
+    
+    document.getElementById('myMenuModal').classList.remove('hide');
+}
+
+// --- FIXED SELECT FOOD ---
+function selectFood(name) { 
+    if(!foodDB[name]) { 
+        // Fallback for custom added items or missing DB entries
+        showFinalModal(name, 200, "Standard", "ok");
+        return; 
+    }
+    const item = foodDB[name]; 
+
+    // Safety Clear
+    const searchBar = document.getElementById('foodName'); if(searchBar) searchBar.value = ""; 
+    const sugg = document.getElementById('suggestions'); if(sugg) sugg.classList.add('hide');
+
+    const prepDiv = document.getElementById('prepOptions');
+    if(prepDiv) prepDiv.innerHTML = ""; 
+
+    if (item.variants) { 
+        if(prepDiv) {
+            prepDiv.innerHTML = item.variants.map((v, i) => `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm hover:border-punch transition-all"><div><p class="font-bold text-marine text-sm">${v.name}</p><p class="text-[10px] text-slate-400">${v.desc}</p></div><p class="text-xs font-black text-punch">${v.cal} kcal</p></div>`).join(''); 
+        }
+        document.getElementById('prepModal').classList.remove('hide'); 
+    } else { 
+        showFinalModal(item.name, item.cal, item.desc || "Standard portion", item.type); 
+    } 
+}
+
+function selectVariant(parentName, index) { 
+    const item = foodDB[parentName].variants[index]; 
+    document.getElementById('prepModal').classList.add('hide'); 
+    showFinalModal(item.name, item.cal, item.desc, item.type); 
+}
+
+function showFinalModal(name, cal, desc, type) { 
+    tempFood = { name: name, calPerUnit: cal, desc: desc, type: type }; 
+    document.getElementById('resName').innerText = name; 
+    document.getElementById('resCal').innerText = cal + " kcal"; 
+    document.getElementById('resDesc').innerText = desc; 
+    const badge = document.getElementById('resBadge'); 
+    if(type === 'good') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-600"; badge.innerText = "Good Choice"; } 
+    else if(type === 'bad') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-600"; badge.innerText = "Limit This"; } 
+    else { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-100 text-orange-600"; badge.innerText = "Moderate"; } 
+    document.getElementById('analysisResult').classList.remove('hide'); 
+    document.getElementById('resQty').value = 1; 
+}
+
+function confirmAdd() { 
+    if(!tempFood) return; 
+    const qty = parseFloat(document.getElementById('resQty').value); 
+    const totalCal = Math.round(tempFood.calPerUnit * qty); 
+    state.consumed.unshift({ name: tempFood.name, cal: totalCal, qty: qty, time: Date.now() }); 
+    save(); updateInfoUI(); 
+    document.getElementById('analysisResult').classList.add('hide'); 
+}
+
+// --- APP & UI ---
+function init() { 
+    document.getElementById('setup-screen').classList.add('hide'); 
+    document.getElementById('survey-screen').classList.add('hide'); 
+    document.getElementById('main-app').classList.remove('hide'); 
+    document.getElementById('userDisp').innerText = state.name; 
+    checkNewDay(); checkHomeDisclaimer(); updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); 
+}
+
+function switchMenu(mode) {
+    currentMenuMode = mode;
+    const userBtn = document.getElementById('tab-user');
+    const coachBtn = document.getElementById('tab-coach');
+    if(mode === 'user') { userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all"; coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; } 
+    else { coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-punch text-white shadow-sm transition-all"; userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; }
+    renderMeals(); 
+}
+
+function renderMeals() {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const d = days[new Date().getDay()];
+    const p = COACH_PLAN[d];
+    document.getElementById('wTitle').innerText = p.t; 
+    document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
+    if (currentMenuMode === 'user') {
+        // Here we use openMyMenuDropdown for ALL user slots
+        document.getElementById('mealContainer').innerHTML = `${renderSearchSlot('Breakfast', 'Tap to pick...')}${renderSearchSlot('Mid-Snack', 'Tap to pick...')}${renderSearchSlot('Lunch', 'Tap to pick...')}${renderSearchSlot('Eve-Snack', 'Tap to pick...')}${renderSearchSlot('Dinner', 'Tap to pick...')}`;
+    } else {
+        document.getElementById('mealContainer').innerHTML = `<div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-leaf"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Breakfast (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake + Afresh</p></div><button onclick="quickLog('Coach Breakfast', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-orange-400 text-xl w-8 text-center"><i class="fas fa-apple-alt"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Mid-Snack Idea</p><p class="font-extrabold text-sm text-marine">${p.sn1}</p></div></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-blue-400 text-xl w-8 text-center"><i class="fas fa-utensils"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Lunch Suggestion</p><p class="font-extrabold text-sm text-marine">${p.lun}</p></div></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-purple-400 text-xl w-8 text-center"><i class="fas fa-mug-hot"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Evening Snack</p><p class="font-extrabold text-sm text-marine">${p.sn2}</p></div></div><div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-moon"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Dinner (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake</p></div><button onclick="quickLog('Coach Dinner', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div>`;
+    }
+}
+
+function renderSearchSlot(title, ph) {
+    let swapBtn = '';
+    if (title === 'Breakfast' || title === 'Dinner') { swapBtn = `<button onclick="triggerHerbalifeUpsell('${title}')" class="text-[9px] font-black bg-white border border-green-100 text-green-500 px-3 py-2 rounded-xl shadow-sm hover:bg-green-50 animate-pulse"><i class="fas fa-sync-alt mr-1"></i>Swap</button>`; }
+    return `<div class="bg-mist p-4 rounded-[2rem] flex justify-between items-center border border-slate-50 shadow-sm relative overflow-hidden group"><div class="flex items-center gap-4 cursor-pointer" onclick="openMyMenuDropdown()"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-plus"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${ph}</p></div></div>${swapBtn}</div>`;
+}
+
+// --- UTILS ---
+function triggerHerbalifeUpsell(mealType) {
+    const modalHTML = `<div id="upsellModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 animate-fade-in"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative"><button onclick="closeUpsell()" class="absolute top-4 right-4 text-slate-300 hover:text-punch"><i class="fas fa-times text-xl"></i></button><div class="text-center"><div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-3 text-green-500 text-2xl shadow-sm"><i class="fas fa-leaf"></i></div><h3 class="text-xl font-black uppercase tracking-tight text-marine">Smart Swap</h3><p class="text-xs font-bold text-slate-400 mt-1">Upgrade your ${mealType} with Nutrition.</p></div><div class="space-y-2"><button onclick="confirmShake(242, 'Formula 1 Shake')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Standard (F1)</span><span class="text-[10px] font-black text-slate-400">242 kcal</span></button><button onclick="confirmShake(360, 'Shake + Protein (PDM)')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Shake + Protein (PDM)</span><span class="text-[10px] font-black text-slate-400">360 kcal</span></button><button onclick="confirmShake(260, 'Power Combo (F1+F2+PPP)')" class="w-full p-3 rounded-xl border-2 border-green-200 bg-green-50 flex justify-between items-center relative overflow-hidden"><div class="absolute top-0 left-0 bg-green-500 text-white text-[8px] font-black px-2 py-0.5 rounded-br-lg">BEST</div><div class="flex flex-col text-left ml-1"><span class="font-black text-marine text-xs">Power Combo</span><span class="text-[9px] font-bold text-slate-500">F1 + Multivit + PPP</span></div><span class="text-[10px] font-black text-green-600">~260 kcal</span></button></div></div></div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+function closeUpsell() { const m = document.getElementById('upsellModal'); if(m) m.remove(); }
+function confirmShake(cal, name) { quickLog(name, cal); closeUpsell(); }
+function closePrep() { document.getElementById('prepModal').classList.add('hide'); }
+function cancelAdd() { document.getElementById('analysisResult').classList.add('hide'); }
+function quickLog(name, cal) { state.consumed.unshift({ name: name, cal: cal, qty: 1, time: Date.now() }); save(); updateInfoUI(); alert(`Added ${name}`); }
+function deleteItem(index) { state.consumed.splice(index, 1); save(); updateInfoUI(); }
+function renderLog() { const list = document.getElementById('logContainer'); if(state.consumed.length === 0) { list.innerHTML = `<div class="text-center py-8 text-slate-300 text-xs font-bold">No meals logged yet.</div>`; return; } list.innerHTML = state.consumed.map((item, i) => `<div class="bg-white p-4 rounded-2xl border flex justify-between items-center"><div><h4 class="font-bold text-marine text-sm">${item.name}</h4><p class="text-[10px] text-slate-400 font-bold">${item.cal} kcal</p></div><button onclick="deleteItem(${i})" class="text-slate-300 p-2"><i class="fas fa-trash-alt"></i></button></div>`).join(''); }
+function checkHomeDisclaimer() { if (state.lastDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('homeDisclaimerModal').classList.remove('hide'); }
+function acceptHomeDisclaimer() { state.lastDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('homeDisclaimerModal').classList.add('hide'); }
+function checkFoodDisclaimer() { if (state.lastFoodDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('foodDisclaimerModal').classList.remove('hide'); }
+function updateUI() { document.getElementById('curW').innerText = state.weight; document.getElementById('wBar').style.width = Math.min(100, (Math.abs(state.startW-state.weight)/Math.abs(state.startW-state.goal))*100) + '%'; document.getElementById('watV').innerText = state.waterC; document.getElementById('watBar').style.width = (state.waterC / state.waterG) * 100 + '%'; }
+function updateInfoUI() { const total = state.consumed.reduce((sum, item) => sum + item.cal, 0); document.getElementById('headerCal').innerText = total; document.getElementById('headerGoal').innerText = state.calGoal; document.getElementById('dispRemaining').innerText = Math.max(0, state.calGoal - total); document.getElementById('dispGoal').innerText = state.calGoal + " kcal"; const offset = (2 * Math.PI * 40) - (total / state.calGoal) * (2 * Math.PI * 40); document.getElementById('calRing').style.strokeDashoffset = offset; renderLog(); }
+function browseCategory(cat) { const items = CATEGORIES[cat]; const listContainer = document.getElementById('catListContent'); document.getElementById('catGrid').classList.add('hide'); document.getElementById('catView').classList.remove('hide'); let html = ''; let foundCount = 0; items.forEach(keyword => { const matchKey = Object.keys(foodDB).find(k => k.includes(keyword)); if(matchKey) { foundCount++; const food = foodDB[matchKey]; let badgeColor = food.variants && food.variants[0].type === 'bad' ? 'text-red-500 bg-red-50' : 'text-green-500 bg-green-50'; html += `<div onclick="selectFood('${matchKey}')" class="bg-white p-4 rounded-2xl border border-slate-50 shadow-sm flex justify-between items-center cursor-pointer mb-2 btn-click"><div><p class="font-bold text-marine capitalize text-sm">${matchKey}</p><p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tap to add</p></div><div class="w-8 h-8 rounded-full ${badgeColor} flex items-center justify-center"><i class="fas fa-plus"></i></div></div>`; } }); if (foundCount === 0) html = `<div class="text-center py-10 text-slate-400 font-bold text-xs">Loading items...</div>`; listContainer.innerHTML = html; }
+function closeCategory() { document.getElementById('catView').classList.add('hide'); document.getElementById('catGrid').classList.remove('hide'); }
+function showSuggestions(val) { val = val.toLowerCase(); const list = document.getElementById('suggestions'); if(val.length < 1) { list.classList.add('hide'); return; } const matches = Object.keys(foodDB).filter(k => k.includes(val)); if(matches.length === 0) { list.innerHTML = `<div class="p-3 text-center text-xs text-slate-400">No results. Try Fuel tab.</div>`; list.classList.remove('hide'); return; } list.innerHTML = matches.map(f => `<div onclick="selectFood('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center transition-all"><span class="font-bold text-marine capitalize text-sm">${f}</span></div>`).join(''); list.classList.remove('hide'); }
+function shareWhatsApp() { const total = state.consumed.reduce((sum, item) => sum + item.cal, 0); const remainingWeight = (state.weight - state.goal).toFixed(1); const daysPassed = Math.max(1, Math.floor((Date.now() - state.startDate) / 86400000)); const rate = (state.startW - state.weight) > 0 ? (state.startW - state.weight) / daysPassed : 0.071; let estDays = Math.ceil(remainingWeight / rate); let timeStr = remainingWeight <= 0 ? "Goal Reached! 🎉" : (estDays > 30 ? (estDays / 30).toFixed(1) + " Months" : estDays + " Days"); const text = `*ZestUp Pro Update* 🚀%0a%0a*Status:*%0a🔥 Calories: ${total}/${state.calGoal}%0a⚖️ Current: ${state.weight}kg%0a🎯 Target Weight: ${state.goal}kg%0a⏳ Est. Time: ${timeStr}%0a%0a🔗 *Open App:* https://krishnamu045-rgb.github.io/fitflow/`; window.open(`https://wa.me/?text=${text}`, '_blank'); }
+function showT(tab) { ['home','workout','info'].forEach(t => document.getElementById(`${t}-section`).classList.add('hide')); ['nav-home','nav-workout','nav-info'].forEach(t => document.getElementById(t).className = 'flex flex-col items-center gap-1 text-slate-300'); document.getElementById(`${tab}-section`).classList.remove('hide'); document.getElementById(`nav-${tab}`).className = 'flex flex-col items-center gap-1 nav-active'; if(tab === 'workout') { renderW(); } if(tab === 'info') checkFoodDisclaimer(); }
+function selectGender(g) { document.getElementById('setupGender').value = g; document.getElementById('btnMale').className = g==='male'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; document.getElementById('btnFemale').className = g==='female'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; }
+function addW(v) { state.waterC = Math.max(0, state.waterC + v); updateUI(); save(); }
+function openW() { document.getElementById('wModal').classList.remove('hide'); }
+function closeW() { document.getElementById('wModal').classList.add('hide'); }
+function saveW() { const v = parseFloat(document.getElementById('wIn').value); if(v) { state.weight = v; updateUI(); save(); closeW(); } }
+function toggleTask(task) { state.todayTasks[task] = !state.todayTasks[task]; const today = new Date().toISOString().split('T')[0]; let score = 0; if (state.todayTasks.mShake) score++; if (state.todayTasks.nShake) score++; if (state.todayTasks.water) score++; if (state.todayTasks.workout) score++; state.history[today] = score; renderTasks(); renderHistory(); save(); }
+function renderTasks() { ['mShake','nShake','water','workout'].forEach(k => { const b = document.getElementById('task-'+k); if(state.todayTasks[k]) b.classList.add('check-active'); else b.classList.remove('check-active'); }); }
+function renderHistory() { const container = document.getElementById('historyContainer'); let html = ''; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const k = d.toISOString().split('T')[0]; const s = state.history && state.history[k] ? state.history[k] : 0; let bg = s === 4 ? "bg-punch text-white" : (s > 0 ? "bg-orange-100 text-punch" : "bg-white text-slate-300"); html += `<div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black ${bg} border border-slate-100">${s || '-'}</div></div>`; } container.innerHTML = html; }
+function renderW() { const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; const d = days[new Date().getDay()]; const p = COACH_PLAN[d]; document.getElementById('wTitle').innerText = p.t; document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`; }
+function launchWorkout() { const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; const d = days[new Date().getDay()]; const p = COACH_PLAN[d]; window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank'); }
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+function masterReset() { if(prompt("PIN:") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
+function checkNewDay() { const today = new Date().toISOString().split('T')[0]; if (state.lastLogin !== today) { state.lastLogin = today; state.waterC = 0; state.consumed = []; state.todayTasks = {}; save(); } }
+function enableNotifications() { Notification.requestPermission(); }
