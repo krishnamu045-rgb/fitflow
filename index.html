@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZestUp Pro V19.5</title>
+    <title>ZestUp Pro V13.6</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -17,29 +16,54 @@
             }
         }
     </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+    </style>
 </head>
-<body class="font-sans text-marine select-none bg-white">
+<body class="font-sans text-marine select-none">
+
+    <div id="loading-screen" class="fixed inset-0 z-[500] bg-white flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="w-12 h-12 border-4 border-slate-100 border-t-punch rounded-full animate-spin"></div>
+        <p class="text-[10px] font-black text-slate-300 mt-4 uppercase tracking-[0.2em] animate-pulse">Loading Menu...</p>
+    </div>
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
-        <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">V19.5 • Instant Load</p></div>
+        <div class="w-full max-w-sm space-y-6 text-center">
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 13.6</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
                 <input type="hidden" id="setupGender" value="">
+                <div class="text-left ml-1"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date of Birth</p></div>
+                <input type="date" id="setupDOB" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg text-marine">
                 <div class="grid grid-cols-2 gap-3"><input type="number" id="setupH" placeholder="Ht (cm)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg"><input type="number" id="setupW" placeholder="Wt (kg)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg"></div>
-                <button onclick="goToLifestyle()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4 text-lg">Next <i class="fas fa-arrow-right ml-2"></i></button>
+                <button onclick="finishSetup()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4 text-lg">Calculate Plan</button>
             </div>
         </div>
     </div>
 
-    <div id="lifestyle-screen" class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center p-8 hide">
-        <div class="w-full max-w-sm space-y-5 text-center animate-slide-up">
-            <div><h2 class="text-2xl font-black text-marine uppercase tracking-tight">How do you eat? 🥗</h2><p class="text-xs font-bold text-slate-400 mt-2">Tap one to auto-fill your menu.</p></div>
-            <button onclick="finishSetup('south')" class="w-full p-5 rounded-3xl border border-orange-100 bg-orange-50 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-sm btn-click"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm">🍛</div><div class="text-left"><h3 class="font-black text-marine text-lg">South Indian</h3><p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Idli, Dosa, Rice...</p></div></button>
-            <button onclick="finishSetup('north')" class="w-full p-5 rounded-3xl border border-amber-100 bg-amber-50 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-sm btn-click"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm">🫓</div><div class="text-left"><h3 class="font-black text-marine text-lg">North Indian</h3><p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Roti, Dal, Paneer...</p></div></button>
-            <button onclick="finishSetup('modern')" class="w-full p-5 rounded-3xl border border-blue-100 bg-blue-50 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-sm btn-click"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm">🥪</div><div class="text-left"><h3 class="font-black text-marine text-lg">Modern / Quick</h3><p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Sandwich, Oats, Eggs...</p></div></button>
+    <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-shield-heart text-5xl text-punch mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Health Check</h2></div>
+            <div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. This app is a tracker, not a doctor.</p><p>2. Listen to your body—stop immediately if you feel pain.</p></div>
+            <button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button>
+        </div>
+    </div>
+    <div id="workoutSafetyModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-heart-pulse text-5xl text-water mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Safety First</h2></div>
+            <div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Clear a 6ft safe zone around you.</p><p>2. Wear shoes and keep water handy.</p></div>
+            <button onclick="acceptWorkoutSafety()" class="w-full bg-water text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-blue-200">I'm Ready</button>
+        </div>
+    </div>
+    <div id="foodDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up">
+            <div class="text-center"><i class="fas fa-utensils text-5xl text-leaf mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Nutrition</h2></div>
+            <div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. Calories are estimates based on standard recipes.</p><p>2. Values vary based on oil & portion size.</p></div>
+            <button onclick="acceptFoodDisclaimer()" class="w-full bg-leaf text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-green-200">I Understand</button>
         </div>
     </div>
 
@@ -48,34 +72,81 @@
             <header class="flex justify-between items-center py-4">
                 <div><h1 class="text-2xl font-black italic tracking-tighter text-slate-900 leading-none">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-[12px] font-bold text-slate-400 mt-1 uppercase tracking-wider">Namaste, <span id="userDisp">User</span></p></div>
                 <div class="flex gap-2 items-center">
-                    <div class="bg-purple-50 px-3 py-2 rounded-xl text-right border border-purple-100 cursor-pointer" onclick="showT('info')"><p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Calories</p><p class="text-xs font-black text-cal leading-tight"><span id="headerCal">0</span>/<span id="headerGoal">--</span></p></div>
-                    <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-500 text-white rounded-xl flex items-center justify-center btn-click shadow-lg shadow-green-200 animate-pulse"><i class="fab fa-whatsapp text-xl"></i></button>
+                    <div class="bg-purple-50 px-3 py-2 rounded-xl text-right border border-purple-100 cursor-pointer" onclick="showT('info')">
+                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Calories</p>
+                        <p class="text-xs font-black text-cal leading-tight"><span id="headerCal">0</span>/<span id="headerGoal">--</span></p>
+                    </div>
+                    <button onclick="enableNotifications()" class="w-11 h-11 bg-orange-50 text-punch rounded-2xl flex items-center justify-center btn-click border border-orange-100 shadow-sm" id="notifBtn"><i class="fas fa-bell text-xl"></i></button>
+                    <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center btn-click border border-green-100 shadow-sm animate-pulse"><i class="fab fa-whatsapp text-xl"></i></button>
                 </div>
             </header>
         </div>
 
-        <div id="home-section" class="max-w-md mx-auto p-5 space-y-6">
-            <div class="card-weight rounded-[2.5rem] p-6 space-y-5">
-                <div class="flex justify-between items-start"><div><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Current Weight</p><h2 class="text-5xl font-black tracking-tighter text-marine"><span id="curW">--</span><span class="text-lg opacity-30 font-bold ml-1">kg</span></h2></div><button onclick="openW()" class="w-10 h-10 bg-white rounded-full text-punch shadow-sm flex items-center justify-center btn-click"><i class="fas fa-pencil-alt"></i></button></div>
-                <div class="grid grid-cols-2 gap-3"><div class="bg-white/60 p-3 rounded-2xl border border-orange-100/50"><p class="text-[8px] font-black text-slate-400 uppercase">Target</p><p class="text-xl font-black text-marine"><span id="targetW">--</span> <small class="text-xs">kg</small></p></div><div class="bg-white/60 p-3 rounded-2xl border border-orange-100/50"><p class="text-[8px] font-black text-slate-400 uppercase">To Go</p><p class="text-xl font-black text-punch" id="daysToGoal">--</p></div></div>
-                <div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div id="wBar" class="h-full bg-punch rounded-full transition-all duration-1000" style="width: 0%"></div></div><p class="text-[9px] font-bold text-slate-400 text-right mt-1" id="lossText">Let's start!</p></div>
+        <div id="home-section" class="max-w-md mx-auto p-5 space-y-8">
+            <div class="bg-white rounded-[2.5rem] p-7 pro-shadow border border-slate-50 space-y-6">
+                <div class="space-y-3">
+                    <div class="flex justify-between items-end"><div><p class="text-[9px] font-bold text-slate-300 uppercase">Weight</p><h2 class="text-4xl font-extrabold tracking-tighter text-marine"><span id="curW">--</span><small class="text-xs opacity-20 ml-1 font-medium">kg</small></h2></div><button onclick="openW()" class="bg-orange-50 text-punch px-4 py-2 rounded-xl text-[10px] font-black uppercase btn-click shadow-sm shadow-orange-100">Update</button><div class="text-right"><p class="text-[9px] font-bold text-punch uppercase">Ideal Goal</p><p class="text-xl font-bold text-marine"><span id="goalW">--</span>kg</p></div></div>
+                    <div class="w-full bg-mist h-2 rounded-full overflow-hidden p-0.5"><div id="wBar" class="h-full bg-punch rounded-full transition-all duration-1000"></div></div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-end"><div><p class="text-[9px] font-bold text-slate-300 uppercase text-water">Intake (ml)</p><h2 class="text-4xl font-extrabold tracking-tighter text-water"><span id="watV">0</span><small class="text-xs opacity-20 ml-1 font-medium">ml</small></h2></div><div class="flex gap-2"><button onclick="addW(250)" class="bg-blue-50 text-water w-11 h-11 rounded-xl flex items-center justify-center btn-click border border-blue-100 shadow-sm"><i class="fas fa-plus"></i></button><button onclick="addW(-250)" class="bg-slate-50 text-slate-300 w-11 h-11 rounded-xl flex items-center justify-center btn-click border border-slate-100"><i class="fas fa-undo"></i></button></div><div class="text-right"><p class="text-[9px] font-bold text-water uppercase">Target</p><p class="text-xl font-bold text-marine"><span id="watT">--</span>ml</p></div></div>
+                    <div class="w-full bg-mist h-2 rounded-full overflow-hidden p-0.5"><div id="watBar" class="h-full bg-water rounded-full transition-all duration-500"></div></div>
+                </div>
             </div>
-
-            <div class="card-water rounded-[2.5rem] p-6 space-y-4">
-                <div class="flex justify-between items-end"><div><p class="text-[9px] font-bold text-blue-300 uppercase tracking-widest mb-1">Hydration Goal</p><h2 class="text-4xl font-black tracking-tighter text-marine"><span id="watV">0</span><span class="text-xl text-blue-200">/</span><span id="watGoal" class="text-xl text-blue-400">--</span> <small class="text-xs text-blue-300">ml</small></h2></div><button onclick="addW(250)" class="w-12 h-12 bg-water text-white rounded-2xl shadow-lg shadow-blue-200 flex items-center justify-center btn-click text-xl"><i class="fas fa-plus"></i></button></div>
-                <div class="w-full bg-blue-50 h-3 rounded-full overflow-hidden"><div id="watBar" class="h-full bg-water rounded-full transition-all duration-500 relative" style="width: 0%"></div></div>
-            </div>
-
-            <div class="space-y-4 pt-2">
-                <div class="flex justify-between items-center px-1"><h3 class="font-black text-lg uppercase tracking-tight text-marine">My Menu</h3><div class="bg-mist p-1 rounded-xl flex border border-slate-100"><button onclick="switchMenu('user')" id="tab-user" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all">My Foods</button><button onclick="switchMenu('coach')" id="tab-coach" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all">Coach</button></div></div>
-                <div id="mealContainer" class="space-y-3 pb-24"></div>
+            <div class="space-y-4">
+                <div class="flex justify-between items-end px-1">
+                    <h3 class="font-extrabold text-xl uppercase tracking-tight italic">Suggested Menu</h3>
+                    <p class="text-[10px] font-bold text-cal bg-purple-50 px-2 py-1 rounded-lg border border-purple-100">Total: ~<span id="menuTotal">--</span> kcal</p>
+                </div>
+                <div id="mealContainer" class="space-y-3"></div>
             </div>
         </div>
 
-        <div id="workout-section" class="max-w-md mx-auto p-5 space-y-8 hide text-center"><div class="relative group cursor-pointer" onclick="launchWorkout()"><div class="bg-white rounded-[2.5rem] overflow-hidden pro-shadow border border-slate-50 relative aspect-video"><img id="wThumb" src="" alt="Workout" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-8 text-left"><p id="wStatus" class="text-punch font-black text-[10px] uppercase tracking-[0.2em] mb-1">Today's Session</p><h3 id="wTitle" class="text-3xl font-black text-white italic leading-none uppercase tracking-tight">--</h3></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-play ml-1"></i></div></div></div><div class="space-y-4 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Checklist</h3><div class="grid grid-cols-2 gap-3"><button id="task-mShake" onclick="toggleTask('mShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Morning Shake</span></button><button id="task-nShake" onclick="toggleTask('nShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Night Shake</span></button><button id="task-water" onclick="toggleTask('water')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight text-water">Water Goal</span></button><button id="task-workout" onclick="toggleTask('workout')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Workout Done</span></button></div></div></div>
-        <div id="info-section" class="max-w-md mx-auto p-5 space-y-6 hide"><div class="card-cal rounded-[2.5rem] p-6 relative overflow-hidden flex items-center justify-between"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Remaining</p><h2 class="text-5xl font-black text-marine tracking-tighter" id="dispRemaining">--</h2><p class="text-xs font-bold text-cal mt-1">Goal: <span id="dispGoal">--</span></p></div><div class="relative w-24 h-24"><svg class="w-full h-full" viewBox="0 0 100 100"><circle class="text-white stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="calRing" class="text-cal progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0"></circle></svg><div class="absolute inset-0 flex items-center justify-center text-marine font-bold text-xs"><i class="fas fa-fire"></i></div></div></div><div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search Full Database..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div><div class="space-y-4"><p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-1">Today's Log</p><div id="logContainer" class="space-y-3 pb-10"></div></div></div>
-        
-        <nav class="fixed bottom-0 left-0 right-0 glass-nav pb-10 pt-4 px-8 z-50">
+        <div id="workout-section" class="max-w-md mx-auto p-5 space-y-8 hide text-center">
+            <div class="relative group cursor-pointer" onclick="launchWorkout()">
+                <div class="bg-white rounded-[2.5rem] overflow-hidden pro-shadow border border-slate-50 relative aspect-video">
+                    <img id="wThumb" src="" alt="Workout" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 thumbnail-gradient flex flex-col justify-end p-8 text-left">
+                        <p id="wStatus" class="text-punch font-black text-[10px] uppercase tracking-[0.2em] mb-1">Today's Session</p>
+                        <h3 id="wTitle" class="text-3xl font-black text-white italic leading-none uppercase tracking-tight">--</h3>
+                    </div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-play ml-1"></i></div>
+                </div>
+            </div>
+            <div class="space-y-4 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Daily Checklist</h3><div id="tracker-list" class="grid grid-cols-2 gap-3"><button id="task-mShake" onclick="toggleTask('mShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Morning Shake</span></button><button id="task-nShake" onclick="toggleTask('nShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Night Shake</span></button><button id="task-water" onclick="toggleTask('water')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight text-water">Water Goal</span></button><button id="task-workout" onclick="toggleTask('workout')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Workout Done</span></button></div></div>
+            <div class="space-y-3 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Weekly History</h3><div id="historyContainer" class="flex justify-between bg-mist p-4 rounded-[2rem] border border-slate-100 overflow-x-auto no-scrollbar"></div></div>
+            <button onclick="masterReset()" class="w-full py-6 text-[10px] font-black text-slate-200 uppercase tracking-[0.4em] hover:text-red-400 transition-all mt-6">Master Reset (PIN: 2710)</button>
+        </div>
+
+        <div id="info-section" class="max-w-md mx-auto p-5 space-y-6 hide">
+            <div class="bg-white rounded-[2.5rem] p-6 pro-shadow border border-slate-50 relative overflow-hidden flex items-center justify-between">
+                <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Calories Remaining</p><h2 class="text-5xl font-black text-marine tracking-tighter" id="dispRemaining">--</h2><p class="text-xs font-bold text-cal mt-1">Goal: <span id="dispGoal">--</span></p></div>
+                <div class="relative w-24 h-24"><svg class="w-full h-full" viewBox="0 0 100 100"><circle class="text-mist stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="calRing" class="text-cal progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0"></circle></svg><div class="absolute inset-0 flex items-center justify-center text-marine font-bold text-xs"><i class="fas fa-fire"></i></div></div>
+            </div>
+            
+            <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-4">
+                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Menu</p>
+                
+                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search specific item..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
+
+                <div id="catGrid" class="grid grid-cols-3 gap-3">
+                    <button onclick="browseCategory('tiffin')" class="bg-orange-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-orange-100 hover:bg-orange-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-orange-500 text-lg"><i class="fas fa-sun"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Tiffin</span></button>
+                    <button onclick="browseCategory('indian')" class="bg-amber-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-amber-100 hover:bg-amber-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-amber-600 text-lg"><i class="fas fa-utensils"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Indian</span></button>
+                    <button onclick="browseCategory('chinese')" class="bg-red-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-red-100 hover:bg-red-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-red-500 text-lg"><i class="fas fa-bowl-rice"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Chinese</span></button>
+                    <button onclick="browseCategory('western')" class="bg-blue-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-blue-100 hover:bg-blue-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-blue-500 text-lg"><i class="fas fa-burger"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Western</span></button>
+                    <button onclick="browseCategory('bakery')" class="bg-yellow-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-yellow-100 hover:bg-yellow-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-yellow-600 text-lg"><i class="fas fa-bread-slice"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Bakery</span></button>
+                    <button onclick="browseCategory('fresh')" class="bg-green-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-green-100 hover:bg-green-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-green-500 text-lg"><i class="fas fa-leaf"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Fresh</span></button>
+                </div>
+
+                <div id="catView" class="hide animate-slide-up space-y-3"><button onclick="closeCategory()" class="w-full bg-mist p-3 rounded-2xl font-bold text-slate-400 text-xs border border-slate-100 mb-2"><i class="fas fa-chevron-left mr-2"></i>Back to Categories</button><div id="catListContent" class="space-y-2"></div></div>
+                <div id="prepModal" class="hide bg-mist p-5 rounded-2xl border border-slate-100 animate-slide-up space-y-4"><div><h3 class="font-black text-marine capitalize text-xl">Select Variant</h3><p class="text-xs text-slate-400 font-bold mt-1">Preparation changes calories significantly.</p></div><div id="prepOptions" class="space-y-2"></div><button onclick="closePrep()" class="w-full text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Cancel</button></div>
+                <div id="analysisResult" class="hide bg-mist p-5 rounded-2xl border border-slate-100 animate-slide-up space-y-4"><div class="flex justify-between items-start"><div><h3 id="resName" class="font-black text-marine capitalize text-xl">--</h3><p id="resDesc" class="text-xs text-slate-500 font-bold mt-1">--</p></div><div id="resBadge" class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">--</div></div><div class="flex items-center gap-3"><div class="flex-1 bg-white p-3 rounded-xl border border-slate-100 text-center"><p class="text-[9px] font-bold text-slate-300 uppercase">Calories</p><h4 class="font-black text-marine text-lg" id="resCal">--</h4></div><div class="flex-1"><input type="number" id="resQty" value="1" class="w-full bg-white p-3 rounded-xl font-bold text-center border border-slate-100 text-lg outline-none"></div></div><button onclick="confirmAdd()" class="w-full bg-marine text-white font-bold py-4 rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button><button onclick="cancelAdd()" class="w-full text-xs font-bold text-slate-400 uppercase tracking-widest">Cancel</button></div>
+                <div id="addCustom" class="hide bg-mist p-5 rounded-2xl border border-slate-100 animate-slide-up space-y-3"><p class="text-xs font-bold text-slate-400 uppercase">Add New Item</p><input type="text" id="custName" placeholder="Food Name" class="w-full bg-white p-3 rounded-xl font-bold border border-slate-100"><input type="number" id="custCal" placeholder="Calories per unit" class="w-full bg-white p-3 rounded-xl font-bold border border-slate-100"><button onclick="saveCustom()" class="w-full bg-punch text-white font-bold py-3 rounded-xl btn-click">Save & Add</button></div>
+            </div>
+            <div class="space-y-4"><p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-1">Today's Meals</p><div id="logContainer" class="space-y-3 pb-10"></div></div>
+        </div>
+
+        <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-100 pb-10 pt-4 px-8 z-50">
             <div class="max-w-md mx-auto flex justify-between items-center px-4">
                 <button onclick="showT('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active transition-all"><i class="fas fa-bolt-lightning text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Dash</span></button>
                 <button onclick="showT('workout')" id="nav-workout" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-dumbbell text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Workout</span></button>
@@ -84,11 +155,7 @@
         </nav>
     </div>
 
-    <div id="myMenuModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative h-[60vh] flex flex-col"><div class="flex justify-between items-center"><h3 class="text-xl font-black uppercase tracking-tight text-marine">Select Item</h3><button onclick="document.getElementById('myMenuModal').classList.add('hide')" class="w-8 h-8 bg-mist rounded-full flex items-center justify-center text-slate-400"><i class="fas fa-times"></i></button></div><div id="myMenuGrid" class="grid grid-cols-2 gap-3 overflow-y-auto pb-4"></div><button onclick="showT('info'); document.getElementById('myMenuModal').classList.add('hide')" class="w-full bg-mist text-slate-400 font-bold py-3 rounded-xl text-xs uppercase tracking-widest mt-auto">Search Full Database</button></div></div>
-    <div id="prepModal" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up"><div class="flex justify-between items-center"><h3 class="font-black text-marine capitalize text-xl">Select Variant</h3><button onclick="closePrep()" class="w-8 h-8 bg-mist rounded-full text-slate-400"><i class="fas fa-times"></i></button></div><div id="prepOptions" class="space-y-2 max-h-60 overflow-y-auto"></div></div></div>
-    <div id="analysisResult" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up"><div class="flex justify-between items-start"><div><h3 id="resName" class="font-black text-marine capitalize text-xl">--</h3><p id="resDesc" class="text-xs text-slate-500 font-bold mt-1">--</p></div><div id="resBadge" class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">--</div></div><div class="flex items-center gap-3"><div class="flex-1 bg-white p-3 rounded-xl border border-slate-100 text-center"><p class="text-[9px] font-bold text-slate-300 uppercase">Calories</p><h4 class="font-black text-marine text-lg" id="resCal">--</h4></div><div class="flex-1"><input type="number" id="resQty" value="1" class="w-full bg-white p-3 rounded-xl font-bold text-center border border-slate-100 text-lg outline-none"></div></div><button onclick="confirmAdd()" class="w-full bg-marine text-white font-bold py-4 rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button></div></div>
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
-
     <script src="script.js"></script>
 </body>
 </html>
