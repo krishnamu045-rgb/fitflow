@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZestUp Pro V15.2</title>
+    <title>ZestUp Pro V15.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,12 +23,12 @@
 
     <div id="loading-screen" class="fixed inset-0 z-[500] bg-white flex flex-col items-center justify-center">
         <div class="w-12 h-12 border-4 border-slate-100 border-t-punch rounded-full animate-spin"></div>
-        <p class="text-[10px] font-black text-slate-300 mt-4 uppercase tracking-[0.2em] animate-pulse">Loading AI...</p>
+        <p class="text-[10px] font-black text-slate-300 mt-4 uppercase tracking-[0.2em] animate-pulse">Loading Your App...</p>
     </div>
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 15.2</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 15.3</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -41,17 +41,26 @@
     </div>
 
     <div id="survey-screen" class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center p-8 hide">
-        <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div><h2 class="text-2xl font-black text-marine uppercase tracking-tight">Your Kitchen 🥘</h2><p class="text-xs font-bold text-slate-400 mt-2">Select what you usually eat.</p></div>
-            <div class="grid grid-cols-2 gap-3" id="surveyGrid">
-                <button onclick="togglePref('south')" id="pref-south" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-sun text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Idli / Dosa</span></button>
-                <button onclick="togglePref('north')" id="pref-north" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-bread-slice text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Roti / Curry</span></button>
-                <button onclick="togglePref('rice')" id="pref-rice" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-bowl-rice text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Rice Eater</span></button>
-                <button onclick="togglePref('nonveg')" id="pref-nonveg" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-drumstick-bite text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Non-Veg</span></button>
-                <button onclick="togglePref('egg')" id="pref-egg" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-egg text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Eggs</span></button>
-                <button onclick="togglePref('bread')" id="pref-bread" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-sandwich text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Bread/Oats</span></button>
+        <div class="w-full max-w-sm space-y-4 text-center animate-slide-up h-full flex flex-col">
+            <div class="mt-8">
+                <h2 class="text-2xl font-black text-marine uppercase tracking-tight">Build Your Menu 🥘</h2>
+                <p class="text-xs font-bold text-slate-400 mt-2">Add foods you eat regularly. These will appear in your daily list.</p>
             </div>
-            <button onclick="finishSetup()" class="w-full bg-marine text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 uppercase tracking-widest btn-click mt-4 text-lg">Build My App</button>
+            
+            <div class="relative z-20">
+                <input type="text" id="surveySearch" onkeyup="showSurveySuggestions(this.value)" placeholder="Search (e.g. Idli, Rice)..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100">
+                <i class="fas fa-search absolute left-5 top-5 text-slate-300"></i>
+                <div id="surveySuggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-30 top-full mt-1 hide"></div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto bg-mist rounded-2xl p-4 border border-slate-50 relative">
+                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-2 text-left sticky top-0 bg-mist pb-2">Your Personal Menu</p>
+                <div id="myMenuList" class="space-y-2">
+                    <div class="text-center mt-10 text-slate-300 text-xs font-bold">Search above to add items...</div>
+                </div>
+            </div>
+
+            <button onclick="finishSetup()" class="w-full bg-marine text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-200 uppercase tracking-widest btn-click text-lg">Finish & Start</button>
         </div>
     </div>
 
@@ -85,7 +94,7 @@
                 <div class="flex justify-between items-center px-1">
                     <h3 class="font-extrabold text-xl uppercase tracking-tight italic">Daily Menu</h3>
                     <div class="bg-mist p-1 rounded-xl flex border border-slate-100">
-                        <button onclick="switchMenu('user')" id="tab-user" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all">My Choice</button>
+                        <button onclick="switchMenu('user')" id="tab-user" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all">My Menu</button>
                         <button onclick="switchMenu('coach')" id="tab-coach" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all">Coach Plan</button>
                     </div>
                 </div>
@@ -114,8 +123,8 @@
             </div>
             
             <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-4">
-                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Menu</p>
-                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search specific item..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
+                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Global Food Database</p>
+                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search anything..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
 
                 <div id="catGrid" class="grid grid-cols-3 gap-3">
                     <button onclick="browseCategory('tiffin')" class="bg-orange-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-orange-100 hover:bg-orange-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-orange-500 text-lg"><i class="fas fa-sun"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Tiffin</span></button>
@@ -137,6 +146,14 @@
                 <button onclick="showT('info')" id="nav-info" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-leaf text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Fuel</span></button>
             </div>
         </nav>
+    </div>
+
+    <div id="myMenuModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative h-[60vh] flex flex-col">
+            <div class="flex justify-between items-center"><h3 class="text-xl font-black uppercase tracking-tight text-marine">Select Item</h3><button onclick="document.getElementById('myMenuModal').classList.add('hide')" class="w-8 h-8 bg-mist rounded-full flex items-center justify-center text-slate-400"><i class="fas fa-times"></i></button></div>
+            <div id="myMenuGrid" class="grid grid-cols-2 gap-3 overflow-y-auto pb-4"></div>
+            <button onclick="showT('info'); document.getElementById('myMenuModal').classList.add('hide')" class="w-full bg-mist text-slate-400 font-bold py-3 rounded-xl text-xs uppercase tracking-widest mt-auto">Search Database Instead</button>
+        </div>
     </div>
 
     <div id="prepModal" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
@@ -163,18 +180,6 @@
         </div>
     </div>
     
-    <div id="addCustom" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
-        <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up">
-            <h3 class="font-black text-marine capitalize text-xl">Add New Food</h3>
-            <input type="text" id="custName" placeholder="Food Name" class="w-full bg-white p-3 rounded-xl font-bold border border-slate-100">
-            <input type="number" id="custCal" placeholder="Calories per unit" class="w-full bg-white p-3 rounded-xl font-bold border border-slate-100">
-            <div class="flex gap-3">
-                <button onclick="document.getElementById('addCustom').classList.add('hide')" class="flex-1 p-3 font-bold text-slate-400">Cancel</button>
-                <button onclick="saveCustom()" class="flex-1 bg-punch text-white font-bold py-3 rounded-xl btn-click">Save</button>
-            </div>
-        </div>
-    </div>
-
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
     <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-shield-heart text-5xl text-punch mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Health Check</h2></div><div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. This app is a tracker, not a doctor.</p><p>2. Listen to your body—stop immediately if you feel pain.</p></div><button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button></div></div>
     <script src="script.js"></script>
