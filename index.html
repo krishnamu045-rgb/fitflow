@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZestUp Pro V18.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { punch: '#FF6B00', marine: '#0A2647', water: '#00A3FF', mist: '#F8FAFC', leaf: '#10B981', danger: '#EF4444', cal: '#8B5CF6' },
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* CRITICAL STYLES */
+        body { -webkit-tap-highlight-color: transparent; }
+        .hide { display: none !important; }
+        .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        /* CARD STYLES */
+        .card-weight { background: linear-gradient(135deg, #FFF0E6 0%, #FFFFFF 100%); border: 1px solid #FFD8BE; box-shadow: 0 10px 30px -10px rgba(255, 107, 0, 0.15); }
+        .card-water { background: linear-gradient(135deg, #E6F6FF 0%, #FFFFFF 100%); border: 1px solid #BEE3FF; box-shadow: 0 10px 30px -10px rgba(0, 163, 255, 0.15); }
+        .card-cal { background: linear-gradient(135deg, #F5F3FF 0%, #FFFFFF 100%); border: 1px solid #DDD6FE; box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15); }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #f1f5f9; }
+        .btn-click:active { transform: scale(0.96); }
+    </style>
+</head>
+<body class="font-sans text-marine select-none bg-white">
+
+    <div id="loading-screen" class="fixed inset-0 z-[500] bg-white flex flex-col items-center justify-center">
+        <div class="w-12 h-12 border-4 border-slate-100 border-t-punch rounded-full animate-spin"></div>
+        <button onclick="emergencyReset()" class="mt-8 text-[10px] text-red-400 font-bold uppercase underline">Stuck? Tap to Reset</button>
+    </div>
+
+    <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
+        <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">V18.0 • Single File Edition</p></div>
+            <div class="space-y-3">
+                <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
+                <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
+                <input type="hidden" id="setupGender" value="">
+                <div class="grid grid-cols-2 gap-3"><input type="number" id="setupH" placeholder="Ht (cm)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg"><input type="number" id="setupW" placeholder="Wt (kg)" class="bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg"></div>
+                <button onclick="goToLifestyle()" class="w-full bg-punch text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 uppercase tracking-widest btn-click mt-4 text-lg">Next <i class="fas fa-arrow-right ml-2"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="lifestyle-screen" class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center p-8 hide">
+        <div class="w-full max-w-sm space-y-5 text-center animate-slide-up">
+            <div><h2 class="text-2xl font-black text-marine uppercase tracking-tight">How do you eat? 🥗</h2><p class="text-xs font-bold text-slate-400 mt-2">Tap one to auto-fill your menu.</p></div>
+            <button onclick="finishSetup('south')" class="w-full p-5 rounded-3xl border border-orange-100 bg-orange-50 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-sm btn-click"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm">🍛</div><div class="text-left"><h3 class="font-black text-marine text-lg">South Indian</h3><p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Idli, Dosa, Rice...</p></div></button>
+            <button onclick="finishSetup('north')" class="w-full p-5 rounded-3xl border border-amber-100 bg-amber-50 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-sm btn-click"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm">🫓</div><div class="text-left"><h3 class="font-black text-marine text-lg">North Indian</h3><p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Roti, Dal, Paneer...</p></div></button>
+            <button onclick="finishSetup('modern')" class="w-full p-5 rounded-3xl border border-blue-100 bg-blue-50 flex items-center gap-4 hover:scale-[1.02] transition-transform shadow-sm btn-click"><div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-sm">🥪</div><div class="text-left"><h3 class="font-black text-marine text-lg">Modern / Quick</h3><p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Sandwich, Oats, Eggs...</p></div></button>
+        </div>
+    </div>
+
+    <div id="main-app" class="pb-32 hide">
+        <div class="max-w-md mx-auto p-5 pb-0">
+            <header class="flex justify-between items-center py-4">
+                <div><h1 class="text-2xl font-black italic tracking-tighter text-slate-900 leading-none">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-[12px] font-bold text-slate-400 mt-1 uppercase tracking-wider">Namaste, <span id="userDisp">User</span></p></div>
+                <div class="flex gap-2 items-center">
+                    <div class="bg-purple-50 px-3 py-2 rounded-xl text-right border border-purple-100 cursor-pointer" onclick="showT('info')"><p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Calories</p><p class="text-xs font-black text-cal leading-tight"><span id="headerCal">0</span>/<span id="headerGoal">--</span></p></div>
+                    <button onclick="shareWhatsApp()" class="w-11 h-11 bg-green-500 text-white rounded-xl flex items-center justify-center btn-click shadow-lg shadow-green-200 animate-pulse"><i class="fab fa-whatsapp text-xl"></i></button>
+                </div>
+            </header>
+        </div>
+
+        <div id="home-section" class="max-w-md mx-auto p-5 space-y-6">
+            <div class="card-weight rounded-[2.5rem] p-6 space-y-5">
+                <div class="flex justify-between items-start"><div><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Current Weight</p><h2 class="text-5xl font-black tracking-tighter text-marine"><span id="curW">--</span><span class="text-lg opacity-30 font-bold ml-1">kg</span></h2></div><button onclick="openW()" class="w-10 h-10 bg-white rounded-full text-punch shadow-sm flex items-center justify-center btn-click"><i class="fas fa-pencil-alt"></i></button></div>
+                <div class="grid grid-cols-2 gap-3"><div class="bg-white/60 p-3 rounded-2xl border border-orange-100/50"><p class="text-[8px] font-black text-slate-400 uppercase">Target</p><p class="text-xl font-black text-marine"><span id="targetW">--</span> <small class="text-xs">kg</small></p></div><div class="bg-white/60 p-3 rounded-2xl border border-orange-100/50"><p class="text-[8px] font-black text-slate-400 uppercase">To Go</p><p class="text-xl font-black text-punch" id="daysToGoal">--</p></div></div>
+                <div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div id="wBar" class="h-full bg-punch rounded-full transition-all duration-1000" style="width: 0%"></div></div><p class="text-[9px] font-bold text-slate-400 text-right mt-1" id="lossText">0 kg lost</p></div>
+            </div>
+
+            <div class="card-water rounded-[2.5rem] p-6 space-y-4">
+                <div class="flex justify-between items-end"><div><p class="text-[9px] font-bold text-blue-300 uppercase tracking-widest mb-1">Hydration Goal</p><h2 class="text-4xl font-black tracking-tighter text-marine"><span id="watV">0</span><span class="text-xl text-blue-200">/</span><span id="watGoal" class="text-xl text-blue-400">--</span> <small class="text-xs text-blue-300">ml</small></h2></div><button onclick="addW(250)" class="w-12 h-12 bg-water text-white rounded-2xl shadow-lg shadow-blue-200 flex items-center justify-center btn-click text-xl"><i class="fas fa-plus"></i></button></div>
+                <div class="w-full bg-blue-50 h-3 rounded-full overflow-hidden"><div id="watBar" class="h-full bg-water rounded-full transition-all duration-500 relative" style="width: 0%"></div></div>
+            </div>
+
+            <div class="space-y-4 pt-2">
+                <div class="flex justify-between items-center px-1"><h3 class="font-black text-lg uppercase tracking-tight text-marine">My Menu</h3><div class="bg-mist p-1 rounded-xl flex border border-slate-100"><button onclick="switchMenu('user')" id="tab-user" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all">My Foods</button><button onclick="switchMenu('coach')" id="tab-coach" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all">Coach</button></div></div>
+                <div id="mealContainer" class="space-y-3 pb-24"></div>
+            </div>
+        </div>
+
+        <div id="workout-section" class="max-w-md mx-auto p-5 space-y-8 hide text-center">
+            <div class="relative group cursor-pointer" onclick="launchWorkout()"><div class="bg-white rounded-[2.5rem] overflow-hidden pro-shadow border border-slate-50 relative aspect-video"><img id="wThumb" src="" alt="Workout" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-8 text-left"><p id="wStatus" class="text-punch font-black text-[10px] uppercase tracking-[0.2em] mb-1">Today's Session</p><h3 id="wTitle" class="text-3xl font-black text-white italic leading-none uppercase tracking-tight">--</h3></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20"><i class="fas fa-play ml-1"></i></div></div></div>
+            <div class="space-y-4 text-left"><h3 class="font-extrabold text-lg uppercase tracking-tight px-1">Checklist</h3><div class="grid grid-cols-2 gap-3"><button id="task-mShake" onclick="toggleTask('mShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Morning Shake</span></button><button id="task-nShake" onclick="toggleTask('nShake')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Night Shake</span></button><button id="task-water" onclick="toggleTask('water')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight text-water">Water Goal</span></button><button id="task-workout" onclick="toggleTask('workout')" class="bg-mist p-4 rounded-3xl border border-slate-100 flex items-center gap-3 btn-click transition-all"><div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]"><i class="fas fa-check opacity-0"></i></div><span class="text-xs font-extrabold uppercase tracking-tight">Workout Done</span></button></div></div>
+        </div>
+
+        <div id="info-section" class="max-w-md mx-auto p-5 space-y-6 hide">
+            <div class="card-cal rounded-[2.5rem] p-6 relative overflow-hidden flex items-center justify-between"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Remaining</p><h2 class="text-5xl font-black text-marine tracking-tighter" id="dispRemaining">--</h2><p class="text-xs font-bold text-cal mt-1">Goal: <span id="dispGoal">--</span></p></div><div class="relative w-24 h-24"><svg class="w-full h-full" viewBox="0 0 100 100"><circle class="text-white stroke-current" stroke-width="8" cx="50" cy="50" r="40" fill="transparent"></circle><circle id="calRing" class="text-cal progress-ring__circle stroke-current" stroke-width="8" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0"></circle></svg><div class="absolute inset-0 flex items-center justify-center text-marine font-bold text-xs"><i class="fas fa-fire"></i></div></div></div>
+            <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search Full Database..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
+            <div class="space-y-4"><p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-1">Today's Log</p><div id="logContainer" class="space-y-3 pb-10"></div></div>
+        </div>
+
+        <nav class="fixed bottom-0 left-0 right-0 glass-nav pb-10 pt-4 px-8 z-50">
+            <div class="max-w-md mx-auto flex justify-between items-center px-4">
+                <button onclick="showT('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active transition-all"><i class="fas fa-bolt-lightning text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Dash</span></button>
+                <button onclick="showT('workout')" id="nav-workout" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-dumbbell text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Workout</span></button>
+                <button onclick="showT('info')" id="nav-info" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-leaf text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Fuel</span></button>
+            </div>
+        </nav>
+    </div>
+
+    <div id="myMenuModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative h-[60vh] flex flex-col"><div class="flex justify-between items-center"><h3 class="text-xl font-black uppercase tracking-tight text-marine">Select Item</h3><button onclick="document.getElementById('myMenuModal').classList.add('hide')" class="w-8 h-8 bg-mist rounded-full flex items-center justify-center text-slate-400"><i class="fas fa-times"></i></button></div><div id="myMenuGrid" class="grid grid-cols-2 gap-3 overflow-y-auto pb-4"></div><button onclick="showT('info'); document.getElementById('myMenuModal').classList.add('hide')" class="w-full bg-mist text-slate-400 font-bold py-3 rounded-xl text-xs uppercase tracking-widest mt-auto">Search Full Database</button></div></div>
+    <div id="prepModal" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up"><div class="flex justify-between items-center"><h3 class="font-black text-marine capitalize text-xl">Select Variant</h3><button onclick="closePrep()" class="w-8 h-8 bg-mist rounded-full text-slate-400"><i class="fas fa-times"></i></button></div><div id="prepOptions" class="space-y-2 max-h-60 overflow-y-auto"></div></div></div>
+    <div id="analysisResult" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up"><div class="flex justify-between items-start"><div><h3 id="resName" class="font-black text-marine capitalize text-xl">--</h3><p id="resDesc" class="text-xs text-slate-500 font-bold mt-1">--</p></div><div id="resBadge" class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">--</div></div><div class="flex items-center gap-3"><div class="flex-1 bg-white p-3 rounded-xl border border-slate-100 text-center"><p class="text-[9px] font-bold text-slate-300 uppercase">Calories</p><h4 class="font-black text-marine text-lg" id="resCal">--</h4></div><div class="flex-1"><input type="number" id="resQty" value="1" class="w-full bg-white p-3 rounded-xl font-bold text-center border border-slate-100 text-lg outline-none"></div></div><button onclick="confirmAdd()" class="w-full bg-marine text-white font-bold py-4 rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button></div></div>
+    <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
+
+    <script>
+    /* --- ZESTUP PRO V18.0 CORE SCRIPT --- */
+    const KEY = "ZESTUP_PRO_V18_0";
+    let state = null;
+    try { state = JSON.parse(localStorage.getItem(KEY)); } catch(e) { localStorage.removeItem(KEY); }
+
+    // EMBEDDED DATABASE
+    const MEGA_DB = [
+        { "name": "idli", "variants": [ { "name": "Single Idli", "cal": 39, "unit": "pc", "type": "good", "desc": "Steamed" }, { "name": "Plate Idli (2+Sambar)", "cal": 220, "unit": "plate", "type": "good", "desc": "Standard" } ] },
+        { "name": "dosa", "variants": [ { "name": "Plain Dosa", "cal": 180, "unit": "pc", "type": "good", "desc": "Less Oil" }, { "name": "Masala Dosa", "cal": 380, "unit": "pc", "type": "bad", "desc": "Potato" } ] },
+        { "name": "rice", "variants": [ { "name": "White Rice", "cal": 150, "unit": "cup", "type": "ok", "desc": "Boiled" }, { "name": "Brown Rice", "cal": 111, "unit": "cup", "type": "good", "desc": "Fiber" } ] },
+        { "name": "dal", "variants": [ { "name": "Dal Fry", "cal": 160, "unit": "bowl", "type": "good", "desc": "Protein" } ] },
+        { "name": "roti", "variants": [ { "name": "Tandoori Roti", "cal": 110, "unit": "pc", "type": "good", "desc": "Wheat" }, { "name": "Chapati", "cal": 80, "unit": "pc", "type": "good", "desc": "Home made" } ] },
+        { "name": "paneer", "variants": [ { "name": "Paneer Butter Masala", "cal": 400, "unit": "bowl", "type": "bad", "desc": "Creamy" }, { "name": "Paneer Tikka", "cal": 180, "unit": "plate", "type": "good", "desc": "Grilled" } ] },
+        { "name": "chicken", "variants": [ { "name": "Grilled Chicken", "cal": 165, "unit": "breast", "type": "good", "desc": "Lean" }, { "name": "Chicken Biryani", "cal": 350, "unit": "cup", "type": "bad", "desc": "Rich" } ] },
+        { "name": "egg", "variants": [ { "name": "Boiled Egg", "cal": 70, "unit": "pc", "type": "good", "desc": "Protein" }, { "name": "Omelette", "cal": 140, "unit": "pc", "type": "ok", "desc": "Fried" } ] },
+        { "name": "tea", "cal": 60, "unit": "cup", "type": "ok", "desc": "Milk Sugar" },
+        { "name": "coffee", "cal": 80, "unit": "cup", "type": "ok", "desc": "Milk Sugar" },
+        { "name": "sandwich", "cal": 250, "unit": "pc", "type": "ok", "desc": "Veg Grilled" },
+        { "name": "f1 shake", "cal": 242, "unit": "glass", "type": "good", "desc": "Herbalife" }
+    ];
+
+    const PRESETS = {
+        'south': ['idli', 'dosa', 'rice', 'dal', 'coffee', 'f1 shake'],
+        'north': ['roti', 'dal', 'paneer', 'tea', 'rice', 'f1 shake'],
+        'modern': ['sandwich', 'egg', 'chicken', 'coffee', 'f1 shake'],
+        'custom': ['rice', 'dal', 'f1 shake']
+    };
+
+    let foodDB = {};
+    MEGA_DB.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
+    
+    let currentMenuMode = 'user';
+    let currentSlot = '';
+    const COACH_PLAN = {
+        "Monday": { sn1: "Almonds", lun: "Brown Rice + Dal", sn2: "Green Tea", vCal: 340, t: "Body Basics", vid: "b9ztxh-cTHI" },
+        "Tuesday": { sn1: "Apple", lun: "Ragi Mudde", sn2: "Buttermilk", vCal: 320, t: "Core Strength", vid: "ELpVLwrDR_g" },
+        "Wednesday": { sn1: "Egg", lun: "Millet Rice", sn2: "Papaya", vCal: 310, t: "Metabolism", vid: "VsAXZ34AJ-k" },
+        "Thursday": { sn1: "Cucumber", lun: "Jowar Roti", sn2: "Black Coffee", vCal: 330, t: "Lower Body", vid: "rmmWuI5Jinc" },
+        "Friday": { sn1: "Guava", lun: "Curd Rice", sn2: "Protein Bar", vCal: 300, t: "Cardio Kick", vid: "8r4Z-ghDI4k" },
+        "Saturday": { sn1: "Coconut Water", lun: "Veg Biryani", sn2: "Makhana", vCal: 400, t: "Stability", vid: "uKXcLBjWqas" },
+        "Sunday": { sn1: "Watermelon", lun: "Grilled Chicken", sn2: "Tea", vCal: 280, t: "Mindfulness", vid: "inpok4MKVLM" }
+    };
+
+    // --- MAIN EXECUTION ---
+    function boot() {
+        document.getElementById('loading-screen').classList.add('hide');
+        if (!state) { 
+            document.getElementById('setup-screen').classList.remove('hide'); 
+        } else { 
+            if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; 
+            init(); 
+        }
+    }
+    // Try to boot immediately
+    setTimeout(boot, 1500);
+
+    function emergencyReset() {
+        if(confirm("Reset App Data?")) { localStorage.removeItem(KEY); location.reload(); }
+    }
+
+    function goToLifestyle() {
+        const n = document.getElementById('setupName').value;
+        const w = parseFloat(document.getElementById('setupW').value);
+        if(!n || !w) return alert("Please fill Name & Weight");
+        document.getElementById('setup-screen').classList.add('hide');
+        document.getElementById('lifestyle-screen').classList.remove('hide');
+    }
+
+    function finishSetup(style) {
+        const n = document.getElementById('setupName').value;
+        const h = parseFloat(document.getElementById('setupH').value);
+        const w = parseFloat(document.getElementById('setupW').value);
+        const g = document.getElementById('setupGender').value;
+        let bmr = (10 * w) + (6.25 * h) - (5 * 30) + (g === 'male' ? 5 : -161);
+        let dailyGoal = Math.max(1200, Math.round(bmr * 1.2 - 300));
+        let idealW = g === 'male' ? (h - 100) * 0.9 : (h - 100) * 0.85;
+
+        state = { 
+            name: n, weight: w, height: h, startW: w, goal: idealW.toFixed(1), 
+            waterG: Math.round(w * 35), waterC: 0, calGoal: dailyGoal, consumed: [], 
+            startDate: Date.now(), history: {}, todayTasks: {}, 
+            lastLogin: new Date().toISOString().split('T')[0], customFoods: {},
+            myMenu: PRESETS[style] || PRESETS['custom']
+        };
+        save();
+        location.reload();
+    }
+
+    function init() { 
+        ['setup-screen','lifestyle-screen'].forEach(id => document.getElementById(id).classList.add('hide')); 
+        document.getElementById('main-app').classList.remove('hide'); 
+        document.getElementById('userDisp').innerText = state.name; 
+        checkNewDay(); updateUI(); renderMeals(); 
+    }
+
+    function updateUI() {
+        document.getElementById('curW').innerText = state.weight;
+        document.getElementById('targetW').innerText = state.goal;
+        let lost = state.startW - state.weight;
+        let total = state.startW - state.goal;
+        document.getElementById('wBar').style.width = Math.max(0, Math.min(100, (lost/total)*100)) + '%';
+        document.getElementById('lossText').innerText = lost > 0 ? `${lost.toFixed(1)} kg lost` : "Let's Go!";
+        
+        let diff = state.weight - state.goal;
+        if(diff <= 0) document.getElementById('daysToGoal').innerText = "Done!";
+        else {
+             let rate = lost > 0 ? (lost / Math.max(1, (Date.now()-state.startDate)/(86400000))) : 0.05;
+             let d = Math.ceil(diff/rate);
+             document.getElementById('daysToGoal').innerText = d > 365 ? ">1 Yr" : d + " Days";
+        }
+
+        document.getElementById('watV').innerText = state.waterC;
+        document.getElementById('watGoal').innerText = state.waterG;
+        document.getElementById('watBar').style.width = Math.min(100, (state.waterC/state.waterG)*100) + '%';
+        updateInfoUI();
+    }
+
+    function updateInfoUI() {
+        const total = state.consumed.reduce((sum, item) => sum + item.cal, 0);
+        document.getElementById('headerCal').innerText = total;
+        document.getElementById('headerGoal').innerText = state.calGoal;
+        document.getElementById('dispRemaining').innerText = Math.max(0, state.calGoal - total);
+        document.getElementById('dispGoal').innerText = state.calGoal + " kcal";
+        const offset = (2 * Math.PI * 40) - (Math.min(total, state.calGoal) / state.calGoal) * (2 * Math.PI * 40);
+        document.getElementById('calRing').style.strokeDashoffset = offset;
+        renderLog();
+    }
+
+    function renderMeals() {
+        const d = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date().getDay()];
+        const p = COACH_PLAN[d] || COACH_PLAN["Monday"];
+        document.getElementById('wTitle').innerText = p.t; 
+        document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
+
+        if (currentMenuMode === 'user') {
+            document.getElementById('mealContainer').innerHTML = `
+                ${renderSearchSlot('Breakfast', 'Tap to add...')}
+                ${renderSearchSlot('Mid-Snack', 'Tap to add...')}
+                ${renderSearchSlot('Lunch', 'Tap to add...')}
+                ${renderSearchSlot('Eve-Snack', 'Tap to add...')}
+                ${renderSearchSlot('Dinner', 'Tap to add...')}`;
+        } else {
+            document.getElementById('mealContainer').innerHTML = `<div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-leaf"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Breakfast</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake</p></div><button onclick="quickLog('Coach Breakfast', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div>`;
+        }
+    }
+
+    function renderSearchSlot(title, ph) {
+        const found = state.consumed.find(i => i.slot === title);
+        if (found) {
+            return `<div class="bg-green-50 p-4 rounded-[2rem] flex justify-between items-center border border-green-100 shadow-sm"><div class="flex items-center gap-4"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-green-500 shadow-sm"><i class="fas fa-check"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${found.name}</p></div></div><span class="text-xs font-black text-green-600">${found.cal} kcal</span></div>`;
+        } else {
+            return `<div class="bg-mist p-4 rounded-[2rem] flex justify-between items-center border border-slate-50 shadow-sm cursor-pointer hover:bg-slate-100 transition-colors" onclick="openMyMenuDropdown('${title}')"><div class="flex items-center gap-4"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-slate-300 shadow-sm"><i class="fas fa-plus"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${ph}</p></div></div></div>`;
+        }
+    }
+
+    function openMyMenuDropdown(slot) {
+        currentSlot = slot;
+        const grid = document.getElementById('myMenuGrid');
+        grid.innerHTML = (state.myMenu || []).map(key => {
+            return `<div onclick="selectFood('${key}'); document.getElementById('myMenuModal').classList.add('hide')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-50 hover:border-punch bg-mist cursor-pointer"><div class="w-10 h-10 rounded-full bg-white text-marine flex items-center justify-center text-lg shadow-sm"><i class="fas fa-utensils"></i></div><span class="text-xs font-bold text-marine capitalize">${key}</span></div>`;
+        }).join('');
+        document.getElementById('myMenuModal').classList.remove('hide');
+    }
+
+    function selectFood(name) {
+        if(!foodDB[name]) { showFinalModal(name, 100, "Standard", "ok"); return; }
+        const item = foodDB[name];
+        if(item.variants) {
+            document.getElementById('prepOptions').innerHTML = item.variants.map((v, i) => `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm mb-2"><div><p class="font-bold text-marine text-sm">${v.name}</p><p class="text-[10px] text-slate-400">${v.desc}</p></div><p class="text-xs font-black text-punch">${v.cal}</p></div>`).join('');
+            document.getElementById('prepModal').classList.remove('hide');
+        } else {
+            showFinalModal(item.name, item.cal, item.desc, item.type);
+        }
+    }
+    function selectVariant(p, i) { const v = foodDB[p].variants[i]; document.getElementById('prepModal').classList.add('hide'); showFinalModal(v.name, v.cal, v.desc, v.type); }
+    function showFinalModal(n, c, d, t) {
+        let tempFood = { name: n, calPerUnit: c, slot: currentSlot };
+        document.getElementById('resName').innerText = n; document.getElementById('resCal').innerText = c;
+        document.getElementById('analysisResult').classList.remove('hide');
+        document.querySelector('#analysisResult button').onclick = () => {
+            const qty = document.getElementById('resQty').value;
+            state.consumed.unshift({ ...tempFood, cal: Math.round(c*qty), qty: qty, time: Date.now() });
+            save(); updateUI(); renderMeals();
+            document.getElementById('analysisResult').classList.add('hide');
+        };
+    }
+
+    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+    function selectGender(g) { document.getElementById('setupGender').value = g; document.getElementById('btnMale').className = g==='male'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; document.getElementById('btnFemale').className = g==='female'?'flex-1 bg-punch text-white p-4 rounded-2xl font-bold':'flex-1 bg-mist p-4 rounded-2xl font-bold'; }
+    function addW(v) { state.waterC += v; updateUI(); save(); }
+    function openW() { document.getElementById('wModal').classList.remove('hide'); }
+    function closeW() { document.getElementById('wModal').classList.add('hide'); }
+    function saveW() { const v = parseFloat(document.getElementById('wIn').value); if(v) { state.weight = v; updateUI(); save(); closeW(); } }
+    function showT(t) { ['home','workout','info'].forEach(id=>document.getElementById(id+'-section').classList.add('hide')); document.getElementById(t+'-section').classList.remove('hide'); }
+    function switchMenu(m) { currentMenuMode = m; renderMeals(); }
+    function checkNewDay() { const t = new Date().toISOString().split('T')[0]; if(state.lastLogin!==t) { state.lastLogin=t; state.waterC=0; state.consumed=[]; save(); } }
+    function renderLog() { document.getElementById('logContainer').innerHTML = state.consumed.map((i,x) => `<div class="bg-white p-4 rounded-2xl border border-slate-50 flex justify-between items-center"><div><h4 class="font-bold text-marine text-sm">${i.name}</h4><p class="text-[10px] text-slate-400">${i.cal} kcal</p></div><button onclick="state.consumed.splice(${x},1);save();updateUI();" class="text-slate-300"><i class="fas fa-trash"></i></button></div>`).join(''); }
+    function shareWhatsApp() {
+        const total = state.consumed.reduce((sum, i) => sum + i.cal, 0);
+        const text = `*ZestUp Pro Update* 🚀%0a🔥 Calories: ${total}/${state.calGoal}%0a⚖️ Weight: ${state.weight}kg%0a💧 Water: ${state.waterC}ml`;
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+    function showSuggestions(val) {
+        const list = document.getElementById('suggestions');
+        if (val.length < 1) { list.classList.add('hide'); return; }
+        list.classList.remove('hide');
+        const matches = Object.keys(foodDB).filter(k => k.includes(val.toLowerCase()));
+        list.innerHTML = matches.map(f => `<div onclick="selectFood('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer"><span class="font-bold text-marine capitalize text-sm">${f}</span></div>`).join('');
+    }
+    function toggleTask(task) {
+        state.todayTasks[task] = !state.todayTasks[task];
+        const btn = document.getElementById('task-' + task);
+        if(state.todayTasks[task]) {
+            btn.classList.add('border-green-200', 'bg-green-50');
+            btn.querySelector('div').classList.replace('border-slate-200', 'bg-green-500');
+            btn.querySelector('div').classList.replace('border-slate-200', 'border-green-500');
+            btn.querySelector('i').classList.remove('opacity-0');
+            btn.querySelector('i').classList.add('text-white');
+        } else {
+            btn.classList.remove('border-green-200', 'bg-green-50');
+            btn.querySelector('div').classList.replace('bg-green-500', 'border-slate-200');
+            btn.querySelector('div').classList.replace('border-green-500', 'border-slate-200');
+            btn.querySelector('i').classList.add('opacity-0');
+        }
+        save();
+    }
+    function closePrep() { document.getElementById('prepModal').classList.add('hide'); }
+    function quickLog(name, cal) { state.consumed.unshift({ name: name, cal: cal, qty: 1, time: Date.now() }); save(); updateUI(); alert(`Added ${name}`); }
+    function launchWorkout() { const d = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date().getDay()]; const p = COACH_PLAN[d] || COACH_PLAN["Monday"]; window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank'); }
+    </script>
+</body>
+</html>
