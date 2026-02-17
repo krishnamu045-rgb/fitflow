@@ -1,17 +1,8 @@
-const KEY = "ZESTUP_PRO_V15_4";
+const KEY = "ZESTUP_PRO_V16_0";
 let state = JSON.parse(localStorage.getItem(KEY));
 let foodDB = {}; 
 let tempFood = null; 
 let currentMenuMode = 'user'; 
-
-// --- EMERGENCY FALLBACK DB (Prevents Stuck Screen) ---
-const FALLBACK_DB = [
-    { "name": "rice", "variants": [{ "name": "White Rice", "cal": 150, "desc": "Boiled", "type": "ok" }] },
-    { "name": "dal", "variants": [{ "name": "Dal Fry", "cal": 160, "desc": "Standard", "type": "good" }] },
-    { "name": "tea", "cal": 60, "desc": "Milk Sugar", "type": "ok" },
-    { "name": "coffee", "cal": 80, "desc": "Milk Sugar", "type": "ok" },
-    { "name": "f1 shake", "cal": 242, "desc": "Herbalife Meal", "type": "good" }
-];
 
 // --- CATEGORIES ---
 const CATEGORIES = {
@@ -20,7 +11,8 @@ const CATEGORIES = {
     'chinese': ['noodles', 'fried rice', 'momos', 'manchurian', 'spring roll', 'soup', 'schezwan'],
     'western': ['pizza', 'burger', 'kfc', 'pasta', 'taco', 'nachos', 'sandwich', 'fries', 'subway'],
     'bakery': ['puff', 'roll', 'cake', 'samosa', 'chips', 'donut', 'biscuit', 'bun', 'dilpasand', 'tea', 'coffee', 'milkshake', 'coke', 'soft drink', 'ice cream'],
-    'fresh': ['apple', 'banana', 'mango', 'grapes', 'papaya', 'watermelon', 'pomegranate', 'salad', 'corn', 'cucumber', 'carrot', 'sprouts', 'avocado', 'coconut', 'juice']
+    'fresh': ['apple', 'banana', 'mango', 'grapes', 'papaya', 'watermelon', 'pomegranate', 'salad', 'corn', 'cucumber', 'carrot', 'sprouts', 'avocado', 'coconut', 'juice'],
+    'sweets': ['jamun', 'rasgulla', 'mysore pak', 'laddu', 'jalebi', 'kaju', 'payasam', 'cake', 'donut', 'brownie', 'ice cream', 'kulfi', 'chocolate']
 };
 
 const COACH_PLAN = {
@@ -35,43 +27,41 @@ const COACH_PLAN = {
 
 let surveySelections = []; 
 
-// --- ROBUST STARTUP LOGIC ---
+// --- CRASH PROOF LOADING ---
 window.onload = async () => {
-    // 1. Force Spinner OFF after 2 seconds no matter what
+    // Force spinner to hide after 2 seconds no matter what
     setTimeout(() => { 
         const loader = document.getElementById('loading-screen');
         if(loader) loader.classList.add('hide'); 
     }, 2000);
 
-    // 2. Load Data
     await loadFoodData();
 
-    // 3. Routing
     if (!state) { 
         document.getElementById('setup-screen').classList.remove('hide'); 
+        // Ensure loader is hidden
         document.getElementById('loading-screen').classList.add('hide'); 
     } else { 
         if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; 
         init(); 
-        // Double ensure loader is gone
-        document.getElementById('loading-screen').classList.add('hide');
+        document.getElementById('loading-screen').classList.add('hide'); 
     }
 };
 
 async function loadFoodData() {
     try {
-        const response = await fetch('food.json?v=15.4');
-        if (!response.ok) throw new Error("File not found");
+        const response = await fetch('food.json?v=16.0');
+        if (!response.ok) throw new Error("DB Error");
         const data = await response.json();
         data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
-        console.log("DB Loaded Successfully");
+        console.log("DB Loaded");
     } catch (error) { 
-        console.warn("External DB failed, using fallback.");
-        FALLBACK_DB.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
+        console.warn("DB Load Failed");
+        // We rely on manually adding foods if DB fails, app will still open
     }
 }
 
-// --- NEW SURVEY LOGIC ---
+// --- SURVEY LOGIC ---
 function goToSurvey() {
     const n = document.getElementById('setupName').value;
     const h = parseFloat(document.getElementById('setupH').value);
@@ -109,7 +99,7 @@ function addToSurvey(name) {
 function renderSurveyList() {
     const list = document.getElementById('myMenuList');
     if(surveySelections.length === 0) {
-        list.innerHTML = `<div class="text-center mt-10 text-slate-300 text-xs font-bold">Search above to add items...</div>`;
+        list.innerHTML = `<div class="text-center mt-10 text-slate-300 text-xs font-bold">List is empty. Add items above!</div>`;
         return;
     }
     list.innerHTML = surveySelections.map((item, i) => `
@@ -129,8 +119,7 @@ function removeFromSurvey(i) {
 
 function finishSetup() {
     if(surveySelections.length < 1) {
-        // Add defaults if they picked nothing
-        surveySelections = ['rice', 'dal', 'f1 shake', 'tea'];
+        if(!confirm("You haven't added any foods! Do you want to start with a blank menu?")) return;
     }
 
     const n = document.getElementById('setupName').value;
@@ -150,41 +139,45 @@ function finishSetup() {
         waterG: Math.round(w * 35), waterC: 0, calGoal: dailyGoal, consumed: [], 
         startDate: Date.now(), history: {}, todayTasks: {}, 
         lastLogin: new Date().toISOString().split('T')[0], customFoods: {},
-        myMenu: surveySelections // SAVE THE MENU
+        myMenu: surveySelections 
     };
     save();
     location.reload();
 }
 
-// --- HOME MENU LOGIC ---
+// --- HOME MENU ---
 function openMyMenuDropdown() {
     const grid = document.getElementById('myMenuGrid');
-    const myItems = state.myMenu || ['rice', 'dal', 'f1 shake']; // Fallback
+    const myItems = state.myMenu || []; 
     
-    grid.innerHTML = myItems.map(itemKey => {
-        const dbItem = foodDB[itemKey] || { variants: [{ type: 'ok' }] }; 
-        const isBad = (dbItem.variants && dbItem.variants[0].type === 'bad') || dbItem.type === 'bad';
-        const colorClass = isBad ? 'text-orange-500 bg-orange-50' : 'text-green-500 bg-green-50';
-        return `
-        <div onclick="selectFood('${itemKey}'); document.getElementById('myMenuModal').classList.add('hide')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-50 hover:border-punch transition-all cursor-pointer bg-mist">
-            <div class="w-10 h-10 rounded-full ${colorClass} flex items-center justify-center text-lg"><i class="fas fa-utensils"></i></div>
-            <span class="text-xs font-bold text-marine capitalize">${itemKey}</span>
-        </div>`;
-    }).join('');
+    if(myItems.length === 0) {
+        grid.innerHTML = `<div class="col-span-2 text-center text-slate-400 text-xs font-bold py-4">No items in your menu.<br>Use "Search Database" below.</div>`;
+    } else {
+        grid.innerHTML = myItems.map(itemKey => {
+            const dbItem = foodDB[itemKey] || { variants: [{ type: 'ok' }] }; 
+            const isBad = (dbItem.variants && dbItem.variants[0].type === 'bad') || dbItem.type === 'bad';
+            const colorClass = isBad ? 'text-orange-500 bg-orange-50' : 'text-green-500 bg-green-50';
+            return `
+            <div onclick="selectFood('${itemKey}'); document.getElementById('myMenuModal').classList.add('hide')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-50 hover:border-punch transition-all cursor-pointer bg-mist">
+                <div class="w-10 h-10 rounded-full ${colorClass} flex items-center justify-center text-lg"><i class="fas fa-utensils"></i></div>
+                <span class="text-xs font-bold text-marine capitalize">${itemKey}</span>
+            </div>`;
+        }).join('');
+    }
     
     document.getElementById('myMenuModal').classList.remove('hide');
 }
 
-// --- FIXED SELECT FOOD ---
+// --- SELECT FOOD ---
 function selectFood(name) { 
     if(!foodDB[name]) { 
-        // Fallback for custom added items or missing DB entries
-        showFinalModal(name, 200, "Standard", "ok");
+        // Fallback if item is missing in DB but exists in list
+        showFinalModal(name, 100, "Standard", "ok");
         return; 
     }
     const item = foodDB[name]; 
 
-    // Safety Clear
+    // Safety Clear UI
     const searchBar = document.getElementById('foodName'); if(searchBar) searchBar.value = ""; 
     const sugg = document.getElementById('suggestions'); if(sugg) sugg.classList.add('hide');
 
@@ -229,7 +222,7 @@ function confirmAdd() {
     document.getElementById('analysisResult').classList.add('hide'); 
 }
 
-// --- APP & UI ---
+// --- STANDARD UI LOGIC ---
 function init() { 
     document.getElementById('setup-screen').classList.add('hide'); 
     document.getElementById('survey-screen').classList.add('hide'); 
@@ -254,7 +247,6 @@ function renderMeals() {
     document.getElementById('wTitle').innerText = p.t; 
     document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
     if (currentMenuMode === 'user') {
-        // Here we use openMyMenuDropdown for ALL user slots
         document.getElementById('mealContainer').innerHTML = `${renderSearchSlot('Breakfast', 'Tap to pick...')}${renderSearchSlot('Mid-Snack', 'Tap to pick...')}${renderSearchSlot('Lunch', 'Tap to pick...')}${renderSearchSlot('Eve-Snack', 'Tap to pick...')}${renderSearchSlot('Dinner', 'Tap to pick...')}`;
     } else {
         document.getElementById('mealContainer').innerHTML = `<div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-leaf"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Breakfast (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake + Afresh</p></div><button onclick="quickLog('Coach Breakfast', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-orange-400 text-xl w-8 text-center"><i class="fas fa-apple-alt"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Mid-Snack Idea</p><p class="font-extrabold text-sm text-marine">${p.sn1}</p></div></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-blue-400 text-xl w-8 text-center"><i class="fas fa-utensils"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Lunch Suggestion</p><p class="font-extrabold text-sm text-marine">${p.lun}</p></div></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-purple-400 text-xl w-8 text-center"><i class="fas fa-mug-hot"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Evening Snack</p><p class="font-extrabold text-sm text-marine">${p.sn2}</p></div></div><div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-moon"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Dinner (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake</p></div><button onclick="quickLog('Coach Dinner', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div>`;
