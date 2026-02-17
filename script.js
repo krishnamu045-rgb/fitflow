@@ -1,4 +1,4 @@
-const KEY = "ZESTUP_PRO_V16_2";
+const KEY = "ZESTUP_PRO_V16_3";
 let state = null;
 try { state = JSON.parse(localStorage.getItem(KEY)); } catch(e) { console.error("Data Reset"); localStorage.removeItem(KEY); }
 
@@ -6,6 +6,24 @@ let foodDB = {};
 let tempFood = null; 
 let currentMenuMode = 'user'; 
 let currentSlot = ''; 
+
+// --- APP INIT (IMMEDIATE) ---
+// We do not wait for food.json here. We let the app open.
+if (!state) { 
+    document.getElementById('setup-screen').classList.remove('hide'); 
+} else { 
+    if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; 
+    init(); 
+}
+
+// Load Data in Background
+fetch('food.json?v=16.3')
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
+        console.log("DB Loaded in background");
+    })
+    .catch(err => console.warn("DB Failed (Offline Mode)"));
 
 const CATEGORIES = {
     'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'poha', 'parotta', 'oats', 'chapati'],
@@ -28,22 +46,6 @@ const COACH_PLAN = {
 };
 
 let surveySelections = []; 
-
-window.onload = async () => {
-    // Note: The HTML script kills the loader safely, this is backup
-    await loadFoodData();
-    if (!state) { document.getElementById('setup-screen').classList.remove('hide'); } 
-    else { if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; init(); }
-};
-
-async function loadFoodData() {
-    try {
-        const response = await fetch('./food.json?v=16.0'); // Added ./ for safety
-        if (!response.ok) throw new Error("DB Error");
-        const data = await response.json();
-        data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
-    } catch (error) { console.warn("DB Load Failed"); }
-}
 
 // --- SETUP ---
 function goToSurvey() {
