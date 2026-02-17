@@ -1,10 +1,10 @@
-const KEY = "ZESTUP_PRO_V16_0";
+const KEY = "ZESTUP_PRO_V16_1";
 let state = JSON.parse(localStorage.getItem(KEY));
 let foodDB = {}; 
 let tempFood = null; 
 let currentMenuMode = 'user'; 
+let currentSlot = ''; // Tracks which slot (Breakfast/Lunch) was clicked
 
-// --- CATEGORIES ---
 const CATEGORIES = {
     'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'poha', 'parotta', 'oats', 'chapati'],
     'indian': ['rice', 'biryani', 'curry', 'dal', 'sambar', 'rasam', 'chicken', 'fish', 'mutton', 'paneer', 'mushroom', 'roti', 'naan', 'egg', 'rajma', 'chana'],
@@ -27,25 +27,11 @@ const COACH_PLAN = {
 
 let surveySelections = []; 
 
-// --- CRASH PROOF LOADING ---
 window.onload = async () => {
-    // Force spinner to hide after 2 seconds no matter what
-    setTimeout(() => { 
-        const loader = document.getElementById('loading-screen');
-        if(loader) loader.classList.add('hide'); 
-    }, 2000);
-
+    setTimeout(() => { const loader = document.getElementById('loading-screen'); if(loader) loader.classList.add('hide'); }, 2000);
     await loadFoodData();
-
-    if (!state) { 
-        document.getElementById('setup-screen').classList.remove('hide'); 
-        // Ensure loader is hidden
-        document.getElementById('loading-screen').classList.add('hide'); 
-    } else { 
-        if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; 
-        init(); 
-        document.getElementById('loading-screen').classList.add('hide'); 
-    }
+    if (!state) { document.getElementById('setup-screen').classList.remove('hide'); document.getElementById('loading-screen').classList.add('hide'); } 
+    else { if(state.customFoods) foodDB = { ...foodDB, ...state.customFoods }; init(); document.getElementById('loading-screen').classList.add('hide'); }
 };
 
 async function loadFoodData() {
@@ -54,14 +40,10 @@ async function loadFoodData() {
         if (!response.ok) throw new Error("DB Error");
         const data = await response.json();
         data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
-        console.log("DB Loaded");
-    } catch (error) { 
-        console.warn("DB Load Failed");
-        // We rely on manually adding foods if DB fails, app will still open
-    }
+    } catch (error) { console.warn("DB Load Failed"); }
 }
 
-// --- SURVEY LOGIC ---
+// --- SETUP ---
 function goToSurvey() {
     const n = document.getElementById('setupName').value;
     const h = parseFloat(document.getElementById('setupH').value);
@@ -70,196 +52,122 @@ function goToSurvey() {
     document.getElementById('setup-screen').classList.add('hide');
     document.getElementById('survey-screen').classList.remove('hide');
 }
-
 function showSurveySuggestions(val) {
     const list = document.getElementById('surveySuggestions');
     if (val.length < 1) { list.classList.add('hide'); return; }
     list.classList.remove('hide');
-    
     const matches = Object.keys(foodDB).filter(k => k.includes(val.toLowerCase()));
     if (matches.length === 0) { list.innerHTML = `<div class="p-3 text-center text-xs text-slate-400">No match found</div>`; } 
-    else { 
-        list.innerHTML = matches.map(f => `
-            <div onclick="addToSurvey('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center">
-                <span class="font-bold text-marine capitalize text-sm">${f}</span>
-                <i class="fas fa-plus text-slate-300"></i>
-            </div>`).join(''); 
-    }
+    else { list.innerHTML = matches.map(f => `<div onclick="addToSurvey('${f}')" class="p-3 border-b border-slate-50 hover:bg-mist cursor-pointer flex justify-between items-center"><span class="font-bold text-marine capitalize text-sm">${f}</span><i class="fas fa-plus text-slate-300"></i></div>`).join(''); }
 }
-
 function addToSurvey(name) {
-    if(!surveySelections.includes(name)) {
-        surveySelections.push(name);
-        renderSurveyList();
-    }
-    document.getElementById('surveySearch').value = "";
-    document.getElementById('surveySuggestions').classList.add('hide');
+    if(!surveySelections.includes(name)) { surveySelections.push(name); renderSurveyList(); }
+    document.getElementById('surveySearch').value = ""; document.getElementById('surveySuggestions').classList.add('hide');
 }
-
 function renderSurveyList() {
     const list = document.getElementById('myMenuList');
-    if(surveySelections.length === 0) {
-        list.innerHTML = `<div class="text-center mt-10 text-slate-300 text-xs font-bold">List is empty. Add items above!</div>`;
-        return;
-    }
-    list.innerHTML = surveySelections.map((item, i) => `
-        <div class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center animate-fade-in">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-xs"><i class="fas fa-utensils"></i></div>
-                <span class="font-bold text-marine capitalize text-sm">${item}</span>
-            </div>
-            <button onclick="removeFromSurvey(${i})" class="text-red-400 p-2"><i class="fas fa-times"></i></button>
-        </div>`).join('');
+    if(surveySelections.length === 0) { list.innerHTML = `<div class="text-center mt-10 text-slate-300 text-xs font-bold">List is empty. Add items above!</div>`; return; }
+    list.innerHTML = surveySelections.map((item, i) => `<div class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center animate-fade-in"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-xs"><i class="fas fa-utensils"></i></div><span class="font-bold text-marine capitalize text-sm">${item}</span></div><button onclick="removeFromSurvey(${i})" class="text-red-400 p-2"><i class="fas fa-times"></i></button></div>`).join('');
 }
-
-function removeFromSurvey(i) {
-    surveySelections.splice(i, 1);
-    renderSurveyList();
-}
-
+function removeFromSurvey(i) { surveySelections.splice(i, 1); renderSurveyList(); }
 function finishSetup() {
-    if(surveySelections.length < 1) {
-        if(!confirm("You haven't added any foods! Do you want to start with a blank menu?")) return;
-    }
-
+    if(surveySelections.length < 1) { if(!confirm("Start with blank menu?")) return; }
     const n = document.getElementById('setupName').value;
     const h = parseFloat(document.getElementById('setupH').value);
     const w = parseFloat(document.getElementById('setupW').value);
     const g = document.getElementById('setupGender').value;
     const dob = document.getElementById('setupDOB').value;
-
-    let age = 30; 
-    if (dob) { const birthDate = new Date(dob); const today = new Date(); age = today.getFullYear() - birthDate.getFullYear(); }
+    let age = 30; if (dob) { const birthDate = new Date(dob); const today = new Date(); age = today.getFullYear() - birthDate.getFullYear(); }
     let bmr = (10 * w) + (6.25 * h) - (5 * age) + (g === 'male' ? 5 : -161);
     let dailyGoal = Math.max(1200, Math.round(bmr * 1.2 - 300));
     let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2);
-
-    state = { 
-        name: n, weight: w, height: h, age: age, startW: w, goal: idealW.toFixed(1), 
-        waterG: Math.round(w * 35), waterC: 0, calGoal: dailyGoal, consumed: [], 
-        startDate: Date.now(), history: {}, todayTasks: {}, 
-        lastLogin: new Date().toISOString().split('T')[0], customFoods: {},
-        myMenu: surveySelections 
-    };
-    save();
-    location.reload();
+    state = { name: n, weight: w, height: h, age: age, startW: w, goal: idealW.toFixed(1), waterG: Math.round(w * 35), waterC: 0, calGoal: dailyGoal, consumed: [], startDate: Date.now(), history: {}, todayTasks: {}, lastLogin: new Date().toISOString().split('T')[0], customFoods: {}, myMenu: surveySelections };
+    save(); location.reload();
 }
 
-// --- HOME MENU ---
-function openMyMenuDropdown() {
+// --- HOME & MENU LOGIC ---
+function openMyMenuDropdown(slotName) {
+    currentSlot = slotName; // Track where we are adding food
     const grid = document.getElementById('myMenuGrid');
     const myItems = state.myMenu || []; 
-    
-    if(myItems.length === 0) {
-        grid.innerHTML = `<div class="col-span-2 text-center text-slate-400 text-xs font-bold py-4">No items in your menu.<br>Use "Search Database" below.</div>`;
-    } else {
-        grid.innerHTML = myItems.map(itemKey => {
-            const dbItem = foodDB[itemKey] || { variants: [{ type: 'ok' }] }; 
-            const isBad = (dbItem.variants && dbItem.variants[0].type === 'bad') || dbItem.type === 'bad';
-            const colorClass = isBad ? 'text-orange-500 bg-orange-50' : 'text-green-500 bg-green-50';
-            return `
-            <div onclick="selectFood('${itemKey}'); document.getElementById('myMenuModal').classList.add('hide')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-50 hover:border-punch transition-all cursor-pointer bg-mist">
-                <div class="w-10 h-10 rounded-full ${colorClass} flex items-center justify-center text-lg"><i class="fas fa-utensils"></i></div>
-                <span class="text-xs font-bold text-marine capitalize">${itemKey}</span>
-            </div>`;
-        }).join('');
-    }
-    
+    if(myItems.length === 0) { grid.innerHTML = `<div class="col-span-2 text-center text-slate-400 text-xs font-bold py-4">No items in your menu.<br>Use "Search Database" below.</div>`; } 
+    else { grid.innerHTML = myItems.map(itemKey => {
+        const dbItem = foodDB[itemKey] || { variants: [{ type: 'ok' }] }; 
+        const isBad = (dbItem.variants && dbItem.variants[0].type === 'bad') || dbItem.type === 'bad';
+        const colorClass = isBad ? 'text-orange-500 bg-orange-50' : 'text-green-500 bg-green-50';
+        return `<div onclick="selectFood('${itemKey}'); document.getElementById('myMenuModal').classList.add('hide')" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-50 hover:border-punch transition-all cursor-pointer bg-mist"><div class="w-10 h-10 rounded-full ${colorClass} flex items-center justify-center text-lg"><i class="fas fa-utensils"></i></div><span class="text-xs font-bold text-marine capitalize">${itemKey}</span></div>`;
+    }).join(''); }
     document.getElementById('myMenuModal').classList.remove('hide');
 }
 
-// --- SELECT FOOD ---
 function selectFood(name) { 
-    if(!foodDB[name]) { 
-        // Fallback if item is missing in DB but exists in list
-        showFinalModal(name, 100, "Standard", "ok");
-        return; 
-    }
+    if(!foodDB[name]) { showFinalModal(name, 100, "Standard", "ok"); return; }
     const item = foodDB[name]; 
-
-    // Safety Clear UI
     const searchBar = document.getElementById('foodName'); if(searchBar) searchBar.value = ""; 
     const sugg = document.getElementById('suggestions'); if(sugg) sugg.classList.add('hide');
-
-    const prepDiv = document.getElementById('prepOptions');
-    if(prepDiv) prepDiv.innerHTML = ""; 
-
+    const prepDiv = document.getElementById('prepOptions'); if(prepDiv) prepDiv.innerHTML = ""; 
     if (item.variants) { 
-        if(prepDiv) {
-            prepDiv.innerHTML = item.variants.map((v, i) => `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm hover:border-punch transition-all"><div><p class="font-bold text-marine text-sm">${v.name}</p><p class="text-[10px] text-slate-400">${v.desc}</p></div><p class="text-xs font-black text-punch">${v.cal} kcal</p></div>`).join(''); 
-        }
+        if(prepDiv) { prepDiv.innerHTML = item.variants.map((v, i) => `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm hover:border-punch transition-all"><div><p class="font-bold text-marine text-sm">${v.name}</p><p class="text-[10px] text-slate-400">${v.desc}</p></div><p class="text-xs font-black text-punch">${v.cal} kcal</p></div>`).join(''); }
         document.getElementById('prepModal').classList.remove('hide'); 
-    } else { 
-        showFinalModal(item.name, item.cal, item.desc || "Standard portion", item.type); 
-    } 
+    } else { showFinalModal(item.name, item.cal, item.desc || "Standard portion", item.type); } 
 }
-
-function selectVariant(parentName, index) { 
-    const item = foodDB[parentName].variants[index]; 
-    document.getElementById('prepModal').classList.add('hide'); 
-    showFinalModal(item.name, item.cal, item.desc, item.type); 
-}
-
+function selectVariant(parentName, index) { const item = foodDB[parentName].variants[index]; document.getElementById('prepModal').classList.add('hide'); showFinalModal(item.name, item.cal, item.desc, item.type); }
 function showFinalModal(name, cal, desc, type) { 
-    tempFood = { name: name, calPerUnit: cal, desc: desc, type: type }; 
-    document.getElementById('resName').innerText = name; 
-    document.getElementById('resCal').innerText = cal + " kcal"; 
-    document.getElementById('resDesc').innerText = desc; 
+    tempFood = { name: name, calPerUnit: cal, desc: desc, type: type, slot: currentSlot }; // Save Slot Info
+    document.getElementById('resName').innerText = name; document.getElementById('resCal').innerText = cal + " kcal"; document.getElementById('resDesc').innerText = desc; 
     const badge = document.getElementById('resBadge'); 
     if(type === 'good') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-green-100 text-green-600"; badge.innerText = "Good Choice"; } 
     else if(type === 'bad') { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-600"; badge.innerText = "Limit This"; } 
     else { badge.className = "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-orange-100 text-orange-600"; badge.innerText = "Moderate"; } 
-    document.getElementById('analysisResult').classList.remove('hide'); 
-    document.getElementById('resQty').value = 1; 
+    document.getElementById('analysisResult').classList.remove('hide'); document.getElementById('resQty').value = 1; 
 }
-
 function confirmAdd() { 
     if(!tempFood) return; 
     const qty = parseFloat(document.getElementById('resQty').value); 
     const totalCal = Math.round(tempFood.calPerUnit * qty); 
-    state.consumed.unshift({ name: tempFood.name, cal: totalCal, qty: qty, time: Date.now() }); 
-    save(); updateInfoUI(); 
+    // Add slot info to the log
+    state.consumed.unshift({ name: tempFood.name, cal: totalCal, qty: qty, time: Date.now(), slot: tempFood.slot }); 
+    save(); updateInfoUI(); renderMeals(); // Re-render meals to update slot UI
     document.getElementById('analysisResult').classList.add('hide'); 
+    currentSlot = ''; 
 }
 
-// --- STANDARD UI LOGIC ---
-function init() { 
-    document.getElementById('setup-screen').classList.add('hide'); 
-    document.getElementById('survey-screen').classList.add('hide'); 
-    document.getElementById('main-app').classList.remove('hide'); 
-    document.getElementById('userDisp').innerText = state.name; 
-    checkNewDay(); checkHomeDisclaimer(); updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); 
-}
+// --- APP UTILS ---
+function init() { document.getElementById('setup-screen').classList.add('hide'); document.getElementById('survey-screen').classList.add('hide'); document.getElementById('main-app').classList.remove('hide'); document.getElementById('userDisp').innerText = state.name; checkNewDay(); checkHomeDisclaimer(); updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); }
+function switchMenu(mode) { currentMenuMode = mode; const userBtn = document.getElementById('tab-user'); const coachBtn = document.getElementById('tab-coach'); if(mode === 'user') { userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all"; coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; } else { coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-punch text-white shadow-sm transition-all"; userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; } renderMeals(); }
 
-function switchMenu(mode) {
-    currentMenuMode = mode;
-    const userBtn = document.getElementById('tab-user');
-    const coachBtn = document.getElementById('tab-coach');
-    if(mode === 'user') { userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white shadow-sm text-marine transition-all"; coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; } 
-    else { coachBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-punch text-white shadow-sm transition-all"; userBtn.className = "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400 transition-all"; }
-    renderMeals(); 
-}
-
+// FIXED: renderMeals now looks for logged items in slots
 function renderMeals() {
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const d = days[new Date().getDay()];
+    const d = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date().getDay()];
     const p = COACH_PLAN[d];
-    document.getElementById('wTitle').innerText = p.t; 
-    document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
+    document.getElementById('wTitle').innerText = p.t; document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`;
+
     if (currentMenuMode === 'user') {
-        document.getElementById('mealContainer').innerHTML = `${renderSearchSlot('Breakfast', 'Tap to pick...')}${renderSearchSlot('Mid-Snack', 'Tap to pick...')}${renderSearchSlot('Lunch', 'Tap to pick...')}${renderSearchSlot('Eve-Snack', 'Tap to pick...')}${renderSearchSlot('Dinner', 'Tap to pick...')}`;
+        document.getElementById('mealContainer').innerHTML = `
+            ${renderSearchSlot('Breakfast', 'Tap to pick...')}
+            ${renderSearchSlot('Mid-Snack', 'Tap to pick...')}
+            ${renderSearchSlot('Lunch', 'Tap to pick...')}
+            ${renderSearchSlot('Eve-Snack', 'Tap to pick...')}
+            ${renderSearchSlot('Dinner', 'Tap to pick...')}`;
     } else {
         document.getElementById('mealContainer').innerHTML = `<div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-leaf"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Breakfast (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake + Afresh</p></div><button onclick="quickLog('Coach Breakfast', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-orange-400 text-xl w-8 text-center"><i class="fas fa-apple-alt"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Mid-Snack Idea</p><p class="font-extrabold text-sm text-marine">${p.sn1}</p></div></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-blue-400 text-xl w-8 text-center"><i class="fas fa-utensils"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Lunch Suggestion</p><p class="font-extrabold text-sm text-marine">${p.lun}</p></div></div><div class="bg-mist p-4 rounded-[2rem] flex items-center gap-4 border border-slate-50"><div class="text-purple-400 text-xl w-8 text-center"><i class="fas fa-mug-hot"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Evening Snack</p><p class="font-extrabold text-sm text-marine">${p.sn2}</p></div></div><div class="bg-green-50 p-4 rounded-[2rem] flex items-center gap-4 border border-green-100 shadow-sm"><div class="text-green-600 text-xl w-8 text-center"><i class="fas fa-moon"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">Dinner (Fixed)</p><p class="font-extrabold text-sm text-marine">Formula 1 Shake</p></div><button onclick="quickLog('Coach Dinner', 242)" class="ml-auto text-lg text-green-500"><i class="fas fa-plus-circle"></i></button></div>`;
     }
 }
 
 function renderSearchSlot(title, ph) {
-    let swapBtn = '';
-    if (title === 'Breakfast' || title === 'Dinner') { swapBtn = `<button onclick="triggerHerbalifeUpsell('${title}')" class="text-[9px] font-black bg-white border border-green-100 text-green-500 px-3 py-2 rounded-xl shadow-sm hover:bg-green-50 animate-pulse"><i class="fas fa-sync-alt mr-1"></i>Swap</button>`; }
-    return `<div class="bg-mist p-4 rounded-[2rem] flex justify-between items-center border border-slate-50 shadow-sm relative overflow-hidden group"><div class="flex items-center gap-4 cursor-pointer" onclick="openMyMenuDropdown()"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-plus"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${ph}</p></div></div>${swapBtn}</div>`;
+    // Check if user already logged something for this slot today
+    const found = state.consumed.find(i => i.slot === title);
+    
+    if (found) {
+        // Show the Logged Item (Green Box)
+        return `<div class="bg-green-50 p-4 rounded-[2rem] flex justify-between items-center border border-green-100 shadow-sm"><div class="flex items-center gap-4"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-green-500 shadow-sm"><i class="fas fa-check"></i></div><div><p class="text-[9px] font-bold text-green-800 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${found.name}</p></div></div><span class="text-xs font-black text-green-600">${found.cal} kcal</span></div>`;
+    } else {
+        // Show the Empty Search Slot (Grey Box)
+        let swapBtn = (title === 'Breakfast' || title === 'Dinner') ? `<button onclick="triggerHerbalifeUpsell('${title}')" class="text-[9px] font-black bg-white border border-green-100 text-green-500 px-3 py-2 rounded-xl shadow-sm hover:bg-green-50 animate-pulse"><i class="fas fa-sync-alt mr-1"></i>Swap</button>` : '';
+        return `<div class="bg-mist p-4 rounded-[2rem] flex justify-between items-center border border-slate-50 shadow-sm relative overflow-hidden group"><div class="flex items-center gap-4 cursor-pointer" onclick="openMyMenuDropdown('${title}')"><div class="bg-white w-10 h-10 rounded-full flex items-center justify-center text-slate-400 shadow-sm"><i class="fas fa-plus"></i></div><div><p class="text-[9px] font-bold text-slate-400 uppercase mb-0.5">${title}</p><p class="font-extrabold text-sm text-marine">${ph}</p></div></div>${swapBtn}</div>`;
+    }
 }
 
-// --- UTILS ---
 function triggerHerbalifeUpsell(mealType) {
     const modalHTML = `<div id="upsellModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 animate-fade-in"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative"><button onclick="closeUpsell()" class="absolute top-4 right-4 text-slate-300 hover:text-punch"><i class="fas fa-times text-xl"></i></button><div class="text-center"><div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-3 text-green-500 text-2xl shadow-sm"><i class="fas fa-leaf"></i></div><h3 class="text-xl font-black uppercase tracking-tight text-marine">Smart Swap</h3><p class="text-xs font-bold text-slate-400 mt-1">Upgrade your ${mealType} with Nutrition.</p></div><div class="space-y-2"><button onclick="confirmShake(242, 'Formula 1 Shake')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Standard (F1)</span><span class="text-[10px] font-black text-slate-400">242 kcal</span></button><button onclick="confirmShake(360, 'Shake + Protein (PDM)')" class="w-full p-3 rounded-xl border border-slate-100 bg-mist flex justify-between items-center hover:border-green-400 transition-all"><span class="font-bold text-marine text-xs">Shake + Protein (PDM)</span><span class="text-[10px] font-black text-slate-400">360 kcal</span></button><button onclick="confirmShake(260, 'Power Combo (F1+F2+PPP)')" class="w-full p-3 rounded-xl border-2 border-green-200 bg-green-50 flex justify-between items-center relative overflow-hidden"><div class="absolute top-0 left-0 bg-green-500 text-white text-[8px] font-black px-2 py-0.5 rounded-br-lg">BEST</div><div class="flex flex-col text-left ml-1"><span class="font-black text-marine text-xs">Power Combo</span><span class="text-[9px] font-bold text-slate-500">F1 + Multivit + PPP</span></div><span class="text-[10px] font-black text-green-600">~260 kcal</span></button></div></div></div>`;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
@@ -269,12 +177,12 @@ function confirmShake(cal, name) { quickLog(name, cal); closeUpsell(); }
 function closePrep() { document.getElementById('prepModal').classList.add('hide'); }
 function cancelAdd() { document.getElementById('analysisResult').classList.add('hide'); }
 function quickLog(name, cal) { state.consumed.unshift({ name: name, cal: cal, qty: 1, time: Date.now() }); save(); updateInfoUI(); alert(`Added ${name}`); }
-function deleteItem(index) { state.consumed.splice(index, 1); save(); updateInfoUI(); }
+function deleteItem(index) { state.consumed.splice(index, 1); save(); updateInfoUI(); renderMeals(); }
 function renderLog() { const list = document.getElementById('logContainer'); if(state.consumed.length === 0) { list.innerHTML = `<div class="text-center py-8 text-slate-300 text-xs font-bold">No meals logged yet.</div>`; return; } list.innerHTML = state.consumed.map((item, i) => `<div class="bg-white p-4 rounded-2xl border flex justify-between items-center"><div><h4 class="font-bold text-marine text-sm">${item.name}</h4><p class="text-[10px] text-slate-400 font-bold">${item.cal} kcal</p></div><button onclick="deleteItem(${i})" class="text-slate-300 p-2"><i class="fas fa-trash-alt"></i></button></div>`).join(''); }
 function checkHomeDisclaimer() { if (state.lastDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('homeDisclaimerModal').classList.remove('hide'); }
 function acceptHomeDisclaimer() { state.lastDisclaimerDate = new Date().toISOString().split('T')[0]; save(); document.getElementById('homeDisclaimerModal').classList.add('hide'); }
 function checkFoodDisclaimer() { if (state.lastFoodDisclaimerDate !== new Date().toISOString().split('T')[0]) document.getElementById('foodDisclaimerModal').classList.remove('hide'); }
-function updateUI() { document.getElementById('curW').innerText = state.weight; document.getElementById('wBar').style.width = Math.min(100, (Math.abs(state.startW-state.weight)/Math.abs(state.startW-state.goal))*100) + '%'; document.getElementById('watV').innerText = state.waterC; document.getElementById('watBar').style.width = (state.waterC / state.waterG) * 100 + '%'; }
+function updateUI() { document.getElementById('curW').innerText = state.weight; document.getElementById('wBar').style.width = Math.min(100, (Math.abs(state.startW-state.weight)/Math.abs(state.startW-state.goal))*100) + '%'; document.getElementById('watV').innerText = state.waterC; document.getElementById('watBar').style.width = (state.waterC / state.waterG) * 100 + '%'; document.getElementById('watGoal').innerText = state.waterG; }
 function updateInfoUI() { const total = state.consumed.reduce((sum, item) => sum + item.cal, 0); document.getElementById('headerCal').innerText = total; document.getElementById('headerGoal').innerText = state.calGoal; document.getElementById('dispRemaining').innerText = Math.max(0, state.calGoal - total); document.getElementById('dispGoal').innerText = state.calGoal + " kcal"; const offset = (2 * Math.PI * 40) - (total / state.calGoal) * (2 * Math.PI * 40); document.getElementById('calRing').style.strokeDashoffset = offset; renderLog(); }
 function browseCategory(cat) { const items = CATEGORIES[cat]; const listContainer = document.getElementById('catListContent'); document.getElementById('catGrid').classList.add('hide'); document.getElementById('catView').classList.remove('hide'); let html = ''; let foundCount = 0; items.forEach(keyword => { const matchKey = Object.keys(foodDB).find(k => k.includes(keyword)); if(matchKey) { foundCount++; const food = foodDB[matchKey]; let badgeColor = food.variants && food.variants[0].type === 'bad' ? 'text-red-500 bg-red-50' : 'text-green-500 bg-green-50'; html += `<div onclick="selectFood('${matchKey}')" class="bg-white p-4 rounded-2xl border border-slate-50 shadow-sm flex justify-between items-center cursor-pointer mb-2 btn-click"><div><p class="font-bold text-marine capitalize text-sm">${matchKey}</p><p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tap to add</p></div><div class="w-8 h-8 rounded-full ${badgeColor} flex items-center justify-center"><i class="fas fa-plus"></i></div></div>`; } }); if (foundCount === 0) html = `<div class="text-center py-10 text-slate-400 font-bold text-xs">Loading items...</div>`; listContainer.innerHTML = html; }
 function closeCategory() { document.getElementById('catView').classList.add('hide'); document.getElementById('catGrid').classList.remove('hide'); }
@@ -292,6 +200,5 @@ function renderHistory() { const container = document.getElementById('historyCon
 function renderW() { const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; const d = days[new Date().getDay()]; const p = COACH_PLAN[d]; document.getElementById('wTitle').innerText = p.t; document.getElementById('wThumb').src = `https://img.youtube.com/vi/${p.vid}/maxresdefault.jpg`; }
 function launchWorkout() { const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; const d = days[new Date().getDay()]; const p = COACH_PLAN[d]; window.open(`https://www.youtube.com/watch?v=${p.vid}`, '_blank'); }
 function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
-function masterReset() { if(prompt("PIN:") === "2710") { localStorage.removeItem(KEY); location.reload(); } }
 function checkNewDay() { const today = new Date().toISOString().split('T')[0]; if (state.lastLogin !== today) { state.lastLogin = today; state.waterC = 0; state.consumed = []; state.todayTasks = {}; save(); } }
 function enableNotifications() { Notification.requestPermission(); }
