@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZestUp Pro V18.0</title>
+    <title>ZestUp Pro V18.1</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -35,6 +35,8 @@
 </head>
 <body class="font-sans text-marine select-none bg-white">
 
+    <div style="display:none;">System Ready V18.1</div>
+
     <div id="loading-screen" class="fixed inset-0 z-[500] bg-white flex flex-col items-center justify-center">
         <div class="w-12 h-12 border-4 border-slate-100 border-t-punch rounded-full animate-spin"></div>
         <button onclick="emergencyReset()" class="mt-8 text-[10px] text-red-400 font-bold uppercase underline">Stuck? Tap to Reset</button>
@@ -42,7 +44,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">V18.0 • Single File Edition</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">V18.1 • Stable Release</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -117,8 +119,8 @@
     <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
 
     <script>
-    /* --- ZESTUP PRO V18.0 CORE SCRIPT --- */
-    const KEY = "ZESTUP_PRO_V18_0";
+    /* --- ZESTUP PRO V18.1 CORE SCRIPT --- */
+    const KEY = "ZESTUP_PRO_V18_1";
     let state = null;
     try { state = JSON.parse(localStorage.getItem(KEY)); } catch(e) { localStorage.removeItem(KEY); }
 
