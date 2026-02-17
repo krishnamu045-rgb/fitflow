@@ -1,10 +1,10 @@
-const KEY = "ZESTUP_PRO_V15_0";
+const KEY = "ZESTUP_PRO_V15_2";
 let state = JSON.parse(localStorage.getItem(KEY));
 let foodDB = {}; 
 let tempFood = null; 
 let currentMenuMode = 'user'; 
 
-// --- CATEGORIES & DATA ---
+// --- CATEGORIES ---
 const CATEGORIES = {
     'tiffin': ['idli', 'dosa', 'vada', 'puri', 'upma', 'pongal', 'poha', 'parotta', 'oats', 'chapati'],
     'indian': ['rice', 'biryani', 'curry', 'dal', 'sambar', 'rasam', 'chicken', 'fish', 'mutton', 'paneer', 'mushroom', 'roti', 'naan', 'egg', 'rajma', 'chana'],
@@ -26,7 +26,7 @@ const COACH_PLAN = {
 
 let tempPrefs = [];
 
-// --- INIT & SETUP ---
+// --- INIT ---
 window.onload = async () => {
     await loadFoodData();
     if (!state) { 
@@ -41,7 +41,7 @@ window.onload = async () => {
 
 async function loadFoodData() {
     try {
-        const response = await fetch('food.json?v=15.0');
+        const response = await fetch('food.json?v=15.2');
         const data = await response.json();
         data.forEach(item => { foodDB[item.name.toLowerCase()] = item; });
     } catch (error) { 
@@ -83,7 +83,6 @@ function finishSetup() {
     const g = document.getElementById('setupGender').value;
     const dob = document.getElementById('setupDOB').value;
     
-    // Create Default Quick Picks based on Survey
     let myPicks = {
         'Breakfast': ['tea', 'coffee'],
         'Lunch': ['rice', 'dal', 'salad'],
@@ -98,7 +97,8 @@ function finishSetup() {
     if(tempPrefs.includes('egg')) { myPicks.Breakfast.unshift('egg'); myPicks.Lunch.unshift('egg'); }
     if(tempPrefs.includes('bread')) myPicks.Breakfast.unshift('oats', 'sandwich');
 
-    let age = 30; // [Age Calc omitted for brevity, same as before]
+    let age = 30; 
+    if (dob) { const birthDate = new Date(dob); const today = new Date(); age = today.getFullYear() - birthDate.getFullYear(); const m = today.getMonth() - birthDate.getMonth(); if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; } }
     let bmr = (10 * w) + (6.25 * h) - (5 * age) + (g === 'male' ? 5 : -161);
     let dailyGoal = Math.max(1200, Math.round(bmr * 1.2 - 300));
     let idealW = g === 'male' ? (h - 100) - ((h - 150) / 4) : (h - 100) - ((h - 150) / 2);
@@ -108,7 +108,7 @@ function finishSetup() {
         waterG: Math.round(w * 35), waterC: 0, calGoal: dailyGoal, consumed: [], 
         startDate: Date.now(), history: {}, todayTasks: {}, 
         lastLogin: new Date().toISOString().split('T')[0], customFoods: {},
-        userPicks: myPicks // Save preferences
+        userPicks: myPicks 
     };
     save();
     location.reload();
@@ -122,12 +122,10 @@ function init() {
     checkNewDay(); checkHomeDisclaimer(); updateUI(); updateInfoUI(); renderMeals(); renderTasks(); renderHistory(); 
 }
 
-// --- DYNAMIC SMART SELECTOR ---
+// --- SMART SELECTOR ---
 function openSmartSelector(mealType) {
     let contextKey = mealType;
     if (mealType.includes('Snack')) contextKey = 'Snack';
-    
-    // Use User Picks if available, else fallback
     const quickItems = (state.userPicks && state.userPicks[contextKey]) ? state.userPicks[contextKey] : ['rice', 'roti', 'tea'];
     
     const gridHTML = quickItems.map(itemKey => {
@@ -162,20 +160,34 @@ function showSmartSuggestions(val) {
 }
 function saveCustomFromSmart(val) { closeSmartSelector(); showAddCustom(val); }
 
-// --- FIXED SELECT FOOD (Now opens Global Modals) ---
+// --- FIXED SELECT FOOD (CRASH PROOF) ---
 function selectFood(name) { 
+    if(!foodDB[name]) {
+        console.error("Food not found:", name);
+        alert("Item not found. Try searching manually.");
+        return;
+    }
     const item = foodDB[name]; 
-    // Clean up UI
-    document.getElementById('foodName').value = ""; 
-    document.getElementById('suggestions').classList.add('hide');
-    document.getElementById('catView').classList.add('hide'); 
-    document.getElementById('catGrid').classList.remove('hide'); 
+
+    // SAFETY CHECKS (This fixed the bug)
+    const searchBar = document.getElementById('foodName');
+    if(searchBar) searchBar.value = ""; 
+    const sugg = document.getElementById('suggestions');
+    if(sugg) sugg.classList.add('hide');
+    const cView = document.getElementById('catView');
+    if(cView) cView.classList.add('hide'); 
+    const cGrid = document.getElementById('catGrid');
+    if(cGrid) cGrid.classList.remove('hide'); 
     
-    document.getElementById('prepOptions').innerHTML = ""; 
+    // Setup Variants
+    const prepDiv = document.getElementById('prepOptions');
+    if(prepDiv) prepDiv.innerHTML = ""; 
+
     if (item.variants) { 
-        const prepDiv = document.getElementById('prepOptions'); 
-        prepDiv.innerHTML = item.variants.map((v, i) => `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm hover:border-punch transition-all"><div><p class="font-bold text-marine text-sm">${v.name}</p><p class="text-[10px] text-slate-400">${v.desc}</p></div><p class="text-xs font-black text-punch">${v.cal} kcal</p></div>`).join(''); 
-        document.getElementById('prepModal').classList.remove('hide'); // Global overlay
+        if(prepDiv) {
+            prepDiv.innerHTML = item.variants.map((v, i) => `<div onclick="selectVariant('${name}', ${i})" class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center cursor-pointer shadow-sm hover:border-punch transition-all"><div><p class="font-bold text-marine text-sm">${v.name}</p><p class="text-[10px] text-slate-400">${v.desc}</p></div><p class="text-xs font-black text-punch">${v.cal} kcal</p></div>`).join(''); 
+        }
+        document.getElementById('prepModal').classList.remove('hide'); 
     } else { 
         showFinalModal(item.name, item.cal, item.desc || "Standard portion", item.type); 
     } 
