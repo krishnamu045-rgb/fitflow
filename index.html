@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZestUp Pro V16.1</title>
+    <title>ZestUp Pro V16.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -17,18 +17,28 @@
         }
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .hide { display: none !important; }
+        .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .pro-shadow { box-shadow: 0 10px 40px -10px rgba(10, 38, 71, 0.08); }
+        .btn-click:active { transform: scale(0.95); }
+        .thumbnail-gradient { background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+    </style>
 </head>
 <body class="font-sans text-marine select-none bg-white">
 
     <div id="loading-screen" class="fixed inset-0 z-[500] bg-white flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="w-12 h-12 border-4 border-slate-100 border-t-punch rounded-full animate-spin"></div>
-        <p class="text-[10px] font-black text-slate-300 mt-4 uppercase tracking-[0.2em] animate-pulse">Loading App...</p>
+        <p class="text-[10px] font-black text-slate-300 mt-4 uppercase tracking-[0.2em] animate-pulse">Starting...</p>
     </div>
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 16.1</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 16.3</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -145,4 +155,45 @@
                 <div id="catGrid" class="grid grid-cols-3 gap-3">
                     <button onclick="browseCategory('tiffin')" class="bg-orange-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-orange-100 hover:bg-orange-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-orange-500 text-lg"><i class="fas fa-sun"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Tiffin</span></button>
                     <button onclick="browseCategory('indian')" class="bg-amber-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-amber-100 hover:bg-amber-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-amber-600 text-lg"><i class="fas fa-utensils"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Indian</span></button>
-                    <button onclick="browseCategory('sweets')" class="bg-pink-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-pink-100 hover:bg-pink-100 transition-all btn-click
+                    <button onclick="browseCategory('sweets')" class="bg-pink-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-pink-100 hover:bg-pink-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-pink-500 text-lg"><i class="fas fa-cookie-bite"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Sweets</span></button>
+                    <button onclick="browseCategory('western')" class="bg-blue-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-blue-100 hover:bg-blue-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-blue-500 text-lg"><i class="fas fa-burger"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Western</span></button>
+                    <button onclick="browseCategory('bakery')" class="bg-yellow-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-yellow-100 hover:bg-yellow-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-yellow-600 text-lg"><i class="fas fa-bread-slice"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Bakery</span></button>
+                    <button onclick="browseCategory('fresh')" class="bg-green-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-green-100 hover:bg-green-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-green-500 text-lg"><i class="fas fa-leaf"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Fresh</span></button>
+                </div>
+                <div id="catView" class="hide animate-slide-up space-y-3"><button onclick="closeCategory()" class="w-full bg-mist p-3 rounded-2xl font-bold text-slate-400 text-xs border border-slate-100 mb-2"><i class="fas fa-chevron-left mr-2"></i>Back to Categories</button><div id="catListContent" class="space-y-2"></div></div>
+            </div>
+            <div class="space-y-4"><p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest ml-1">Today's Meals</p><div id="logContainer" class="space-y-3 pb-10"></div></div>
+        </div>
+
+        <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-100 pb-10 pt-4 px-8 z-50">
+            <div class="max-w-md mx-auto flex justify-between items-center px-4">
+                <button onclick="showT('home')" id="nav-home" class="flex flex-col items-center gap-1 nav-active transition-all"><i class="fas fa-bolt-lightning text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Dash</span></button>
+                <button onclick="showT('workout')" id="nav-workout" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-dumbbell text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Workout</span></button>
+                <button onclick="showT('info')" id="nav-info" class="flex flex-col items-center gap-1 text-slate-300 transition-all"><i class="fas fa-leaf text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Fuel</span></button>
+            </div>
+        </nav>
+    </div>
+
+    <div id="myMenuModal" class="fixed inset-0 z-[600] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up relative h-[60vh] flex flex-col">
+            <div class="flex justify-between items-center"><h3 class="text-xl font-black uppercase tracking-tight text-marine">Select Item</h3><button onclick="document.getElementById('myMenuModal').classList.add('hide')" class="w-8 h-8 bg-mist rounded-full flex items-center justify-center text-slate-400"><i class="fas fa-times"></i></button></div>
+            <div id="myMenuGrid" class="grid grid-cols-2 gap-3 overflow-y-auto pb-4"></div>
+            <button onclick="showT('info'); document.getElementById('myMenuModal').classList.add('hide')" class="w-full bg-mist text-slate-400 font-bold py-3 rounded-xl text-xs uppercase tracking-widest mt-auto">Search Database Instead</button>
+        </div>
+    </div>
+    <div id="prepModal" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up"><div class="flex justify-between items-center"><h3 class="font-black text-marine capitalize text-xl">Select Variant</h3><button onclick="closePrep()" class="w-8 h-8 bg-mist rounded-full text-slate-400"><i class="fas fa-times"></i></button></div><div id="prepOptions" class="space-y-2 max-h-60 overflow-y-auto"></div></div></div>
+    <div id="analysisResult" class="fixed inset-0 z-[700] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl space-y-4 animate-slide-up"><div class="flex justify-between items-start"><div><h3 id="resName" class="font-black text-marine capitalize text-xl">--</h3><p id="resDesc" class="text-xs text-slate-500 font-bold mt-1">--</p></div><div id="resBadge" class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">--</div></div><div class="flex items-center gap-3"><div class="flex-1 bg-white p-3 rounded-xl border border-slate-100 text-center"><p class="text-[9px] font-bold text-slate-300 uppercase">Calories</p><h4 class="font-black text-marine text-lg" id="resCal">--</h4></div><div class="flex-1"><input type="number" id="resQty" value="1" class="w-full bg-white p-3 rounded-xl font-bold text-center border border-slate-100 text-lg outline-none"></div></div><button onclick="confirmAdd()" class="w-full bg-marine text-white font-bold py-4 rounded-xl btn-click shadow-lg shadow-blue-100">Add to Log</button></div></div>
+    <div id="wModal" class="fixed inset-0 z-[300] hide bg-marine/40 backdrop-blur-sm flex items-center justify-center p-6"><div class="bg-white w-full max-w-xs rounded-3xl p-8 text-center"><h3 class="text-xl font-extrabold mb-4 text-marine">Log Weight</h3><input type="number" id="wIn" class="w-full bg-mist p-4 rounded-xl mb-6 outline-none font-extrabold text-3xl text-punch text-center"><div class="flex gap-3"><button onclick="closeW()" class="flex-1 font-bold text-slate-300 uppercase text-xs">Back</button><button onclick="saveW()" class="flex-1 bg-punch text-white font-extrabold py-3 rounded-xl uppercase text-xs">Save</button></div></div></div>
+    <div id="homeDisclaimerModal" class="fixed inset-0 z-[400] bg-marine/90 backdrop-blur-md flex items-end sm:items-center justify-center p-4 hide"><div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl space-y-6 animate-slide-up"><div class="text-center"><i class="fas fa-shield-heart text-5xl text-punch mb-4"></i><h2 class="text-2xl font-black uppercase tracking-tight text-marine">Health Check</h2></div><div class="space-y-4 text-slate-600 font-bold text-center text-[15px] leading-relaxed"><p>1. This app is a tracker, not a doctor.</p><p>2. Listen to your body—stop immediately if you feel pain.</p></div><button onclick="acceptHomeDisclaimer()" class="w-full bg-punch text-white font-black py-5 rounded-2xl text-lg uppercase tracking-widest btn-click shadow-lg shadow-orange-200">I Accept</button></div></div>
+
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var loader = document.getElementById('loading-screen');
+                if(loader) loader.classList.add('hide');
+            }, 1000); // 1 second timeout
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
