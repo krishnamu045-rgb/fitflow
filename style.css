@@ -13,5 +13,5 @@ body { -webkit-tap-highlight-color: transparent; }
 .nav-active { color: #0A2647; transform: scale(1.1); }
 .btn-click:active { transform: scale(0.96); }
 
-/* Checklist Logic (Visuals only, JS handles logic) */
+/* Checklist Logic */
 .check-active { background-color: #ecfdf5; border-color: #bbf7d0; }
