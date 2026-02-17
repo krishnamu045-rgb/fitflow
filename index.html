@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZestUp Pro V15.0</title>
+    <title>ZestUp Pro V15.2</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -28,7 +28,7 @@
 
     <div id="setup-screen" class="fixed inset-0 z-[200] bg-white flex items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 15.0</p></div>
+            <div><h1 class="text-3xl font-black italic text-slate-900 uppercase tracking-tighter">ZESTUP<span class="text-punch">PRO</span></h1><p class="text-slate-400 font-bold mt-2 uppercase tracking-widest text-[10px]">Version 15.2</p></div>
             <div class="space-y-3">
                 <input type="text" id="setupName" placeholder="Your Name" class="w-full bg-mist p-4 rounded-2xl outline-none font-bold text-center border border-slate-100 text-lg">
                 <div class="flex gap-3"><button onclick="selectGender('male')" id="btnMale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Male</button><button onclick="selectGender('female')" id="btnFemale" class="flex-1 bg-mist p-4 rounded-2xl font-bold text-slate-400 border border-slate-100 transition-all">Female</button></div>
@@ -42,10 +42,7 @@
 
     <div id="survey-screen" class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center p-8 hide">
         <div class="w-full max-w-sm space-y-6 text-center animate-slide-up">
-            <div>
-                <h2 class="text-2xl font-black text-marine uppercase tracking-tight">Your Kitchen 🥘</h2>
-                <p class="text-xs font-bold text-slate-400 mt-2">Select what you usually eat. We will personalize your menu.</p>
-            </div>
+            <div><h2 class="text-2xl font-black text-marine uppercase tracking-tight">Your Kitchen 🥘</h2><p class="text-xs font-bold text-slate-400 mt-2">Select what you usually eat.</p></div>
             <div class="grid grid-cols-2 gap-3" id="surveyGrid">
                 <button onclick="togglePref('south')" id="pref-south" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-sun text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Idli / Dosa</span></button>
                 <button onclick="togglePref('north')" id="pref-north" class="bg-mist p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2 transition-all btn-click"><i class="fas fa-bread-slice text-2xl text-slate-300"></i><span class="text-xs font-bold text-slate-400">Roti / Curry</span></button>
@@ -117,7 +114,9 @@
             </div>
             
             <div class="bg-white rounded-[2rem] p-6 pro-shadow border border-slate-50 space-y-4">
-                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Full Menu</p>
+                <p class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Food Menu</p>
+                <div class="relative"><input type="text" id="foodName" onkeyup="showSuggestions(this.value)" placeholder="Search specific item..." class="w-full bg-mist p-4 pl-12 rounded-2xl outline-none font-bold text-marine border border-slate-100"><i class="fas fa-search absolute left-5 top-5 text-slate-300"></i><div id="suggestions" class="absolute w-full bg-white max-h-48 overflow-y-auto rounded-xl shadow-xl border border-slate-100 z-10 top-full mt-1 hide"></div></div>
+
                 <div id="catGrid" class="grid grid-cols-3 gap-3">
                     <button onclick="browseCategory('tiffin')" class="bg-orange-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-orange-100 hover:bg-orange-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-orange-500 text-lg"><i class="fas fa-sun"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Tiffin</span></button>
                     <button onclick="browseCategory('indian')" class="bg-amber-50 p-4 rounded-2xl flex flex-col items-center gap-2 border border-amber-100 hover:bg-amber-100 transition-all btn-click"><div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-amber-600 text-lg"><i class="fas fa-utensils"></i></div><span class="text-[10px] font-black uppercase tracking-widest text-marine">Indian</span></button>
